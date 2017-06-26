@@ -7,8 +7,8 @@ package com.llb.joke.model.joke.bean;
  * 请求方式：http get
  *
  */
-public class LatestJokeResquest {
+public class GetLatestJokeRequest {
     public int page; //	int	否	当前页数,默认1
     public int pagesize; // int	否	每次返回条数,默认1,最大20
-//    key	string	是	您申请的key
+    public String key; // string	是	您申请的key
 }
