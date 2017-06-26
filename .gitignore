@@ -54,3 +54,4 @@ freeline.py
 freeline/
 freeline_project_description.json
 .idea
+gradle/wrapper/gradle-3.3-all.zip

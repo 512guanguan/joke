@@ -5,4 +5,5 @@ package com.llb.joke.model.joke.service;
  */
 
 public class JokeHttpService {
+
 }
