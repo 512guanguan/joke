@@ -5,5 +5,5 @@ package com.llb.joke.config;
  */
 
 public class config {
-    JOKE_API_HOST = "http://japi.juhe.cn/joke/";
+    public static String JOKE_API_HOST = "http://japi.juhe.cn/joke/";
 }

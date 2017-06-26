@@ -6,7 +6,4 @@ package com.llb.joke.model.joke.http;
 
 public class HttpService{
 
-    public static void GetHttpData(){
-        HttpClient httpClient = new DefaultHttpClient();
-    }
 }

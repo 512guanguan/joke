@@ -21,7 +21,7 @@ package com.llb.joke.model.joke.bean;
  * "updatetime": "2014-12-17 19:13:57"
  * }]
  */
-public class LatestJokeResponse {
+public class JokeResponse {
     public int error_code;
     public String reason;
     public JokeResult result;
