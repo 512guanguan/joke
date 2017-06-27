@@ -1,6 +1,6 @@
-package com.llb.joke.model.joke.service;
+package com.llb.joke.model.api_service;
 
-import com.llb.joke.model.joke.bean.JokeResponse;
+import com.llb.joke.model.bean.joke.JokeResponse;
 
 import java.util.Map;
 
