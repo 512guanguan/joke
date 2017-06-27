@@ -1,4 +1,6 @@
-package com.llb.joke.model.joke.service;
+package com.llb.joke.model.http;
+
+import com.llb.joke.config.Config;
 
 import java.util.concurrent.TimeUnit;
 
@@ -13,16 +15,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitServiceManager {
     private static RetrofitServiceManager INSTANCE = null;
-    private static String BASE_JOKE_URL = "";
-    private static long DEFAULT_TIME_OUT = 10000;
     private Retrofit mRetrofit = null;
 
     private RetrofitServiceManager() {
         // 创建 OKHttpClient
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
-        builder.connectTimeout(DEFAULT_TIME_OUT, TimeUnit.SECONDS);//连接超时时间
-        builder.writeTimeout(DEFAULT_TIME_OUT, TimeUnit.SECONDS);//写操作 超时时间
-        builder.readTimeout(DEFAULT_TIME_OUT, TimeUnit.SECONDS);//读操作超时时间
+        builder.connectTimeout(Config.DEFAULT_TIME_OUT, TimeUnit.SECONDS);//连接超时时间
+        builder.writeTimeout(Config.DEFAULT_TIME_OUT, TimeUnit.SECONDS);//写操作 超时时间
+        builder.readTimeout(Config.DEFAULT_TIME_OUT, TimeUnit.SECONDS);//读操作超时时间
 
 //        // 添加公共参数拦截器
 //        HttpCommonInterceptor commonInterceptor = new HttpCommonInterceptor.Builder()
@@ -33,14 +33,14 @@ public class RetrofitServiceManager {
 //        builder.addInterceptor(commonInterceptor);
 
         mRetrofit = new Retrofit.Builder()
-                .baseUrl(BASE_JOKE_URL)
+                .baseUrl(Config.BASE_JOKE_URL)
                 .client(builder.build())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }
 
-    public RetrofitServiceManager getRetrofitInstance() {
+    public static RetrofitServiceManager getRetrofitInstance() {
         if (INSTANCE == null) {
             synchronized (RetrofitServiceManager.class) {
                 if (INSTANCE == null) {

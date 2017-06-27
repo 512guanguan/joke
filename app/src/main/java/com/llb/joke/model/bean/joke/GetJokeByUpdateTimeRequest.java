@@ -1,4 +1,4 @@
-package com.llb.joke.model.joke.bean;
+package com.llb.joke.model.bean.joke;
 
 /**
  * 根据时间戳返回该时间点前或后的笑话列表

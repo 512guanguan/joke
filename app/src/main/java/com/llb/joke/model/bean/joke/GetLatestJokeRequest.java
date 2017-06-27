@@ -1,4 +1,4 @@
-package com.llb.joke.model.joke.bean;
+package com.llb.joke.model.bean.joke;
 
 /**
  * 获取最新的笑话
