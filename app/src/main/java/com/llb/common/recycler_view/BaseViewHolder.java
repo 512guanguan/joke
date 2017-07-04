@@ -8,11 +8,12 @@ import android.view.View;
  * Created by llb on 2017-07-03.
  */
 
-public class CommonViewHolder extends RecyclerView.ViewHolder{
-    public CommonViewHolder(View itemView) {
+public class BaseViewHolder extends RecyclerView.ViewHolder{
+    private ViewDataBinding binding;
+
+    public BaseViewHolder(View itemView) {
         super(itemView);
     }
-    private ViewDataBinding binding;
 
     public ViewDataBinding getBinding() {
         return binding;

@@ -2,22 +2,41 @@ package com.llb.joke.view;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 
+import com.llb.common.recycler_view.CommonAdapter;
+import com.llb.joke.BR;
 import com.llb.joke.R;
+import com.llb.joke.config.Config;
+import com.llb.joke.model.bean.joke.JokeResponse.JokeData;
+import com.llb.joke.model.loader.JokeLoader;
+import com.llb.joke.utils.ApiUtils;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
+    private Button btn_fetch;
+    private RecyclerView recyclerView = null;
+    private List<JokeData> jokedata = null;
+    private CommonAdapter<JokeData> adapter = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,8 +61,45 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-    }
 
+        recyclerView = (RecyclerView)findViewById(R.id.show_list);
+        jokedata = new ArrayList<>();
+        adapter = new CommonAdapter<>(this,R.layout.joke_list_item,BR.jokeData);
+        adapter.setData(jokedata);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));//这里用线性显示 类似于listview
+//        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));//这里用线性宫格显示 类似于grid view
+//        mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, OrientationHelper.VERTICAL));//这里用线性宫格显示 类似于瀑布流
+        recyclerView.setAdapter(adapter);
+
+        btn_fetch = (Button) findViewById(R.id.btn_fetch);
+        btn_fetch.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fetchData();
+            }
+        });
+        fetchData();
+
+    }
+    public void fetchData() {
+        Map<String, String> requestParams = new HashMap<>();
+        requestParams.put("key", Config.KEY);
+        requestParams.put("page", "1");
+        requestParams.put("pagesize", "30");
+        requestParams.put("time", String.valueOf(ApiUtils.getTime()).substring(0,10));
+        requestParams.put("sort", "desc");
+        new JokeLoader().getLatestJoke(requestParams).subscribe((response) -> {
+            for (JokeData data: response.result.data) {
+                jokedata.add(data);
+            }
+            adapter.setData(jokedata);
+            Log.d("llb", response.result.data[0].content);
+        }, (Throwable e) -> {
+            Log.d("llb", "error" + e.getMessage());
+        }, () -> {
+            Log.d("llb", "completed");
+        });
+    }
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
