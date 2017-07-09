@@ -1,61 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--xmlns:tools="http://schemas.android.com/tools"-->
-<!--android:layout_width="match_parent"-->
-<!--android:layout_height="wrap_content"-->
-<!--android:orientation="vertical">-->
-
-<!--<Button-->
-<!--android:id="@+id/btn_fetch"-->
-<!--android:layout_width="match_parent"-->
-<!--android:layout_height="wrap_content"-->
-<!--android:text="点击请求数据"/>-->
-
-<!--<android.support.v7.widget.RecyclerView-->
-<!--android:visibility="gone"-->
-<!--android:id="@+id/show_list"-->
-<!--android:layout_width="368dp"-->
-<!--android:layout_height="match_parent"-->
-<!--android:scrollbars="vertical"-->
-<!--tools:layout_editor_absoluteX="10dp"-->
-<!--tools:layout_editor_absoluteY="8dp"/>-->
-<!--</LinearLayout>-->
-
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/constraintLayout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.llb.joke.view.MainActivity"
-    tools:showIn="@layout/app_bar_main">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="大家好呀"
-        android:textSize="23sp"
-        app:layout_constraintLeft_toRightOf="@+id/btn_fetch"/>
-    <Button
-        android:id="@+id/btn_fetch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="点击请求数据"
-        app:layout_constraintBottom_toTopOf="@+id/show_list"
-        app:layout_constraintLeft_toLeftOf="@+id/constraintLayout"
-        tools:layout_editor_absoluteX="0dp"/>
+    <data>
+        <variable
+            name="jokeData"
+            type="com.llb.joke.model.bean.joke.JokeResponse.JokeData"></variable>
+    </data>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/show_list"
-        android:layout_width="368dp"
-        android:layout_height="wrap_content"
-        android:scrollbars="vertical"
-        android:background="#fed"
-        app:layout_constraintTop_toBottomOf="@+id/btn_fetch"
-        app:layout_constraintBottom_toBottomOf="@+id/constraintLayout"
-        app:layout_constraintRight_toRightOf="@+id/constraintLayout"
-        app:layout_constraintLeft_toLeftOf="@+id/constraintLayout"
-        android:paddingRight="10dp"/>
-</android.support.constraint.ConstraintLayout>
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context="com.llb.joke.view.MainActivity"
+        tools:showIn="@layout/app_bar_main">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="大家好呀"
+            android:textSize="23sp"
+            app:layout_constraintLeft_toRightOf="@+id/btn_fetch" />
+
+        <Button
+            android:id="@+id/btn_fetch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="点击请求数据"
+            app:layout_constraintBottom_toTopOf="@+id/show_list"
+            app:layout_constraintLeft_toLeftOf="@+id/constraintLayout"
+            tools:layout_editor_absoluteX="0dp" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/show_list"
+            android:layout_width="368dp"
+            android:layout_height="wrap_content"
+            android:background="#fed"
+            android:paddingRight="10dp"
+            android:scrollbars="vertical"
+            app:layout_constraintBottom_toBottomOf="@+id/constraintLayout"
+            app:layout_constraintLeft_toLeftOf="@+id/constraintLayout"
+            app:layout_constraintRight_toRightOf="@+id/constraintLayout"
+            app:layout_constraintTop_toBottomOf="@+id/btn_fetch" />
+    </android.support.constraint.ConstraintLayout>
+</layout>
