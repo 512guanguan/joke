@@ -1,4 +1,4 @@
-package com.llb.common.recycler_view;
+package com.llb.common.widget.recyclerview;
 
 import android.databinding.ViewDataBinding;
 import android.support.v7.widget.RecyclerView;

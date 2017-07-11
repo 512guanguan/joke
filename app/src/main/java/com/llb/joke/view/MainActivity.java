@@ -6,6 +6,7 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,7 +19,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-import com.llb.common.recycler_view.CommonAdapter;
+import com.llb.common.widget.recyclerview.CommonAdapter;
+import com.llb.common.widget.recyclerview.CommonAdapter.OnItemClickListener;
 import com.llb.joke.BR;
 import com.llb.joke.R;
 import com.llb.joke.config.Config;
@@ -37,6 +39,7 @@ public class MainActivity extends AppCompatActivity
     private RecyclerView recyclerView = null;
     private List<JokeData> jokedata = null;
     private CommonAdapter<JokeData> adapter = null;
+    private SwipeRefreshLayout swipeRefreshLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,10 +69,20 @@ public class MainActivity extends AppCompatActivity
         jokedata = new ArrayList<>();
         adapter = new CommonAdapter<>(this,R.layout.joke_list_item,BR.jokeData);
         adapter.setData(jokedata);
+        adapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Log.i("llb", "onItemClick position=" + position);
+            }
+            @Override
+            public void onItemLongClick(View view, int position) {
+                Log.i("llb", "onItemLongClick position=" + position);
+            }
+        });
         recyclerView.setLayoutManager(new LinearLayoutManager(this));//这里用线性显示 类似于listview
-//        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));//这里用线性宫格显示 类似于grid view
-//        mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, OrientationHelper.VERTICAL));//这里用线性宫格显示 类似于瀑布流
         recyclerView.setAdapter(adapter);
+
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
 
         btn_fetch = (Button) findViewById(R.id.btn_fetch);
         btn_fetch.setOnClickListener(new OnClickListener() {
