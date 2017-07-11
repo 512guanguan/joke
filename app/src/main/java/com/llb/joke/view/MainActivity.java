@@ -81,8 +81,31 @@ public class MainActivity extends AppCompatActivity
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(this));//这里用线性显示 类似于listview
         recyclerView.setAdapter(adapter);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener(){
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState){
+                super.onScrollStateChanged(recyclerView, newState);
+                Log.i("llb", "onScrollStateChanged newState=" + newState);
+            }
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy){
+                super.onScrolled(recyclerView, dx, dy);
+                Log.i("llb", "onScrolled dx=" + dx + "  dy = " + dy);
+            }
+        });
 
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener(){
+            @Override
+            public void onRefresh() {
+                Log.i("llb", "setOnRefreshListener()");
+                fetchData();
+            }
+        });
+        swipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                Log.i("llb", "swipeRefreshLayout.post -> run()");
+            }
+        });
 
         btn_fetch = (Button) findViewById(R.id.btn_fetch);
         btn_fetch.setOnClickListener(new OnClickListener() {
@@ -101,16 +124,21 @@ public class MainActivity extends AppCompatActivity
         requestParams.put("pagesize", "30");
         requestParams.put("time", String.valueOf(ApiUtils.getTime()).substring(0,10));
         requestParams.put("sort", "desc");
+        swipeRefreshLayout.setRefreshing(true);
         new JokeLoader().getLatestJoke(requestParams).subscribe((response) -> {
             for (JokeData data: response.result.data) {
                 jokedata.add(data);
             }
             adapter.setData(jokedata);
+            adapter.notifyDataSetChanged();
+//            swipeRefreshLayout.setRefreshing(false);
+            adapter.notifyItemRemoved(adapter.getItemCount()); //底部刷新移除footerView
             Log.d("llb", response.result.data[0].content);
         }, (Throwable e) -> {
             Log.d("llb", "error" + e.getMessage());
         }, () -> {
             Log.d("llb", "completed");
+            swipeRefreshLayout.setRefreshing(false);
         });
     }
     @Override
