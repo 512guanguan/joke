@@ -1,4 +1,4 @@
-package com.llb.joke.model.bean.joke;
+package com.llb.joke.model.bean;
 
 /**
  * Created by Derrick on 2017/6/19.

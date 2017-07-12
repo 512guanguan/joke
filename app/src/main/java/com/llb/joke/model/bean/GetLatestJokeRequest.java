@@ -1,4 +1,4 @@
-package com.llb.joke.model.bean.joke;
+package com.llb.joke.model.bean;
 
 /**
  * 获取最新的笑话
@@ -8,7 +8,7 @@ package com.llb.joke.model.bean.joke;
  *
  */
 public class GetLatestJokeRequest {
-    public int page; //	int	否	当前页数,默认1
-    public int pagesize; // int	否	每次返回条数,默认1,最大20
+    public String page; //	int	否	当前页数,默认1
+    public String pagesize; // int	否	每次返回条数,默认1,最大20
     public String key; // string	是	您申请的key
 }

@@ -1,6 +1,6 @@
-package com.llb.joke.view_model;
+package com.llb.joke.viewmodel;
 
-import com.llb.joke.view_model.base.IViewModel;
+import com.llb.joke.viewmodel.base.IViewModel;
 
 /**
  * Created by Derrick on 2017/6/16.

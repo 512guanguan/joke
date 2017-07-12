@@ -3,21 +3,21 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
+            android:id="@+id/nav_pixabay_image"
             android:icon="@drawable/ic_menu_camera"
-            android:title="Import"/>
+            android:title="图片欣赏"/>
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_wechat"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery"/>
+            android:title="微信精选"/>
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/nav_funny_image"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow"/>
+            android:title="趣图"/>
         <item
-            android:id="@+id/nav_manage"
+            android:id="@+id/nav_bbs"
             android:icon="@drawable/ic_menu_manage"
-            android:title="Tools"/>
+            android:title="论坛精选"/>
     </group>
 
     <item android:title="Communicate">

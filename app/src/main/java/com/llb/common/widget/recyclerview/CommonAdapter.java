@@ -28,8 +28,8 @@ public class CommonAdapter<T> extends RecyclerView.Adapter<BaseViewHolder>{
     private List<T> mDatas;
     private OnItemClickListener onItemClickListener;
     private int layoutId;
-
     private int brId;
+    private boolean isLoadingMore = false;
 
     public CommonAdapter(Context mContext, @LayoutRes int layoutId, int brId){
         this.mContext = mContext;
@@ -107,6 +107,14 @@ public class CommonAdapter<T> extends RecyclerView.Adapter<BaseViewHolder>{
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
+    public boolean isLoadingMore() {
+        return isLoadingMore;
+    }
+
+    public void setLoadingMore(boolean loadingMore) {
+        isLoadingMore = loadingMore;
+    }
+
 
     public interface OnItemClickListener {
         void onItemClick(View view, int position);

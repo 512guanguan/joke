@@ -1,5 +1,6 @@
 package com.llb.joke.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -18,20 +19,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.llb.common.widget.recyclerview.CommonAdapter;
 import com.llb.common.widget.recyclerview.CommonAdapter.OnItemClickListener;
+import com.llb.config.Config;
 import com.llb.joke.BR;
 import com.llb.joke.R;
-import com.llb.joke.config.Config;
-import com.llb.joke.model.bean.joke.JokeResponse.JokeData;
-import com.llb.joke.model.loader.JokeLoader;
-import com.llb.joke.utils.ApiUtils;
+import com.llb.joke.model.JokeLoader;
+import com.llb.joke.model.bean.GetLatestJokeRequest;
+import com.llb.joke.model.bean.JokeResponse.JokeData;
+import com.llb.pixabay.view.PixabayMainActivity;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -40,6 +41,8 @@ public class MainActivity extends AppCompatActivity
     private List<JokeData> jokedata = null;
     private CommonAdapter<JokeData> adapter = null;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private int currentPage = 0;
+    private int pageSize = 50;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +92,20 @@ public class MainActivity extends AppCompatActivity
             public void onScrolled(RecyclerView recyclerView, int dx, int dy){
                 super.onScrolled(recyclerView, dx, dy);
                 Log.i("llb", "onScrolled dx=" + dx + "  dy = " + dy);
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                if(layoutManager.findLastVisibleItemPosition() + 1  == adapter.getItemCount()) {
+                    // 是否正在下拉刷新
+                    if(swipeRefreshLayout.isRefreshing()){
+                        adapter.notifyItemRemoved(adapter.getItemCount());
+                        return;
+                    }
+                    // 触发上拉刷新
+                    if(!adapter.isLoadingMore()) {
+//                        adapter.setLoadingMore(true);
+                        Log.i("llb", "触发上拉刷新");
+                        loadMoreData(currentPage, pageSize);
+                    }
+                }
             }
         });
 
@@ -114,33 +131,47 @@ public class MainActivity extends AppCompatActivity
                 fetchData();
             }
         });
-        fetchData();
+        loadMoreData(currentPage, pageSize);
 
     }
     public void fetchData() {
-        Map<String, String> requestParams = new HashMap<>();
-        requestParams.put("key", Config.KEY);
-        requestParams.put("page", "1");
-        requestParams.put("pagesize", "30");
-        requestParams.put("time", String.valueOf(ApiUtils.getTime()).substring(0,10));
-        requestParams.put("sort", "desc");
-        swipeRefreshLayout.setRefreshing(true);
-        new JokeLoader().getLatestJoke(requestParams).subscribe((response) -> {
+        Toast.makeText(this,"到头啦！！", Toast.LENGTH_SHORT).show();
+        swipeRefreshLayout.setRefreshing(false);
+        return;
+    }
+    public void loadMoreData(int currentPage, int pageSize) {
+//        Map<String, String> requestParams = new HashMap<>();
+//        requestParams.put("key", Config.KEY);
+//        requestParams.put("page", String.valueOf(currentPage));
+//        requestParams.put("pagesize", String.valueOf(pageSize));
+//        requestParams.put("time", String.valueOf(ApiUtils.getTime()).substring(0,10));
+//        requestParams.put("sort", "desc");
+        GetLatestJokeRequest getLatestJokeRequest = new GetLatestJokeRequest();
+        getLatestJokeRequest.key = Config.KEY;
+        getLatestJokeRequest.page = String.valueOf(currentPage);
+        getLatestJokeRequest.pagesize = String.valueOf(pageSize);
+
+        adapter.setLoadingMore(true);
+        new JokeLoader().getLatestJoke(getLatestJokeRequest).subscribe((response) -> {
             for (JokeData data: response.result.data) {
                 jokedata.add(data);
             }
             adapter.setData(jokedata);
             adapter.notifyDataSetChanged();
-//            swipeRefreshLayout.setRefreshing(false);
             adapter.notifyItemRemoved(adapter.getItemCount()); //底部刷新移除footerView
+            this.currentPage++;
             Log.d("llb", response.result.data[0].content);
         }, (Throwable e) -> {
-            Log.d("llb", "error" + e.getMessage());
+            Log.d("llb", "error " + e.getMessage());
+            adapter.setLoadingMore(false);
         }, () -> {
             Log.d("llb", "completed");
-            swipeRefreshLayout.setRefreshing(false);
+            adapter.setLoadingMore(false);
         });
     }
+
+
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -179,13 +210,15 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.nav_pixabay_image) {
+            Intent intent = new Intent();
+            intent.setClass(this, PixabayMainActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_wechat) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_funny_image) {
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_bbs) {
 
         } else if (id == R.id.nav_share) {
 

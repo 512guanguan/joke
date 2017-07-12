@@ -1,8 +1,10 @@
-package com.llb.joke.model.loader;
+package com.llb.joke.model;
 
-import com.llb.joke.model.bean.joke.JokeResponse;
-import com.llb.joke.model.http.RetrofitServiceManager;
-import com.llb.joke.model.api_service.JokeApiService;
+import com.llb.joke.model.apiservice.JokeApiService;
+import com.llb.joke.model.bean.GetLatestJokeRequest;
+import com.llb.joke.model.bean.JokeResponse;
+import com.llb.common.http.RetrofitServiceManager;
+import com.llb.common.utils.ApiUtils;
 
 import java.util.Map;
 
@@ -22,7 +24,8 @@ public class JokeLoader {
         jokeApiService = RetrofitServiceManager.getRetrofitInstance().create(JokeApiService.class);
     }
 
-    public Observable<JokeResponse> getLatestJoke(@QueryMap Map<String, String> requestParams) {
+    public Observable<JokeResponse> getLatestJoke(GetLatestJokeRequest getLatestJokeRequest) {
+        Map<String, String> requestParams = ApiUtils.parseRequestParams(getLatestJokeRequest);
         return jokeApiService.getLatestJoke(requestParams)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

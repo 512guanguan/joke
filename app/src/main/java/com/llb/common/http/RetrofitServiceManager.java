@@ -1,6 +1,6 @@
-package com.llb.joke.model.http;
+package com.llb.common.http;
 
-import com.llb.joke.config.Config;
+import com.llb.config.Config;
 
 import java.util.concurrent.TimeUnit;
 
