@@ -1,10 +1,11 @@
 package com.llb.joke.model;
 
+import com.llb.common.http.RetrofitServiceManager;
+import com.llb.common.utils.ApiUtils;
+import com.llb.config.Config;
 import com.llb.joke.model.apiservice.JokeApiService;
 import com.llb.joke.model.bean.GetLatestJokeRequest;
 import com.llb.joke.model.bean.JokeResponse;
-import com.llb.common.http.RetrofitServiceManager;
-import com.llb.common.utils.ApiUtils;
 
 import java.util.Map;
 
@@ -21,6 +22,7 @@ public class JokeLoader {
     JokeApiService jokeApiService = null;
 
     public JokeLoader() {
+        Config.CURRENT_BASE_URL = Config.BASE_JOKE_URL;
         jokeApiService = RetrofitServiceManager.getRetrofitInstance().create(JokeApiService.class);
     }
 

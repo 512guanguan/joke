@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_bottom_first"
+        android:icon="@drawable/ic_menu_camera"
+        android:title="笑口"/>
+    <item
+        android:id="@+id/nav_bottom_second"
+        android:icon="@drawable/ic_menu_camera"
+        android:title="趣图"/>
+</menu>

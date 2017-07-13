@@ -33,7 +33,7 @@ public class RetrofitServiceManager {
 //        builder.addInterceptor(commonInterceptor);
 
         mRetrofit = new Retrofit.Builder()
-                .baseUrl(Config.BASE_JOKE_URL)
+                .baseUrl(Config.CURRENT_BASE_URL)
                 .client(builder.build())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
