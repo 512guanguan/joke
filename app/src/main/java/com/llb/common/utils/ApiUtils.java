@@ -18,10 +18,11 @@ public class ApiUtils {
         Map<String, String> requestParams = new HashMap<>();
         for(Field field : fields) {
             try {
-                requestParams.put(field.getName(), field.get(request) != null ? field.get(request).toString() : "");
+                if(field.get(request) != null) {
+                    requestParams.put(field.getName(),field.get(request).toString());
+                }
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
-                requestParams.put(field.getName(), "");
             }
         }
         return requestParams;

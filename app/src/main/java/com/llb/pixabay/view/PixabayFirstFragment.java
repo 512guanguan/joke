@@ -145,7 +145,7 @@ public class PixabayFirstFragment extends Fragment {
     public void loadMoreData(int currentPage, int pageSize) {
         SearchImagesRequest searchImagesRequest = new SearchImagesRequest();
         searchImagesRequest.key = Config.PIXABAY_KEY1;
-        searchImagesRequest.q = URLEncoder.encode("girl+sexy");
+        searchImagesRequest.q = "sexy";
         searchImagesRequest.image_type = "photo";
         searchImagesRequest.page = String.valueOf(currentPage);
         searchImagesRequest.per_page = String.valueOf(pageSize);

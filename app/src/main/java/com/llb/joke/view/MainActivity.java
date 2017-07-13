@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.llb.common.http.RetrofitServiceManager;
 import com.llb.joke.R;
 import com.llb.pixabay.view.PixabayFirstFragment;
 import com.llb.pixabay.view.PixabaySecondFragment;
@@ -84,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 // Handle navigation view item clicks here.
                 int id = item.getItemId();
+                RetrofitServiceManager.clearInstance();
                 if (id == R.id.nav_pixabay_image) {
                     pagerAdapter.addFragments(pixabayFragments);
 //                    fragmentTransaction = fragmentManager.beginTransaction();
