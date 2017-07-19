@@ -12,8 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
-import com.llb.common.widget.recyclerview.CommonAdapter.OnItemClickListener;
 import com.llb.config.Config;
 import com.llb.joke.BR;
 import com.llb.joke.R;
@@ -73,7 +71,7 @@ public class PixabayFirstFragment extends Fragment {
 
         loadMoreData(currentPage, pageSize);
 
-        adapter.setOnItemClickListener(new OnItemClickListener() {
+        adapter.setOnItemClickListener(new PixabayAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 Log.i("llb", "onItemClick position=" + position);
@@ -153,7 +151,7 @@ public class PixabayFirstFragment extends Fragment {
         adapter.setLoadingMore(true);
         new PixabayLoader().searchImage(searchImagesRequest).subscribe((response) -> {
             hitsImages.addAll(response.hits);
-            adapter.setData(hitsImages);
+            adapter.setImageData(hitsImages);
             adapter.notifyDataSetChanged();
             adapter.notifyItemRemoved(adapter.getItemCount()); //底部刷新移除footerView
             this.currentPage++;
