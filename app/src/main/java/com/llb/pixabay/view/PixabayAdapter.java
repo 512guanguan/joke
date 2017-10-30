@@ -9,7 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.llb.common.utils.ViewUtil;
 import com.llb.common.widget.recyclerview.BaseViewHolder;
 import com.llb.joke.R;
 import com.llb.pixabay.model.bean.SearchImagesResponse.HitImages;
@@ -48,19 +50,16 @@ public class PixabayAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-//        if (viewType == TYPE_ITEM) {
+        if (viewType == TYPE_FOOTER) {
+            View view = inflater.inflate(R.layout.item_recyclerview_footer, parent, false);
+            return new BaseViewHolder(view);
+        }
+        else {
             ViewDataBinding binding = DataBindingUtil.inflate(inflater, layoutId, parent, false);
             BaseViewHolder viewHolder = new BaseViewHolder(binding.getRoot());
             viewHolder.setBinding(binding);
             return viewHolder;
-//        }
-//        else if (viewType == TYPE_FOOTER) {
-//            View view = inflater.inflate(R.layout.item_recyclerview_footer, parent, false);
-//            return new BaseViewHolder(view);
-//        }
-//        else {
-//            return null;
-//        }
+        }
     }
 
     @Override
@@ -69,46 +68,57 @@ public class PixabayAdapter extends RecyclerView.Adapter<BaseViewHolder> {
             holder.getBinding().setVariable(brId, mDatas.get(position));
             holder.getBinding().executePendingBindings();
             if (this.onItemClickListener != null) {
-                holder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        int position = holder.getLayoutPosition();
-                        onItemClickListener.onItemClick(view, position);
-                    }
-                });
-                holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View view) {
-                        int position = holder.getLayoutPosition();
-                        onItemClickListener.onItemLongClick(view, position);
-                        return false;
-                    }
-                });
+                if(getItemViewType(position) == TYPE_ITEM){
+                    holder.itemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+//                            int position = holder.getLayoutPosition();
+                            onItemClickListener.onItemClick(view, position);
+                        }
+                    });
+                    holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View view) {
+                            int position = holder.getLayoutPosition();
+                            onItemClickListener.onItemLongClick(view, position);
+                            return false;
+                        }
+                    });
+                }else {
+                    holder.itemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+//                            int position = holder.getLayoutPosition();
+                            onItemClickListener.onItemClick(view, position);
+                        }
+                    });
+                }
             }
         }
         //通过itemview得到每个图片的pararms对象
         RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) holder.itemView.getLayoutParams();
 
         //将高度修改为传入的随机高度
-        params.height = Integer.valueOf(mDatas.get(position).previewHeight);
+        params.height = Integer.valueOf(mDatas.get(position).webformatHeight);
+        double width = ViewUtil.getWindowDisplayMetrics(mContext).widthPixels * 0.49;
+        params.width = new Double(width).intValue();
 
         //设置修改参数
         holder.itemView.setLayoutParams(params);
-
-
 //        holder.iv.setImageResource(R.mipmap.ic_launcher);
 
         //用过Picasso框架对图片处理并显示到iv上
         //用with()方法初始化，,
-        Picasso.with(mContext)
-                //load()下载图片
-                .load(mDatas.get(position).previewURL)
-                //下载中显示的图片
-                .placeholder(R.mipmap.ic_launcher)
-                //下载失败显示的图片
-                .error(R.mipmap.ic_launcher)
-                //init()显示到指定控件
-                .into((ImageView) holder.itemView.findViewById(R.id.pixabay_imageview));
+//        Picasso.with(mContext)
+//                //load()下载图片
+//                .load(mDatas.get(position).webformatURL)
+////                .resize(60,120)
+//                //下载中显示的图片
+//                .placeholder(R.mipmap.ic_launcher)
+//                //下载失败显示的图片
+//                .error(R.mipmap.ic_launcher)
+//                //init()显示到指定控件
+//                .into((ImageView) holder.itemView.findViewById(R.id.pixabay_imageview));
     }
 
     public void setImageData(List<HitImages> mDatas) {
@@ -122,11 +132,11 @@ public class PixabayAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     @Override
     public int getItemViewType(int position) {
-//        if (position + '1' == getItemCount()) {
-//            return TYPE_FOOTER;
-//        } else {
+        if (position + '1' == getItemCount()) {
+            return TYPE_FOOTER;
+        } else {
             return TYPE_ITEM;
-//        }
+        }
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
@@ -146,7 +156,6 @@ public class PixabayAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     }
     public interface OnItemClickListener {
         void onItemClick(View view, int position);
-
         void onItemLongClick(View view, int position);
     }
 }

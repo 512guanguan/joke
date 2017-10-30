@@ -66,8 +66,12 @@ public class PixabayFirstFragment extends Fragment {
         adapter = new PixabayAdapter(this.getActivity(), R.layout.item_pixabay_list, BR.hitImages);
         adapter.setData(hitsImages);
 
-        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(3,RecyclerView.VERTICAL));//这里用线性显示 类似于listview
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));//这里用线性显示 类似于listview
+//        recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
+//        SpacesItemDecoration decoration=new SpacesItemDecoration(16);
+//        recyclerView.addItemDecoration(decoration);
         recyclerView.setAdapter(adapter);
+
 
         loadMoreData(currentPage, pageSize);
 
@@ -75,6 +79,10 @@ public class PixabayFirstFragment extends Fragment {
             @Override
             public void onItemClick(View view, int position) {
                 Log.i("llb", "onItemClick position=" + position);
+                if(position + 1 == adapter.getItemCount()){
+                    //底部加载更多
+                    Log.i("llb", "底部加载更多 position=" + position);
+                }
             }
 
             @Override
@@ -92,20 +100,20 @@ public class PixabayFirstFragment extends Fragment {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 Log.i("llb", "onScrolled dx=" + dx + "  dy = " + dy);
-                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                if (layoutManager.findLastVisibleItemPosition() + 1 == adapter.getItemCount()) {
-                    // 是否正在下拉刷新
-                    if (swipeRefreshLayout.isRefreshing()) {
-                        adapter.notifyItemRemoved(adapter.getItemCount());
-                        return;
-                    }
-                    // 触发上拉刷新
-                    if (!adapter.isLoadingMore()) {
-//                        adapter.setLoadingMore(true);
-                        Log.i("llb", "触发上拉刷新");
-                        loadMoreData(currentPage, pageSize);
-                    }
-                }
+                StaggeredGridLayoutManager layoutManager = (StaggeredGridLayoutManager) recyclerView.getLayoutManager();
+//                if (recyclerView.findLastVisibleItemPosition() + 1 == adapter.getItemCount()) {
+//                    // 是否正在下拉刷新
+//                    if (swipeRefreshLayout.isRefreshing()) {
+//                        adapter.notifyItemRemoved(adapter.getItemCount());
+//                        return;
+//                    }
+//                    // 触发上拉刷新
+//                    if (!adapter.isLoadingMore()) {
+////                        adapter.setLoadingMore(true);
+//                        Log.i("llb", "触发上拉刷新");
+//                        loadMoreData(currentPage, pageSize);
+//                    }
+//                }
             }
         });
 

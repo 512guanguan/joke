@@ -26,6 +26,7 @@ import com.llb.common.http.RetrofitServiceManager;
 import com.llb.joke.R;
 import com.llb.pixabay.view.PixabayFirstFragment;
 import com.llb.pixabay.view.PixabaySecondFragment;
+import com.llb.subway.view.SubwayFirstFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     private BottomNavigationView bottomNavigationView;
     private List<Fragment> jokeFragemnts;
     private List<Fragment> pixabayFragments;
-
+    private List<Fragment> subwayFragments;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,13 +54,14 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         pixabayFragments.add(new PixabayFirstFragment());
         pixabayFragments.add(new PixabaySecondFragment());
 
+        subwayFragments = new ArrayList<>();
+        subwayFragments.add(new SubwayFirstFragment());
 //        fragmentTransaction = fragmentManager.beginTransaction();
 //        fragmentTransaction.add(R.id.joke_first_fragment, jokeFragemnts.get(0));
 //        fragmentTransaction.add(R.id.joke_second_fragment, jokeFragemnts.get(1));
 //        fragmentTransaction.add(R.id.pixabay_first_fragment, pixabayFragments.get(0));
 //        fragmentTransaction.add(R.id.pixabay_second_fragment, pixabayFragments.get(1));
 //        fragmentTransaction.commit();
-
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -97,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 } else if (id == R.id.nav_funny_image) {
                     pagerAdapter.addFragments(jokeFragemnts);
                 } else if (id == R.id.nav_bbs) {
-
+                    pagerAdapter.addFragments(subwayFragments);
                 } else if (id == R.id.nav_share) {
 
                 } else if (id == R.id.nav_send) {
