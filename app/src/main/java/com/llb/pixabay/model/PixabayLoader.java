@@ -8,11 +8,9 @@ import com.llb.pixabay.model.bean.SearchImagesRequest;
 import com.llb.pixabay.model.bean.SearchImagesResponse;
 
 import java.util.Map;
-
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 /**
  * Created by Derrick on 2017/7/12.
  */

@@ -4,9 +4,9 @@ import com.llb.pixabay.model.bean.SearchImagesResponse;
 
 import java.util.Map;
 
+import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.QueryMap;
-import rx.Observable;
 
 /**
  * Created by Derrick on 2017/7/12.

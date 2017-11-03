@@ -10,10 +10,9 @@ import com.llb.joke.model.bean.JokeResponse;
 import java.util.Map;
 
 import retrofit2.http.QueryMap;
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 /**
  * Created by Derrick on 2017/6/19.
  */
