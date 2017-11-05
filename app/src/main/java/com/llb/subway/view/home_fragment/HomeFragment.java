@@ -1,4 +1,4 @@
-package com.llb.subway.view;
+package com.llb.subway.view.home_fragment;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -12,16 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.llb.common.widget.recyclerview.CommonAdapter;
-import com.llb.common.widget.recyclerview.CommonAdapter.OnItemClickListener;
-import com.llb.config.Config;
-import com.llb.joke.BR;
 import com.llb.joke.R;
-import com.llb.joke.model.JokeLoader;
-import com.llb.joke.model.bean.GetLatestJokeRequest;
-import com.llb.joke.model.bean.JokeResponse.JokeData;
 import com.llb.joke.view.OnFragmentInteractionListener;
-import com.llb.subway.model.bean.PostListItem;
+import com.llb.subway.common.CommonAdapter;
+import com.llb.subway.model.bean.ForumListItem;
+import com.llb.subway.view.base.BaseActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,21 +26,21 @@ import java.util.List;
  * Activities that contain this fragment must implement the
  * {@link OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link SubwayFirstFragment} factory method to
+ * Use the {@link HomeFragment} factory method to
  * create an instance of this fragment.
  */
-public class SubwayFirstFragment extends Fragment implements SubwayFirstContract.View{
+public class HomeFragment extends Fragment implements HomeContract.View{
     private OnFragmentInteractionListener mListener;
     private View view;
     private RecyclerView recyclerView = null;
-    private List<PostListItem> postListData = null;
-    private CommonAdapter<PostListItem> adapter = null;
+    private List<ForumListItem> postListData = null;
+    private CommonAdapter<ForumListItem> adapter = null;
     private SwipeRefreshLayout swipeRefreshLayout;
     private int currentPage = 0;
     private int pageSize = 10;
-    private SubwayFirstContract.Presenter presenter;
+    private HomeContract.Presenter presenter;
 
-    public SubwayFirstFragment() {
+    public HomeFragment() {
         // Required empty public constructor
     }
 
@@ -59,24 +54,24 @@ public class SubwayFirstFragment extends Fragment implements SubwayFirstContract
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         if(view == null) {
-            view = inflater.inflate(R.layout.fragment_joke_first, container, false);
+            view = inflater.inflate(R.layout.home_fragment, container, false);
             initView();
         }
         return view;
     }
 
     private void initView() {
-        presenter = new SubwayFirstPresenter();
+        presenter = new HomePresenter(this);
         Log.i("llb", "onCreateView");
         recyclerView = (RecyclerView) view.findViewById(R.id.show_list);
         postListData = new ArrayList<>();
-        adapter = new CommonAdapter<>(this.getActivity(), R.layout.item_subway_post_list, BR.subwayData);
+        adapter = new CommonAdapter<>(this.getActivity(), R.layout.item_subway_post_list);
         adapter.setData(postListData);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));//这里用线性显示 类似于listview
         recyclerView.setAdapter(adapter);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
-        adapter.setOnItemClickListener(new OnItemClickListener() {
+        adapter.setOnItemClickListener(new CommonAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 Log.i("llb", "onItemClick position=" + position);
@@ -108,7 +103,7 @@ public class SubwayFirstFragment extends Fragment implements SubwayFirstContract
                     if (!adapter.isLoadingMore()) {
 //                        adapter.setLoadingMore(true);
                         Log.i("llb", "触发上拉刷新");
-                        loadMoreData(currentPage, pageSize);
+                        loadMoreData();
                     }
                 }
             }
@@ -122,7 +117,7 @@ public class SubwayFirstFragment extends Fragment implements SubwayFirstContract
             }
         });
 
-        loadMoreData(currentPage, pageSize);
+        loadMoreData();
     }
 
     @Override
@@ -148,12 +143,13 @@ public class SubwayFirstFragment extends Fragment implements SubwayFirstContract
         return;
     }
 
-    public void loadMoreData(int currentPage, int pageSize) {
+    public void loadMoreData() {
         presenter.getPostListData();
     }
 
     @Override
-    public void parsePostListData() {
-
+    public void parsePostListData(String response) {
+        BaseActivity.forumListItems = ForumListItem.Builder.parse(response);
+        Toast.makeText(this.getActivity(), "数据解析完了", Toast.LENGTH_SHORT).show();
     }
 }

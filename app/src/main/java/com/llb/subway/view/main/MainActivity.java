@@ -1,4 +1,4 @@
-package com.llb.joke.view;
+package com.llb.subway.view.main;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,38 +24,42 @@ import android.widget.Toast;
 
 import com.llb.common.http.RetrofitServiceManager;
 import com.llb.joke.R;
+import com.llb.joke.view.JokeFirstFragment;
+import com.llb.joke.view.JokeSecondFragment;
+import com.llb.joke.view.OnFragmentInteractionListener;
 import com.llb.pixabay.view.PixabayFirstFragment;
 import com.llb.pixabay.view.PixabaySecondFragment;
-import com.llb.subway.view.SubwayFirstFragment;
+import com.llb.subway.view.base.BaseActivity;
+import com.llb.subway.view.home_fragment.HomeFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener {
+public class MainActivity extends BaseActivity implements OnFragmentInteractionListener {
     private ViewPager viewPager;
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
     private MainViewPagerAdapter pagerAdapter;
     private BottomNavigationView bottomNavigationView;
-    private List<Fragment> jokeFragemnts;
+//    private List<Fragment> jokeFragemnts;
     private List<Fragment> pixabayFragments;
-    private List<Fragment> subwayFragments;
+    private List<Fragment> homeFragments;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         fragmentManager = getSupportFragmentManager();
-        jokeFragemnts = new ArrayList<>();
-        jokeFragemnts.add(new JokeFirstFragment());
-        jokeFragemnts.add(new JokeSecondFragment());
+//        jokeFragemnts = new ArrayList<>();
+//        jokeFragemnts.add(new JokeFirstFragment());
+//        jokeFragemnts.add(new JokeSecondFragment());
 
         pixabayFragments = new ArrayList<>();
         pixabayFragments.add(new PixabayFirstFragment());
         pixabayFragments.add(new PixabaySecondFragment());
 
-        subwayFragments = new ArrayList<>();
-        subwayFragments.add(new SubwayFirstFragment());
+        homeFragments = new ArrayList<>();
+        homeFragments.add(new HomeFragment());
 //        fragmentTransaction = fragmentManager.beginTransaction();
 //        fragmentTransaction.add(R.id.joke_first_fragment, jokeFragemnts.get(0));
 //        fragmentTransaction.add(R.id.joke_second_fragment, jokeFragemnts.get(1));
@@ -88,22 +92,20 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 // Handle navigation view item clicks here.
                 int id = item.getItemId();
                 RetrofitServiceManager.clearInstance();
-                if (id == R.id.nav_pixabay_image) {
-                    pagerAdapter.addFragments(pixabayFragments);
+                switch (id){
+                    case R.id.nav_pixabay_image:
+                        pagerAdapter.addFragments(pixabayFragments);
 //                    fragmentTransaction = fragmentManager.beginTransaction();
 //                    fragmentTransaction.hide(jokeFragemnts.get(0));
 //                    fragmentTransaction.hide(jokeFragemnts.get(1));
-//                    fragmentTransaction.commit();
-                } else if (id == R.id.nav_wechat) {
-
-                } else if (id == R.id.nav_funny_image) {
-                    pagerAdapter.addFragments(jokeFragemnts);
-                } else if (id == R.id.nav_bbs) {
-                    pagerAdapter.addFragments(subwayFragments);
-                } else if (id == R.id.nav_share) {
-
-                } else if (id == R.id.nav_send) {
-
+                        break;
+                    case R.id.nav_wechat:
+                        break;
+                    case R.id.nav_bbs:
+                        pagerAdapter.addFragments(homeFragments);
+                        break;
+                    default:
+                        break;
                 }
                 DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                 drawer.closeDrawer(GravityCompat.START);
@@ -143,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         });
 
         pagerAdapter = new MainViewPagerAdapter(fragmentManager);
-        pagerAdapter.addFragments(jokeFragemnts);
+        pagerAdapter.addFragments(homeFragments);
         viewPager.setAdapter(pagerAdapter);
 
     }
