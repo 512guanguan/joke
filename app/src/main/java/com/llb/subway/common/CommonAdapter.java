@@ -20,13 +20,13 @@ import java.util.List;
  */
 
 public class CommonAdapter<T> extends RecyclerView.Adapter<BaseViewHolder> {
-    private Context mContext;
-    private static final int TYPE_ITEM = 0;
-    private static final int TYPE_FOOTER = 1;
-    private List<T> mDatas;
-    private OnItemClickListener onItemClickListener;
-    private int layoutId;
-    private boolean isLoadingMore = false;
+    protected Context mContext;
+    protected static final int TYPE_ITEM = 0;
+    protected static final int TYPE_FOOTER = 1;
+    protected List<T> mDatas;
+    protected OnItemClickListener onItemClickListener;
+    protected int layoutId;
+    protected boolean isLoadingMore = false;
 
     public CommonAdapter(Context mContext, @LayoutRes int layoutId) {
         this.mContext = mContext;

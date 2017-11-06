@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import com.llb.joke.R;
 import com.llb.joke.view.OnFragmentInteractionListener;
-import com.llb.subway.common.CommonAdapter;
 import com.llb.subway.model.bean.ForumListItem;
 import com.llb.subway.view.base.BaseActivity;
 
@@ -34,7 +33,7 @@ public class HomeFragment extends Fragment implements HomeContract.View{
     private View view;
     private RecyclerView recyclerView = null;
     private List<ForumListItem> postListData = null;
-    private CommonAdapter<ForumListItem> adapter = null;
+    private HomeAdapter adapter = null;
     private SwipeRefreshLayout swipeRefreshLayout;
     private int currentPage = 0;
     private int pageSize = 10;
@@ -65,13 +64,13 @@ public class HomeFragment extends Fragment implements HomeContract.View{
         Log.i("llb", "onCreateView");
         recyclerView = (RecyclerView) view.findViewById(R.id.show_list);
         postListData = new ArrayList<>();
-        adapter = new CommonAdapter<>(this.getActivity(), R.layout.item_subway_post_list);
-        adapter.setData(postListData);
+        adapter = new HomeAdapter(this.getActivity(), R.layout.item_subway_post_list);
+//        adapter.setData(postListData);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));//这里用线性显示 类似于listview
         recyclerView.setAdapter(adapter);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
-        adapter.setOnItemClickListener(new CommonAdapter.OnItemClickListener() {
+        adapter.setOnItemClickListener(new HomeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 Log.i("llb", "onItemClick position=" + position);
@@ -151,5 +150,6 @@ public class HomeFragment extends Fragment implements HomeContract.View{
     public void parsePostListData(String response) {
         BaseActivity.forumListItems = ForumListItem.Builder.parse(response);
         Toast.makeText(this.getActivity(), "数据解析完了", Toast.LENGTH_SHORT).show();
+        adapter.setData(BaseActivity.forumListItems);
     }
 }
