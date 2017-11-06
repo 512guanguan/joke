@@ -31,7 +31,7 @@
                 android:layout_weight="1"
                 android:gravity="left"
                 android:text="描述信息……"
-                android:textSize="18sp"/>
+                android:textSize="13sp"/>
         </LinearLayout>
 
         <TextView

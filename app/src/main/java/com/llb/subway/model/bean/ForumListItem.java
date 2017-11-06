@@ -25,12 +25,12 @@ public class ForumListItem {
     /**某个主题模块名，如广州区、地铁心情**/
     public String subjectName;
     public String subjectID;//forum.php?mod=forumdisplay&fid=8&mobile=yes提取的fid
-    public int subjectNewPost;//近日新帖数
+    public String subjectNewPost;//近日新帖数
     public String iconUrl;
     public String description;
 
 
-    public ForumListItem(String forum, String forumUrl, String forumID, String subjectUrl, String subjectName, String subjectID, int subjectNewPost, String iconUrl, String description) {
+    public ForumListItem(String forum, String forumUrl, String forumID, String subjectUrl, String subjectName, String subjectID, String subjectNewPost, String iconUrl, String description) {
         this.forum = forum;
         this.forumUrl = forumUrl;
         this.forumID = forumID;
@@ -106,12 +106,12 @@ public class ForumListItem {
                         subjectID = str.substring(0, str.indexOf("&"));
                     }
 
-                    int subjectNewPost = doc.select("span").size()>0 ? Integer.parseInt(doc.select("span").get(0).text()) : 0;;
+                    String subjectNewPost = doc.select("span").size()>0 ? doc.select("span").get(0).text() : "0";;
 
                     String iconUrl = doc.select("img").size()>0 ? doc.select("img").get(0).attr("src") : "";
                     String subjectName = doc.select("p.f_nm").size()>0 ? doc.select("p.f_nm").get(0).text() : "";
                     String description = doc.select("p.xg1").size()>0 ? doc.select("p.xg1").get(0).text() : "";
-                    CityList.add(new ForumListItem(forum, forumUrl, forumID,subjectUrl,subjectID,subjectName,subjectNewPost,iconUrl,description));
+                    CityList.add(new ForumListItem(forum, forumUrl, forumID,subjectUrl,subjectName, subjectID,subjectNewPost,iconUrl,description));
                 }
             }
             return CityList;

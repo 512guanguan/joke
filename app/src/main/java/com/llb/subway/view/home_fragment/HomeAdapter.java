@@ -19,6 +19,7 @@ import java.util.List;
 
 public class HomeAdapter extends CommonAdapter {
     protected List<ForumListItem> mDatas;
+
     public HomeAdapter(Context mContext, @LayoutRes int layoutId) {
         super(mContext, layoutId);
         mDatas = new ArrayList<>();
@@ -41,10 +42,10 @@ public class HomeAdapter extends CommonAdapter {
     @Override
     public void onBindViewHolder(BaseViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
-        if(holder!=null){
-
-            //用过Picasso框架对图片处理并显示到iv上
-            //用with()方法初始化，,
+        if (holder != null) {
+            if (getItemViewType(position) == TYPE_ITEM) {
+                //用过Picasso框架对图片处理并显示到iv上
+                //用with()方法初始化，,
 //        Picasso.with(mContext)
 //                //load()下载图片
 //                .load(mDatas.get(position).iconUrl)
@@ -55,9 +56,11 @@ public class HomeAdapter extends CommonAdapter {
 //                .error(R.mipmap.ic_launcher)
 //                //init()显示到指定控件
 //                .into((ImageView) holder.getView(R.id.icon_iv));
-            ((TextView)holder.getView(R.id.forum_name_tv)).setText(mDatas.get(position).subjectName);
-            ((TextView)holder.getView(R.id.forum_description_tv)).setText(mDatas.get(position).description);
-//        ((TextView)holder.getView(R.id.new_post_number_tv)).setText(mDatas.get(position).subjectNewPost);
+                ((TextView) holder.getView(R.id.forum_name_tv)).setText(mDatas.get(position).subjectName);
+                ((TextView) holder.getView(R.id.forum_description_tv)).setText(mDatas.get(position).description);
+                ((TextView) holder.getView(R.id.new_post_number_tv)).setText(mDatas.get(position).subjectNewPost);
+            } else if (getItemViewType(position) == TYPE_FOOTER) {
+            }
         }
     }
 }
