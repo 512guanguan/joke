@@ -17,7 +17,7 @@ public class HomePresenter implements HomeContract.Presenter {
 
     @Override
     public void getPostListData() {
-        SubwayLoader.getInstance().getPostListData().subscribe((String response) -> {
+        SubwayLoader.getInstance().getForumListData().subscribe((String response) -> {
             Log.i("llb", "response = " + response);
             homeView.parsePostListData(response);
         }, (Throwable e) -> {

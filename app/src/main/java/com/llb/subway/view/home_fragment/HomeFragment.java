@@ -1,6 +1,7 @@
 package com.llb.subway.view.home_fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -14,8 +15,10 @@ import android.widget.Toast;
 
 import com.llb.joke.R;
 import com.llb.joke.view.OnFragmentInteractionListener;
+import com.llb.subway.model.api.SubwayURL;
 import com.llb.subway.model.bean.ForumListItem;
 import com.llb.subway.view.base.BaseActivity;
+import com.llb.subway.view.forum_home.ForumHomeActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +69,7 @@ public class HomeFragment extends Fragment implements HomeContract.View{
         Log.i("llb", "onCreateView");
         recyclerView = (RecyclerView) view.findViewById(R.id.show_list);
         postListData = new ArrayList<>();
-        adapter = new HomeAdapter(this.getActivity(), R.layout.item_subway_post_list);
+        adapter = new HomeAdapter(this.getActivity(), R.layout.item_subway_home_list);
 //        adapter.setData(postListData);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));//这里用线性显示 类似于listview
@@ -77,6 +80,9 @@ public class HomeFragment extends Fragment implements HomeContract.View{
             public void onItemClick(View view, int position) {
                 Log.i("llb", "onItemClick position=" + position);
                 Toast.makeText(mContext,"onItemClick position=" + position,Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(mContext, ForumHomeActivity.class);
+                intent.putExtra("url", SubwayURL.SUBWAY_BASE + BaseActivity.forumListItems.get(position).subjectUrl);
+                mContext.startActivity(intent);
             }
 
             @Override

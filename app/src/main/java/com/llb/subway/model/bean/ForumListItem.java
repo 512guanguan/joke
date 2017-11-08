@@ -13,6 +13,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
+ * 论坛首页模块信息解析结果
+ * http://www.ditiezu.com/forum.php?mod=forum
  * Created by llb on 2017-09-11.
  */
 

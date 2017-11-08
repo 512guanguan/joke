@@ -1,6 +1,7 @@
 package com.llb.subway.model;
 
 
+import com.llb.subway.model.api.GetRequest;
 import com.llb.subway.model.api.HttpUtil;
 import com.llb.subway.model.api.SubwayURL;
 
@@ -26,20 +27,17 @@ public class SubwayLoader {
         return instance == null ? new SubwayLoader() : instance;
     }
 
-    public Observable<String> getPostListData() {
+    /**
+     * 获取首页各个论坛分区信息
+     * @return
+     */
+    public Observable<String> getForumListData() {
         return Observable.just("")
                 .observeOn(Schedulers.io())
                 .map((s) -> {
                             try {
-                                Response res = HttpUtil.getInstance()
-                                        .get(SubwayURL.SUBWAY_HOME)
-                                        .addHeader("Accept-Encoding","gzip,deflate")
-                                        .addHeader("Accept-Language","zh-CN,zh;q=0.8,en;q=0.6")
-                                        .addHeader("Accept","text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8")
-                                        .addHeader("User-Agent","Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1")
-//                    .addParameter("username", userName)
-                                        .execute();
-//                                return new String(res.body().bytes(), "utf-8");
+                                GetRequest request = HttpUtil.getInstance().get(SubwayURL.SUBWAY_HOME);
+                                Response res = HttpUtil.addCommonHeaders(request).execute();
                                 InputStream inputStream = new ByteArrayInputStream(res.body().bytes());
                                 return zipInputStream(inputStream);
                             } catch (IOException e) {
@@ -50,6 +48,29 @@ public class SubwayLoader {
                 )
                 .observeOn(AndroidSchedulers.mainThread());
     }
+
+    /**
+     * 获取各个分论坛帖子列表信息
+     * @return
+     */
+    public Observable<String> getPostListData(String url) {
+        return Observable.just("")
+                .observeOn(Schedulers.io())
+                .map((s) -> {
+                            try {
+                                GetRequest request = HttpUtil.getInstance().get(url);
+                                Response res = HttpUtil.addCommonHeaders(request).execute();
+                                InputStream inputStream = new ByteArrayInputStream(res.body().bytes());
+                                return zipInputStream(inputStream);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            return "";
+                        }
+                )
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
 
     /**
      * 处理gzip,deflate返回流
