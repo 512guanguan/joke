@@ -29,6 +29,7 @@ import java.util.List;
  * create an instance of this fragment.
  */
 public class HomeFragment extends Fragment implements HomeContract.View{
+    private Context mContext;
     private OnFragmentInteractionListener mListener;
     private View view;
     private RecyclerView recyclerView = null;
@@ -53,6 +54,7 @@ public class HomeFragment extends Fragment implements HomeContract.View{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         if(view == null) {
+            this.mContext = this.getActivity();
             view = inflater.inflate(R.layout.home_fragment, container, false);
             initView();
         }
@@ -69,11 +71,12 @@ public class HomeFragment extends Fragment implements HomeContract.View{
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));//这里用线性显示 类似于listview
         recyclerView.setAdapter(adapter);
-        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.home_swipeRefreshLayout);
         adapter.setOnItemClickListener(new HomeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 Log.i("llb", "onItemClick position=" + position);
+                Toast.makeText(mContext,"onItemClick position=" + position,Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -102,21 +105,21 @@ public class HomeFragment extends Fragment implements HomeContract.View{
                     if (!adapter.isLoadingMore()) {
 //                        adapter.setLoadingMore(true);
                         Log.i("llb", "触发上拉刷新");
-                        loadMoreData();
+//                        getForumListData();
                     }
                 }
             }
         });
 
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                Log.i("llb", "setOnRefreshListener()");
-                fetchData();
-            }
-        });
+//        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                Log.i("llb", "setOnRefreshListener()");
+////                fetchData();
+//            }
+//        });
 
-        loadMoreData();
+        getForumListData();
     }
 
     @Override
@@ -136,18 +139,20 @@ public class HomeFragment extends Fragment implements HomeContract.View{
         mListener = null;
     }
 
-    public void fetchData() {
-        Toast.makeText(this.getActivity(), "到头啦！！", Toast.LENGTH_SHORT).show();
-        swipeRefreshLayout.setRefreshing(false);
-        return;
-    }
+//    public void fetchData() {
+//        Toast.makeText(this.getActivity(), "到头啦！！", Toast.LENGTH_SHORT).show();
+//        swipeRefreshLayout.setRefreshing(false);
+//        return;
+//    }
 
-    public void loadMoreData() {
+    public void getForumListData() {
+        swipeRefreshLayout.setRefreshing(true);
         presenter.getPostListData();
     }
 
     @Override
     public void parsePostListData(String response) {
+        swipeRefreshLayout.setRefreshing(false);
         BaseActivity.forumListItems = ForumListItem.Builder.parse(response);
         Toast.makeText(this.getActivity(), "数据解析完了", Toast.LENGTH_SHORT).show();
         adapter.setData(BaseActivity.forumListItems);

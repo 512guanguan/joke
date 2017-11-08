@@ -1,12 +1,11 @@
 package com.llb.subway.model.api;
 
-import retrofit2.http.PUT;
-
 /**
  * Created by llb on 2017-09-06.
  */
 
 public class SubwayURL {
+    public static final String SUBWAY_BASE = "http://www.ditiezu.com/";
     public static final String SUBWAY_HOST = "http://www.ditiezu.com/forum.php";
 
     /**论坛首页信息列表**/

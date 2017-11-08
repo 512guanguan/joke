@@ -15,7 +15,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,11 +23,7 @@ import android.widget.Toast;
 
 import com.llb.common.http.RetrofitServiceManager;
 import com.llb.joke.R;
-import com.llb.joke.view.JokeFirstFragment;
-import com.llb.joke.view.JokeSecondFragment;
 import com.llb.joke.view.OnFragmentInteractionListener;
-import com.llb.pixabay.view.PixabayFirstFragment;
-import com.llb.pixabay.view.PixabaySecondFragment;
 import com.llb.subway.view.base.BaseActivity;
 import com.llb.subway.view.home_fragment.HomeFragment;
 
@@ -42,7 +37,7 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
     private MainViewPagerAdapter pagerAdapter;
     private BottomNavigationView bottomNavigationView;
 //    private List<Fragment> jokeFragemnts;
-    private List<Fragment> pixabayFragments;
+//    private List<Fragment> pixabayFragments;
     private List<Fragment> homeFragments;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,9 +49,9 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
 //        jokeFragemnts.add(new JokeFirstFragment());
 //        jokeFragemnts.add(new JokeSecondFragment());
 
-        pixabayFragments = new ArrayList<>();
-        pixabayFragments.add(new PixabayFirstFragment());
-        pixabayFragments.add(new PixabaySecondFragment());
+//        pixabayFragments = new ArrayList<>();
+//        pixabayFragments.add(new PixabayFirstFragment());
+//        pixabayFragments.add(new PixabaySecondFragment());
 
         homeFragments = new ArrayList<>();
         homeFragments.add(new HomeFragment());
@@ -94,7 +89,7 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
                 RetrofitServiceManager.clearInstance();
                 switch (id){
                     case R.id.nav_pixabay_image:
-                        pagerAdapter.addFragments(pixabayFragments);
+//                        pagerAdapter.addFragments(pixabayFragments);
 //                    fragmentTransaction = fragmentManager.beginTransaction();
 //                    fragmentTransaction.hide(jokeFragemnts.get(0));
 //                    fragmentTransaction.hide(jokeFragemnts.get(1));

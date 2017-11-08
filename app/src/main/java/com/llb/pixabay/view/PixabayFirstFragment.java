@@ -111,7 +111,7 @@ public class PixabayFirstFragment extends Fragment {
 //                    if (!adapter.isLoadingMore()) {
 ////                        adapter.setLoadingMore(true);
 //                        Log.i("llb", "触发上拉刷新");
-//                        loadMoreData(currentPage, pageSize);
+//                        getForumListData(currentPage, pageSize);
 //                    }
 //                }
             }

@@ -49,6 +49,7 @@ public class CommonAdapter<T> extends RecyclerView.Adapter<BaseViewHolder> {
         } else if (viewType == TYPE_FOOTER) {
             View itemView = inflater.inflate(R.layout.item_recyclerview_footer, parent, false);
             return new BaseViewHolder(mContext, itemView);
+//            return null;
         } else {
             return null;
         }
@@ -78,7 +79,7 @@ public class CommonAdapter<T> extends RecyclerView.Adapter<BaseViewHolder> {
 
     @Override
     public int getItemViewType(int position) {
-        if (position + '1' == getItemCount()) {
+        if (position + '1' == getItemCount()) {//TODO 有问题
             return TYPE_FOOTER;
         } else {
             return TYPE_ITEM;
@@ -87,7 +88,7 @@ public class CommonAdapter<T> extends RecyclerView.Adapter<BaseViewHolder> {
 
     @Override
     public int getItemCount() {
-        return mDatas == null ? 0 : mDatas.size();
+        return mDatas == null ? -1 : mDatas.size();
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {

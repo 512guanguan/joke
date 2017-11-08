@@ -12,8 +12,6 @@ import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 
-import com.llb.joke.R;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,8 +56,9 @@ public class CommonAdapter<T> extends RecyclerView.Adapter<BaseViewHolder>{
             viewHolder.setBinding(binding);
             return viewHolder;
         }else if(viewType == TYPE_FOOTER){
-            View view = inflater.inflate(R.layout.item_recyclerview_footer, parent, false);
-            return new BaseViewHolder(view);
+//            View view = inflater.inflate(R.layout.item_recyclerview_footer, parent, false);
+//            return new BaseViewHolder(view);
+            return null;
         }else {
             return null;
         }
@@ -92,7 +91,7 @@ public class CommonAdapter<T> extends RecyclerView.Adapter<BaseViewHolder>{
 
     @Override
     public int getItemViewType(int position) {
-        if(position + '1' == getItemCount()){
+        if(position + '1' == getItemCount()){//TODO 判断条件有问题
             return TYPE_FOOTER;
         }else {
             return TYPE_ITEM;
