@@ -3,7 +3,6 @@ package com.llb.subway.model;
 
 import com.llb.subway.model.api.GetRequest;
 import com.llb.subway.model.api.HttpUtil;
-import com.llb.subway.model.api.SubwayURL;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -31,22 +30,8 @@ public class SubwayLoader {
      * 获取首页各个论坛分区信息
      * @return
      */
-    public Observable<String> getForumListData() {
-        return Observable.just("")
-                .observeOn(Schedulers.io())
-                .map((s) -> {
-                            try {
-                                GetRequest request = HttpUtil.getInstance().get(SubwayURL.SUBWAY_HOME);
-                                Response res = HttpUtil.addCommonHeaders(request).execute();
-                                InputStream inputStream = new ByteArrayInputStream(res.body().bytes());
-                                return zipInputStream(inputStream);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            return "";
-                        }
-                )
-                .observeOn(AndroidSchedulers.mainThread());
+    public Observable<String> getForumListData(String url) {
+        return requestByGet(url);
     }
 
     /**
@@ -54,6 +39,15 @@ public class SubwayLoader {
      * @return
      */
     public Observable<String> getPostListData(String url) {
+        return requestByGet(url);
+    }
+
+    /**
+     * 通用的网络请求
+     * @param url
+     * @return
+     */
+    private Observable<String> requestByGet(String url){
         return Observable.just("")
                 .observeOn(Schedulers.io())
                 .map((s) -> {

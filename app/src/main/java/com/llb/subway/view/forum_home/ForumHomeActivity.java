@@ -11,14 +11,15 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.llb.joke.R;
+import com.llb.subway.model.bean.ForumListItem;
 import com.llb.subway.model.bean.PostListItem;
+import com.llb.subway.view.base.BaseActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ForumHomeActivity extends AppCompatActivity implements ForumHomeContract.View{
     private Context mContext;
-    private View view;
     private String url = "";
     private RecyclerView recyclerView = null;
     private List<PostListItem> postListData = null;
@@ -35,12 +36,12 @@ public class ForumHomeActivity extends AppCompatActivity implements ForumHomeCon
     }
     private void initView() {
         presenter = new ForumHomePresenter(this);
-        recyclerView = (RecyclerView) view.findViewById(R.id.post_list);
+        recyclerView = (RecyclerView) findViewById(R.id.post_list);
         postListData = new ArrayList<>();
         adapter = new ForumHomeAdapter(this, R.layout.item_forum_home_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));//这里用线性显示 类似于listview
         recyclerView.setAdapter(adapter);
-        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.home_swipeRefreshLayout);
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.home_swipeRefreshLayout);
         adapter.setOnItemClickListener(new ForumHomeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -101,5 +102,9 @@ public class ForumHomeActivity extends AppCompatActivity implements ForumHomeCon
     @Override
     public void parsePostListData(String response) {
         Log.i("llb","数据那回来了，等待解析\n" + response);
+        PostListItem.Builder builder= new PostListItem().new Builder();
+        BaseActivity.postListItems = builder.parse(response);
+        Toast.makeText(this, "数据解析完了", Toast.LENGTH_SHORT).show();
+
     }
 }

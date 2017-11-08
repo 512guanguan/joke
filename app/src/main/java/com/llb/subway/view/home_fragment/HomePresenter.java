@@ -3,6 +3,7 @@ package com.llb.subway.view.home_fragment;
 import android.util.Log;
 
 import com.llb.subway.model.SubwayLoader;
+import com.llb.subway.model.api.SubwayURL;
 
 /**
  * Created by llb on 2017-09-12.
@@ -17,7 +18,7 @@ public class HomePresenter implements HomeContract.Presenter {
 
     @Override
     public void getPostListData() {
-        SubwayLoader.getInstance().getForumListData().subscribe((String response) -> {
+        SubwayLoader.getInstance().getForumListData(SubwayURL.SUBWAY_HOME).subscribe((String response) -> {
             Log.i("llb", "response = " + response);
             homeView.parsePostListData(response);
         }, (Throwable e) -> {
