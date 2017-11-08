@@ -94,8 +94,9 @@ public class HomeFragment extends Fragment implements HomeContract.View{
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 Log.i("llb", "onScrolled dx=" + dx + "  dy = " + dy);
-                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                if (layoutManager.findLastVisibleItemPosition() + 1 == adapter.getItemCount()) {
+//                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                if (recyclerView.computeVerticalScrollOffset() + recyclerView.computeHorizontalScrollExtent() >= recyclerView.computeVerticalScrollRange()) {
+                    Log.i("llb", "onScrolled 底部啦");
                     // 是否正在下拉刷新
                     if (swipeRefreshLayout.isRefreshing()) {
                         adapter.notifyItemRemoved(adapter.getItemCount());
@@ -111,13 +112,14 @@ public class HomeFragment extends Fragment implements HomeContract.View{
             }
         });
 
-//        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//                Log.i("llb", "setOnRefreshListener()");
-////                fetchData();
-//            }
-//        });
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Log.i("llb", "setOnRefreshListener()");
+//                fetchData();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
 
         getForumListData();
     }
