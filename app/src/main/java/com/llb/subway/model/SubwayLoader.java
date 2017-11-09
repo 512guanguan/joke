@@ -1,8 +1,15 @@
 package com.llb.subway.model;
 
 
+import android.util.Log;
+import android.widget.Toast;
+
 import com.llb.subway.model.api.GetRequest;
 import com.llb.subway.model.api.HttpUtil;
+import com.llb.subway.model.bean.ForumListItem;
+import com.llb.subway.model.bean.PostListItem;
+import com.llb.subway.model.http.DefaultObservableTransformer;
+import com.llb.subway.view.base.BaseActivity;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -12,9 +19,9 @@ import java.io.InputStreamReader;
 import java.util.zip.GZIPInputStream;
 
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.Response;
+
 /**
  * Created by llb on 2017-09-06.
  */
@@ -28,26 +35,44 @@ public class SubwayLoader {
 
     /**
      * 获取首页各个论坛分区信息
+     *
      * @return
      */
-    public Observable<String> getForumListData(String url) {
-        return requestByGet(url);
+    public Observable<ForumListItem> getForumListData(String url) {
+        return requestByGet(url)
+                .flatMap((response) -> {//io线程
+                    Log.i("llb","数据那回来了，等待解析\n" + response);
+                    // do something like cache
+                    BaseActivity.forumListItems = ForumListItem.Builder.parse(response);
+                    return  Observable.just(BaseActivity.forumListItems);
+                })
+                .compose(DefaultObservableTransformer.defaultTransformer());
     }
 
     /**
      * 获取各个分论坛帖子列表信息
+     *
      * @return
      */
-    public Observable<String> getPostListData(String url) {
-        return requestByGet(url);
+    public Observable<PostListItem> getPostListData(String url) {
+        return requestByGet(url)
+                .flatMap((response) -> {//io线程
+                    Log.i("llb","数据那回来了，等待解析\n" + response);
+                    // do something like cache
+                    PostListItem.Builder builder= new PostListItem().new Builder();
+                    BaseActivity.postListItems = builder.parse(response);
+                    return  Observable.just(BaseActivity.postListItems);
+                })
+                .compose(DefaultObservableTransformer.defaultTransformer());
     }
 
     /**
      * 通用的网络请求
+     *
      * @param url
      * @return
      */
-    private Observable<String> requestByGet(String url){
+    private Observable<String> requestByGet(String url) {
         return Observable.just("")
                 .observeOn(Schedulers.io())
                 .map((s) -> {
@@ -61,8 +86,8 @@ public class SubwayLoader {
                             }
                             return "";
                         }
-                )
-                .observeOn(AndroidSchedulers.mainThread());
+                );
+//                .observeOn(AndroidSchedulers.mainThread());
     }
 
 

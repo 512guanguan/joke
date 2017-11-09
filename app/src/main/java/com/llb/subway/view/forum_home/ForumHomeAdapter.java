@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 
 import com.llb.joke.R;
 import com.llb.subway.common.BaseViewHolder;
-import com.llb.subway.model.bean.PostListItem;
+import com.llb.subway.model.bean.PostListItem.PostItemInformation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ public class ForumHomeAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     protected Context mContext;
     protected static final int TYPE_ITEM = 0;
     protected static final int TYPE_FOOTER = 1;
-    protected List<PostListItem.PostListInformation> mDatas;
+    protected List<PostItemInformation> mDatas;
     protected OnItemClickListener onItemClickListener;
     protected int layoutId;
     protected boolean isLoadingMore = false;

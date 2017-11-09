@@ -11,9 +11,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.llb.joke.R;
-import com.llb.subway.model.bean.ForumListItem;
 import com.llb.subway.model.bean.PostListItem;
-import com.llb.subway.view.base.BaseActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,10 +98,9 @@ public class ForumHomeActivity extends AppCompatActivity implements ForumHomeCon
     }
 
     @Override
-    public void parsePostListData(String response) {
-        Log.i("llb","数据那回来了，等待解析\n" + response);
-        PostListItem.Builder builder= new PostListItem().new Builder();
-        BaseActivity.postListItems = builder.parse(response);
+    public void parsePostListData(PostListItem response) {
+//        PostListItem.Builder builder= new PostListItem().new Builder();
+//        BaseActivity.postListItems = builder.parse(response);
         Toast.makeText(this, "数据解析完了", Toast.LENGTH_SHORT).show();
 
     }

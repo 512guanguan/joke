@@ -1,16 +1,12 @@
 package com.llb.subway.model.bean;
 
-import android.util.Log;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
+import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * 分论坛列表页解析结果，如广州区
@@ -19,20 +15,21 @@ import java.util.regex.Pattern;
  */
 
 public class PostListItem {
-    public ArrayList<PostListInformation> postList;
+    public ArrayList<PostItemInformation> postList;
     public ArrayList<LineInformation> lineList;
 
     public PostListItem() {
         this.postList = new ArrayList<>();
         this.lineList = new ArrayList<>();
     }
-    public PostListItem(ArrayList<PostListInformation> postList, ArrayList<LineInformation> lineList) {
+    public PostListItem(ArrayList<PostItemInformation> postList, ArrayList<LineInformation> lineList) {
         this.postList = postList;
         this.lineList = lineList;
     }
 
-    public class  PostListInformation{
+    public class PostItemInformation {
         public String postUrl;
+        public String iconUrl;//http://www.ditiezu.com/mplus/img/p_1.png
         public String title;
         public String author;
         public String time;
@@ -47,28 +44,53 @@ public class PostListItem {
     public class Builder{
         /**
          * <div id="thtys_menu" class="thtyss" style="display:none">
-         <a href="forum.php?mod=forumdisplay&amp;fid=8&mobile=yes" class="a">全部</a>
-         <a href="forum.php?mod=forumdisplay&amp;fid=8&amp;filter=typeid&amp;typeid=48&mobile=yes" >1号线</a>
-         <a href="forum.php?mod=forumdisplay&amp;fid=8&amp;filter=typeid&amp;typeid=49&mobile=yes" >2号线</a>
+             <a href="forum.php?mod=forumdisplay&amp;fid=8&mobile=yes" class="a">全部</a>
+             <a href="forum.php?mod=forumdisplay&amp;fid=8&amp;filter=typeid&amp;typeid=48&mobile=yes" >1号线</a>
+             <a href="forum.php?mod=forumdisplay&amp;fid=8&amp;filter=typeid&amp;typeid=49&mobile=yes" >2号线</a>
          </div>
+
+         <ul id="alist" class="thlist">
+             <li>
+                 <a href="forum.php?mod=viewthread&amp;tid=383197&mobile=yes">
+                     <h1><img src="./mplus/img/l1.png" height="15" />地铁族北京区管理规定</h1>
+                     <p>hat600<span class="pipe">-</span>2014-9-23 <span class="replies">3</span></p>
+                 </a>
+             </li>
+             <li>
+                 <a href="forum.php?mod=viewthread&amp;tid=537380&mobile=yes">
+                     <h1>关于北京北站（西直门站）的建议，北京北改为西直门，清河改为北京北。</h1>
+                     <p>zzyljl<span class="pipe">-</span>2017-11-7 <span class="replies">40</span></p>
+                 </a>
+             </li>
+         </ul>
          */
-        public List<PostListItem> parse(String html){
+        public PostListItem parse(String html){
             if(html==null)
                 return null;
-            List<LineInformation> lineList =new ArrayList<>();
+            PostListItem postListItem = new PostListItem();
             Document document= Jsoup.parse(html);
             //解析所有线路信息
             Elements elements = document.select("div #thtys_menu a");
             for(int j = 0;j<elements.size();j++){
-                Element Section = elements.get(j);
                 LineInformation line = new LineInformation();
                 line.name = elements.get(j).text();
                 line.url = elements.get(j).attr("href");
-                lineList.add(line);
+                postListItem.lineList.add(line);
             }
             //TODO 解析帖子列表信息
-            
-            return null;
+            Elements postElements = document.select("ul.thlist li");
+            for(int j = 0;j<postElements.size();j++){
+                PostItemInformation postItemInformation = new PostItemInformation();
+                postItemInformation.postUrl = postElements.get(j).select("li a").attr("href");
+                postItemInformation.title = postElements.get(j).select("li a h1").text();
+                postItemInformation.iconUrl = postElements.get(j).select("li a h1 img").first().attr("src").substring(2);
+                postItemInformation.commentNum = postElements.get(j).getElementsByClass("replies").text();
+                List<TextNode> textNodes = postElements.get(j).getElementsByTag("p").first().textNodes();
+                postItemInformation.author =textNodes.get(0).text();
+                postItemInformation.time = textNodes.get(1).text();
+                postListItem.postList.add(postItemInformation);
+            }
+            return postListItem;
         }
     }
 }

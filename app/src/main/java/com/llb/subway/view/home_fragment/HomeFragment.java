@@ -159,9 +159,9 @@ public class HomeFragment extends Fragment implements HomeContract.View{
     }
 
     @Override
-    public void parsePostListData(String response) {
+    public void parsePostListData(ForumListItem response) {
         swipeRefreshLayout.setRefreshing(false);
-        BaseActivity.forumListItems = ForumListItem.Builder.parse(response);
+//        BaseActivity.forumListItems = ForumListItem.Builder.parse(response);
         Toast.makeText(this.getActivity(), "数据解析完了", Toast.LENGTH_SHORT).show();
         adapter.setData(BaseActivity.forumListItems);
     }

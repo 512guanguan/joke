@@ -10,7 +10,7 @@ import java.util.List;
 
 public class BaseActivity extends AppCompatActivity {
     public static List<ForumListItem> forumListItems;
-    public static List<PostListItem> postListItems;
+    public static PostListItem postListItems;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

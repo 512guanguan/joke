@@ -19,35 +19,50 @@ import java.util.regex.Pattern;
  */
 
 public class ForumListItem {
-    /**论坛分区，如管理分区、地铁文化、生活休闲**/
-    public String forum;
-    public String forumUrl;
-    public String forumID;//forum.php?gid=2&amp;mod=forum&mobile=yes提取的gid
-    public String subjectUrl;
-    /**某个主题模块名，如广州区、地铁心情**/
-    public String subjectName;
-    public String subjectID;//forum.php?mod=forumdisplay&fid=8&mobile=yes提取的fid
-    public String subjectNewPost;//近日新帖数
-    public String iconUrl;
-    public String description;
+    public ArrayList<ForumInformation> forumInformations;
+//    /**论坛分区，如管理分区、地铁文化、生活休闲**/
+//    public String forum;
+//    public String forumUrl;
+//    public String forumID;//forum.php?gid=2&amp;mod=forum&mobile=yes提取的gid
+//    public String subjectUrl;
+//    /**某个主题模块名，如广州区、地铁心情**/
+//    public String subjectName;
+//    public String subjectID;//forum.php?mod=forumdisplay&fid=8&mobile=yes提取的fid
+//    public String subjectNewPost;//近日新帖数
+//    public String iconUrl;
+//    public String description;
 
-
-    public ForumListItem(String forum, String forumUrl, String forumID, String subjectUrl, String subjectName, String subjectID, String subjectNewPost, String iconUrl, String description) {
-        this.forum = forum;
-        this.forumUrl = forumUrl;
-        this.forumID = forumID;
-        this.subjectUrl = subjectUrl;
-        this.subjectName = subjectName;
-        this.subjectID = subjectID;
-        this.subjectNewPost = subjectNewPost;
-        this.iconUrl = iconUrl;
-        this.description = description;
+    public ForumListItem(){
+        forumInformations = new ArrayList<>();
     }
-//    public enum ForumCodeEnum{
-//        CITY_SUBWAY(0),SUBWAY_CULTURE(1),
+
+//    public ForumListItem(String forum, String forumUrl, String forumID, String subjectUrl, String subjectName, String subjectID, String subjectNewPost, String iconUrl, String description) {
+//        this.forum = forum;
+//        this.forumUrl = forumUrl;
+//        this.forumID = forumID;
+//        this.subjectUrl = subjectUrl;
+//        this.subjectName = subjectName;
+//        this.subjectID = subjectID;
+//        this.subjectNewPost = subjectNewPost;
+//        this.iconUrl = iconUrl;
+//        this.description = description;
 //    }
 
-    public static class Builder{
+    public class ForumInformation{
+        /**论坛分区，如管理分区、地铁文化、生活休闲**/
+        public String forum;
+        public String forumUrl;
+        public String forumID;//forum.php?gid=2&amp;mod=forum&mobile=yes提取的gid
+        public String subjectUrl;
+        /**某个主题模块名，如广州区、地铁心情**/
+        public String subjectName;
+        public String subjectID;//forum.php?mod=forumdisplay&fid=8&mobile=yes提取的fid
+        public String subjectNewPost;//近日新帖数
+        public String iconUrl;
+        public String description;
+    }
+
+    public class Builder{
         /**
          * <div class="catlist">
              <h1><a href="forum.php?gid=2&amp;mod=forum&mobile=yes">都市地铁</a><span id="subfrm_2" onclick="dbox('subfrm_2','o');" class="o"></span></h1>
@@ -67,48 +82,40 @@ public class ForumListItem {
              </li>
          </ul>
          */
-        public static List<ForumListItem> parse(String html){
+        public List<ForumListItem> parse(String html){
             if(html==null)
                 return null;
-            List<ForumListItem> CityList =new ArrayList<>();
+            ForumListItem forumListItem = new ForumListItem();
+//            List<ForumListItem> CityList =new ArrayList<>();
             String gidReg = "gid=";
             String fidReg = "fid=";
             Document document= Jsoup.parse(html);
             Elements elements = document.select("div.catlist");
             for(int j = 0;j<elements.size();j++){
+                ForumInformation forumInformation = new ForumInformation();
                 Element forumSection = elements.get(j);
 
                 Elements element = forumSection.getElementsByTag("h1");
                 Document doc = Jsoup.parse(element.toString());
                 element = doc.select("a");
-                String forum = element.size() > 0 ? element.get(0).text() : "";
-                String forumUrl = element.size()> 0 ? element.get(0).attr("href"): "";
-//                Matcher matcher = Pattern.compile(gidReg).matcher(forumUrl);
-                String forumID = "";
-//                boolean find= matcher.find();
-//                if(find){
-//                    Log.i("llb","matcher.group()="+matcher.group());
-//                    String str = forumUrl.substring(matcher.end());
-//                    forumID = str.substring(0, str.indexOf("&"));
-//                }
-                String[] arr = forumUrl.split(gidReg);
-                forumID = arr.length>1? arr[1].substring(0,arr[1].indexOf("&")): "";
-                Log.i("llb","arr.length ="+arr.length + "  forumID="+forumID);
+                forumInformation.forum = element.size() > 0 ? element.get(0).text() : "";
+                forumInformation.forumUrl = element.size()> 0 ? element.get(0).attr("href"): "";
+                String[] arr = forumInformation.forumUrl.split(gidReg);
+                forumInformation.forumID = arr.length>1? arr[1].substring(0,arr[1].indexOf("&")): "";
 
                 element =forumSection.select("li");
                 for(int i=0;i<element.size();i++){
                     Elements item=element.get(i).getElementsByTag("a");
                     doc = Jsoup.parse(item.toString());
 
-                    String subjectUrl = item.first().attr("href");
-                    Matcher mat = Pattern.compile(fidReg).matcher(subjectUrl);
-                    String subjectID = "";
+                    forumInformation.subjectUrl = item.first().attr("href");
+                    Matcher mat = Pattern.compile(fidReg).matcher(forumInformation.subjectUrl);
                     if(mat.find()){
-                        String str = subjectUrl.substring(mat.end());
-                        subjectID = str.substring(0, str.indexOf("&"));
+                        String str = forumInformation.subjectUrl.substring(mat.end());
+                        forumInformation.subjectID = str.substring(0, str.indexOf("&"));
                     }
 
-                    String subjectNewPost = doc.select("span").size()>0 ? doc.select("span").get(0).text() : "0";;
+                    forumInformation.subjectNewPost = doc.select("span").size()>0 ? doc.select("span").get(0).text() : "0";;
 
                     String iconUrl = doc.select("img").size()>0 ? doc.select("img").get(0).attr("src") : "";
                     String subjectName = doc.select("p.f_nm").size()>0 ? doc.select("p.f_nm").get(0).text() : "";
