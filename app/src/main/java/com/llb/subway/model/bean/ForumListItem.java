@@ -1,14 +1,11 @@
 package com.llb.subway.model.bean;
 
-import android.util.Log;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -60,6 +57,22 @@ public class ForumListItem {
         public String subjectNewPost;//近日新帖数
         public String iconUrl;
         public String description;
+
+        public ForumInformation(){
+        }
+        public ForumInformation(String forum, String forumUrl, String forumID,
+                                String subjectUrl, String subjectName, String subjectID,
+                                String subjectNewPost, String iconUrl, String description) {
+            this.forum = forum;
+            this.forumUrl = forumUrl;
+            this.forumID = forumID;
+            this.subjectUrl = subjectUrl;
+            this.subjectName = subjectName;
+            this.subjectID = subjectID;
+            this.subjectNewPost = subjectNewPost;
+            this.iconUrl = iconUrl;
+            this.description = description;
+        }
     }
 
     public class Builder{
@@ -82,7 +95,7 @@ public class ForumListItem {
              </li>
          </ul>
          */
-        public List<ForumListItem> parse(String html){
+        public ForumListItem parse(String html){
             if(html==null)
                 return null;
             ForumListItem forumListItem = new ForumListItem();
@@ -92,38 +105,39 @@ public class ForumListItem {
             Document document= Jsoup.parse(html);
             Elements elements = document.select("div.catlist");
             for(int j = 0;j<elements.size();j++){
-                ForumInformation forumInformation = new ForumInformation();
+                ForumInformation tempInfo = new ForumInformation();
                 Element forumSection = elements.get(j);
 
                 Elements element = forumSection.getElementsByTag("h1");
                 Document doc = Jsoup.parse(element.toString());
                 element = doc.select("a");
-                forumInformation.forum = element.size() > 0 ? element.get(0).text() : "";
-                forumInformation.forumUrl = element.size()> 0 ? element.get(0).attr("href"): "";
-                String[] arr = forumInformation.forumUrl.split(gidReg);
-                forumInformation.forumID = arr.length>1? arr[1].substring(0,arr[1].indexOf("&")): "";
+                tempInfo.forum = element.size() > 0 ? element.get(0).text() : "";
+                tempInfo.forumUrl = element.size()> 0 ? element.get(0).attr("href"): "";
+                String[] arr = tempInfo.forumUrl.split(gidReg);
+                tempInfo.forumID = arr.length>1? arr[1].substring(0,arr[1].indexOf("&")): "";
 
                 element =forumSection.select("li");
                 for(int i=0;i<element.size();i++){
                     Elements item=element.get(i).getElementsByTag("a");
                     doc = Jsoup.parse(item.toString());
 
-                    forumInformation.subjectUrl = item.first().attr("href");
-                    Matcher mat = Pattern.compile(fidReg).matcher(forumInformation.subjectUrl);
+                    tempInfo.subjectUrl = item.first().attr("href");
+                    Matcher mat = Pattern.compile(fidReg).matcher(tempInfo.subjectUrl);
                     if(mat.find()){
-                        String str = forumInformation.subjectUrl.substring(mat.end());
-                        forumInformation.subjectID = str.substring(0, str.indexOf("&"));
+                        String str = tempInfo.subjectUrl.substring(mat.end());
+                        tempInfo.subjectID = str.substring(0, str.indexOf("&"));
                     }
 
-                    forumInformation.subjectNewPost = doc.select("span").size()>0 ? doc.select("span").get(0).text() : "0";;
-
-                    String iconUrl = doc.select("img").size()>0 ? doc.select("img").get(0).attr("src") : "";
-                    String subjectName = doc.select("p.f_nm").size()>0 ? doc.select("p.f_nm").get(0).text() : "";
-                    String description = doc.select("p.xg1").size()>0 ? doc.select("p.xg1").get(0).text() : "";
-                    CityList.add(new ForumListItem(forum, forumUrl, forumID,subjectUrl,subjectName, subjectID,subjectNewPost,iconUrl,description));
+                    tempInfo.subjectNewPost = doc.select("span").size()>0 ? doc.select("span").get(0).text() : "0";;
+                    tempInfo.iconUrl = doc.select("img").size()>0 ? doc.select("img").get(0).attr("src") : "";
+                    tempInfo.subjectName = doc.select("p.f_nm").size()>0 ? doc.select("p.f_nm").get(0).text() : "";
+                    tempInfo.description = doc.select("p.xg1").size()>0 ? doc.select("p.xg1").get(0).text() : "";
+                    forumListItem.forumInformations.add(new ForumInformation(tempInfo.forum, tempInfo.forumUrl, tempInfo.forumID,
+                            tempInfo.subjectUrl, tempInfo.subjectName, tempInfo.subjectID, tempInfo.subjectNewPost, tempInfo.iconUrl,
+                            tempInfo.description));
                 }
             }
-            return CityList;
+            return forumListItem;
         }
     }
 }

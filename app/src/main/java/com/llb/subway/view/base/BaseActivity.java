@@ -9,7 +9,7 @@ import com.llb.subway.model.bean.PostListItem;
 import java.util.List;
 
 public class BaseActivity extends AppCompatActivity {
-    public static List<ForumListItem> forumListItems;
+    public static ForumListItem forumListItems;
     public static PostListItem postListItems;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

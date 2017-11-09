@@ -43,7 +43,7 @@ public class SubwayLoader {
                 .flatMap((response) -> {//io线程
                     Log.i("llb","数据那回来了，等待解析\n" + response);
                     // do something like cache
-                    BaseActivity.forumListItems = ForumListItem.Builder.parse(response);
+                    BaseActivity.forumListItems = (new ForumListItem()).new Builder().parse(response);
                     return  Observable.just(BaseActivity.forumListItems);
                 })
                 .compose(DefaultObservableTransformer.defaultTransformer());

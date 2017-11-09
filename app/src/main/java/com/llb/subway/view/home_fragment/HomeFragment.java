@@ -81,7 +81,7 @@ public class HomeFragment extends Fragment implements HomeContract.View{
                 Log.i("llb", "onItemClick position=" + position);
                 Toast.makeText(mContext,"onItemClick position=" + position,Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(mContext, ForumHomeActivity.class);
-                intent.putExtra("url", SubwayURL.SUBWAY_BASE + BaseActivity.forumListItems.get(position).subjectUrl);
+                intent.putExtra("url", SubwayURL.SUBWAY_BASE + BaseActivity.forumListItems.forumInformations.get(position).subjectUrl);
                 mContext.startActivity(intent);
             }
 
@@ -163,6 +163,6 @@ public class HomeFragment extends Fragment implements HomeContract.View{
         swipeRefreshLayout.setRefreshing(false);
 //        BaseActivity.forumListItems = ForumListItem.Builder.parse(response);
         Toast.makeText(this.getActivity(), "数据解析完了", Toast.LENGTH_SHORT).show();
-        adapter.setData(BaseActivity.forumListItems);
+        adapter.setData(response.forumInformations);
     }
 }

@@ -29,7 +29,7 @@ public class HomeAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     protected Context mContext;
     protected static final int TYPE_ITEM = 0;
     protected static final int TYPE_FOOTER = 1;
-    protected List<ForumListItem> mDatas;
+    protected List<ForumListItem.ForumInformation> mDatas;
     protected OnItemClickListener onItemClickListener;
     protected int layoutId;
     protected boolean isLoadingMore = false;
