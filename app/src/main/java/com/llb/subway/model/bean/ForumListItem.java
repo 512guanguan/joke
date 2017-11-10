@@ -1,5 +1,7 @@
 package com.llb.subway.model.bean;
 
+import android.text.TextUtils;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -96,7 +98,7 @@ public class ForumListItem {
          </ul>
          */
         public ForumListItem parse(String html){
-            if(html==null)
+            if(TextUtils.isEmpty(html))
                 return null;
             ForumListItem forumListItem = new ForumListItem();
 //            List<ForumListItem> CityList =new ArrayList<>();

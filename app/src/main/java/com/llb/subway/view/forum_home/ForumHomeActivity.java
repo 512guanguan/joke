@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.llb.joke.R;
+import com.llb.subway.common.OnItemClickListener;
 import com.llb.subway.model.bean.PostListItem;
 
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ public class ForumHomeActivity extends AppCompatActivity implements ForumHomeCon
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.forum_home_activity);
+        mContext = this;
         url = getIntent().getStringExtra("url");
         initView();
     }
@@ -39,8 +41,8 @@ public class ForumHomeActivity extends AppCompatActivity implements ForumHomeCon
         adapter = new ForumHomeAdapter(this, R.layout.item_forum_home_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));//这里用线性显示 类似于listview
         recyclerView.setAdapter(adapter);
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.home_swipeRefreshLayout);
-        adapter.setOnItemClickListener(new ForumHomeAdapter.OnItemClickListener() {
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.forum_home_swipeRefreshLayout);
+        adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 Log.i("llb", "onItemClick position=" + position);
@@ -90,6 +92,7 @@ public class ForumHomeActivity extends AppCompatActivity implements ForumHomeCon
         });
 
         presenter.getPostListData();
+        swipeRefreshLayout.setRefreshing(true);
     }
 
     @Override
@@ -102,6 +105,7 @@ public class ForumHomeActivity extends AppCompatActivity implements ForumHomeCon
 //        PostListItem.Builder builder= new PostListItem().new Builder();
 //        BaseActivity.postListItems = builder.parse(response);
         Toast.makeText(this, "数据解析完了", Toast.LENGTH_SHORT).show();
-
+        adapter.setData(response.postList);
+        swipeRefreshLayout.setRefreshing(false);
     }
 }

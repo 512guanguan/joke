@@ -2,7 +2,6 @@ package com.llb.subway.model;
 
 
 import android.util.Log;
-import android.widget.Toast;
 
 import com.llb.subway.model.api.GetRequest;
 import com.llb.subway.model.api.HttpUtil;
@@ -59,8 +58,7 @@ public class SubwayLoader {
                 .flatMap((response) -> {//io线程
                     Log.i("llb","数据那回来了，等待解析\n" + response);
                     // do something like cache
-                    PostListItem.Builder builder= new PostListItem().new Builder();
-                    BaseActivity.postListItems = builder.parse(response);
+                    BaseActivity.postListItems = (new PostListItem()).new Builder().parse(response);
                     return  Observable.just(BaseActivity.postListItems);
                 })
                 .compose(DefaultObservableTransformer.defaultTransformer());

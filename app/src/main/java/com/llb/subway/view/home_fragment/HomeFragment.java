@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.llb.joke.R;
 import com.llb.joke.view.OnFragmentInteractionListener;
+import com.llb.subway.common.OnItemClickListener;
 import com.llb.subway.model.api.SubwayURL;
 import com.llb.subway.model.bean.ForumListItem;
 import com.llb.subway.view.base.BaseActivity;
@@ -75,7 +76,7 @@ public class HomeFragment extends Fragment implements HomeContract.View{
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));//这里用线性显示 类似于listview
         recyclerView.setAdapter(adapter);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.home_swipeRefreshLayout);
-        adapter.setOnItemClickListener(new HomeAdapter.OnItemClickListener() {
+        adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 Log.i("llb", "onItemClick position=" + position);

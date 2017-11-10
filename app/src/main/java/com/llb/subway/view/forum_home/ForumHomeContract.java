@@ -7,10 +7,10 @@ import com.llb.subway.model.bean.PostListItem;
  */
 
 public interface ForumHomeContract {
-    public interface Presenter{
+    interface Presenter{
         void getPostListData();
     }
-    public interface View{
+    interface View{
         String getUrl();
         void parsePostListData(PostListItem response);
     }

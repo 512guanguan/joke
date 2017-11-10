@@ -1,5 +1,7 @@
 package com.llb.subway.model.bean;
 
+import android.text.TextUtils;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.TextNode;
@@ -65,7 +67,7 @@ public class PostListItem {
          </ul>
          */
         public PostListItem parse(String html){
-            if(html==null)
+            if(TextUtils.isEmpty(html))
                 return null;
             PostListItem postListItem = new PostListItem();
             Document document= Jsoup.parse(html);
@@ -83,7 +85,8 @@ public class PostListItem {
                 PostItemInformation postItemInformation = new PostItemInformation();
                 postItemInformation.postUrl = postElements.get(j).select("li a").attr("href");
                 postItemInformation.title = postElements.get(j).select("li a h1").text();
-                postItemInformation.iconUrl = postElements.get(j).select("li a h1 img").first().attr("src").substring(2);
+                Elements e = postElements.get(j).select("li a h1 img");
+                postItemInformation.iconUrl = e.size() > 0 ? e.first().attr("src").substring(2) : "";
                 postItemInformation.commentNum = postElements.get(j).getElementsByClass("replies").text();
                 List<TextNode> textNodes = postElements.get(j).getElementsByTag("p").first().textNodes();
                 postItemInformation.author =textNodes.get(0).text();

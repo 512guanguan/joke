@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.llb.joke.R;
 import com.llb.subway.common.BaseViewHolder;
+import com.llb.subway.common.OnItemClickListener;
 import com.llb.subway.model.api.SubwayURL;
 import com.llb.subway.model.bean.ForumListItem;
 import com.squareup.picasso.Picasso;
@@ -149,12 +150,5 @@ public class HomeAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     public void setLoadingMore(boolean loadingMore) {
         isLoadingMore = loadingMore;
-    }
-
-
-    public interface OnItemClickListener {
-        void onItemClick(View view, int position);
-
-        void onItemLongClick(View view, int position);
     }
 }
