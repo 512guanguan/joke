@@ -6,6 +6,7 @@ import android.util.Log;
 import com.llb.subway.model.api.GetRequest;
 import com.llb.subway.model.api.HttpUtil;
 import com.llb.subway.model.bean.ForumListItem;
+import com.llb.subway.model.bean.PostDetailResponse;
 import com.llb.subway.model.bean.PostListItem;
 import com.llb.subway.model.http.DefaultObservableTransformer;
 import com.llb.subway.view.base.BaseActivity;
@@ -60,6 +61,22 @@ public class SubwayLoader {
                     // do something like cache
                     BaseActivity.postListItems = (new PostListItem()).new Builder().parse(response);
                     return  Observable.just(BaseActivity.postListItems);
+                })
+                .compose(DefaultObservableTransformer.defaultTransformer());
+    }
+
+    /**
+     * 获取帖子详情页面信息
+     *
+     * @return
+     */
+    public Observable<PostDetailResponse> getPostDetailData(String url) {
+        return requestByGet(url)
+                .flatMap((response) -> {//io线程
+                    Log.i("llb","数据那回来了，等待解析\n" + response);
+                    // do something like cache
+                    PostDetailResponse res = (new PostDetailResponse()).new Builder().parsePage(response);
+                    return  Observable.just(res);
                 })
                 .compose(DefaultObservableTransformer.defaultTransformer());
     }
