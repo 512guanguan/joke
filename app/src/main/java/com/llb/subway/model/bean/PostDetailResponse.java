@@ -107,7 +107,8 @@ public class PostDetailResponse {
             elements.clear();
             elements = doc.select("div.vbc div.pbody div.mes div.postmessage");
             if(elements.size()>0){
-                postDetailResponse.postContent = elements.first().text();
+
+                postDetailResponse.postContent = elements.toString();//elements.first().text();
             }
 
             postDetailResponse.changeOrderUrl = document.select("div.titls a.xi2").attr("href");

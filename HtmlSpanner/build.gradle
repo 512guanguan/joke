@@ -18,7 +18,9 @@ repositories {
 
 dependencies {
     compile 'net.sourceforge.htmlcleaner:htmlcleaner:2.16'
-    compile 'com.osbcp.cssparser:cssparser:1.5'
+    //    compile 'com.osbcp.cssparser:cssparser:1.5'
+    compile files('lib/cssparser-1.5.jar')
+    testCompile 'junit:junit:4.12'
 }
 
 android {
