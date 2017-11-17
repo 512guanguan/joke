@@ -15,11 +15,11 @@ import android.widget.Toast;
 import com.llb.common.widget.recyclerview.CommonAdapter;
 import com.llb.common.widget.recyclerview.CommonAdapter.OnItemClickListener;
 import com.llb.config.Config;
-import com.llb.joke.BR;
-import com.llb.joke.R;
 import com.llb.joke.model.JokeLoader;
 import com.llb.joke.model.bean.GetLatestJokeRequest;
 import com.llb.joke.model.bean.JokeResponse.JokeData;
+import com.llb.subway.BR;
+import com.llb.subway.R;
 
 import java.util.ArrayList;
 import java.util.List;

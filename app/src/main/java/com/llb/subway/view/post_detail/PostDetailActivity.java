@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.llb.joke.R;
+import com.llb.subway.R;
 import com.llb.subway.common.OnItemClickListener;
 import com.llb.subway.model.bean.PostDetailResponse;
 import com.llb.subway.model.bean.PostDetailResponse.CommentInformation;

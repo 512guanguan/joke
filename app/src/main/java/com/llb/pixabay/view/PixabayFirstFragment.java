@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
@@ -12,15 +11,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
 import com.llb.config.Config;
-import com.llb.joke.BR;
-import com.llb.joke.R;
 import com.llb.joke.view.OnFragmentInteractionListener;
 import com.llb.pixabay.model.PixabayLoader;
 import com.llb.pixabay.model.bean.SearchImagesRequest;
 import com.llb.pixabay.model.bean.SearchImagesResponse.HitImages;
+import com.llb.subway.BR;
+import com.llb.subway.R;
 
-import java.net.URLEncoder;
 import java.util.ArrayList;
 
 /**

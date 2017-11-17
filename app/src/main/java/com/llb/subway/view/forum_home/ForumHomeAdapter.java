@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.llb.joke.R;
+import com.llb.subway.R;
 import com.llb.subway.common.BaseViewHolder;
 import com.llb.subway.common.OnItemClickListener;
 import com.llb.subway.model.api.SubwayURL;

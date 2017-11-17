@@ -13,8 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.llb.joke.R;
 import com.llb.joke.view.OnFragmentInteractionListener;
+import com.llb.subway.R;
 import com.llb.subway.common.OnItemClickListener;
 import com.llb.subway.model.api.SubwayURL;
 import com.llb.subway.model.bean.ForumListItem;

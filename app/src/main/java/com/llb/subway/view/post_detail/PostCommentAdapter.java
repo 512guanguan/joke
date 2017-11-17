@@ -10,7 +10,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 
-import com.llb.joke.R;
+import com.llb.subway.R;
 import com.llb.subway.common.BaseViewHolder;
 import com.llb.subway.common.OnItemClickListener;
 import com.llb.subway.model.bean.PostDetailResponse.CommentInformation;
