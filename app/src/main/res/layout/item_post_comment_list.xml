@@ -4,82 +4,86 @@
                 android:layout_height="wrap_content"
                 android:paddingBottom="5dp"
                 android:paddingLeft="10dp"
-                android:paddingTop="5dp">
+                android:background="@android:color/white"
+                android:layout_marginTop="5dp">
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/title_layout_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/comment_number_tv"
-        android:layout_marginBottom="5dp"
-        android:orientation="horizontal">
+        android:padding="5dp">
 
         <ImageView
-            android:id="@+id/tip_icon_iv"
+            android:id="@+id/head_shortcut_iv"
             android:layout_width="40dp"
-            android:layout_height="20dp"
-            android:layout_gravity="top"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
             android:padding="3dp"
             android:src="@drawable/common_full_open_on_phone"
             android:visibility="visible"/>
-
-        <TextView
-            android:id="@+id/post_title_tv"
+        <LinearLayout
+            android:id="@+id/title_top_layout_ll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_toRightOf="@+id/tip_icon_iv"
-            android:gravity="left|center_vertical"
-            android:maxLines="2"
-            android:text="逗比的日常"
-            android:textSize="16sp"
-            android:textStyle="bold"/>
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="25dp"
-        android:layout_alignParentBottom="true"
-        android:layout_below="@+id/title_layout_ll"
-        android:layout_toLeftOf="@+id/comment_number_tv"
-        android:orientation="horizontal">
-
+            android:layout_toRightOf="@+id/head_shortcut_iv"
+            android:layout_toLeftOf="@+id/comment_tv"
+            android:paddingBottom="5dp"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/comment_author_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:maxLines="1"
+                android:maxWidth="180dp"
+                android:text="逗比dddddddddddddddddddddddd"
+                android:ellipsize="marquee"
+                android:textSize="16sp"/>
+            <TextView
+                android:id="@+id/floor_title_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:maxLines="1"
+                android:text="楼主"
+                android:textSize="16sp"
+                android:textColor="#33ff33"
+                android:layout_marginLeft="10dp"/>
+            <TextView
+                android:id="@+id/floor_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:maxLines="1"
+                android:text="2#"
+                android:textSize="16sp"
+                android:textColor="#33ff33"
+                android:layout_marginLeft="10dp"/>
+        </LinearLayout>
         <TextView
-            android:id="@+id/post_author_tv"
+            android:id="@+id/comment_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="left"
-            android:text="暮雨潇潇"
-            android:textColor="@color/colorAccent"
-            android:textSize="13sp"/>
-
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:padding="15dp"
+            android:text="回复"/>
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/comment_time_tv"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="5dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginStart="5dp"
-            android:gravity="left"
-            android:text="发表于"
-            android:textSize="11sp"/>
-
-        <TextView
-            android:id="@+id/post_time_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:text="2017-02-06"
-            android:textSize="13sp"/>
-    </LinearLayout>
-
+            android:layout_below="@+id/title_top_layout_ll"
+            android:layout_toRightOf="@+id/head_shortcut_iv"
+            android:layout_toLeftOf="@+id/comment_tv"
+            android:text="2009-09-10 17:23:11"/>
+    </RelativeLayout>
     <TextView
-        android:id="@+id/comment_number_tv"
-        android:layout_width="wrap_content"
+        android:id="@+id/comment_content_tv"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:padding="15dp"
-        android:text="32"/>
+        android:layout_below="@+id/title_layout_ll"
+        android:minLines="4"
+        android:padding="10dp"
+        android:text="我是评论内容！！！"/>
 
 </RelativeLayout>
