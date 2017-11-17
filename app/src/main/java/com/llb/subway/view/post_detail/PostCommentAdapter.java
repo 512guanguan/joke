@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.annotation.LayoutRes;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,7 +36,7 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     protected static final int TYPE_FOOTER = 2;
     protected List<CommentInformation> commentData;
     protected PostDetailResponse response;
-    protected View headerView;
+    protected View headerView, footerView;
     protected OnItemClickListener onItemClickListener;
     protected int layoutId;
     protected boolean isLoadingMore = false;
@@ -54,21 +53,22 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View itemView;
         BaseViewHolder holder = null;
-        switch (viewType){
+        switch (viewType) {
             case TYPE_HEADER:
-                if(headerView == null){
+                if (headerView == null) {
                     headerView = inflater.inflate(R.layout.item_post_detail_header, parent, false);
                 }
-                itemView = headerView;
-                holder = new BaseViewHolder(mContext, itemView);
+                holder = new BaseViewHolder(mContext, headerView);
                 break;
             case TYPE_ITEM:
                 itemView = inflater.inflate(layoutId, parent, false);
-                holder =  new BaseViewHolder(mContext, itemView);
+                holder = new BaseViewHolder(mContext, itemView);
                 break;
             case TYPE_FOOTER:
-                itemView = inflater.inflate(R.layout.item_recyclerview_footer, parent, false);
-                holder = new BaseViewHolder(mContext, itemView);
+//                if (footerView == null) {
+//                    footerView = inflater.inflate(R.layout.item_recyclerview_footer, parent, false);
+//                }
+//                holder = new BaseViewHolder(mContext, footerView);
                 break;
             default:
                 break;
@@ -82,6 +82,7 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         this.response = response;
         notifyDataSetChanged();
     }
+
     public void setHeaderView(View headerView) {
         this.headerView = headerView;
         notifyItemInserted(0);
@@ -90,66 +91,73 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     public View getHeaderView() {
         return headerView;
     }
+
     @Override
     public void onBindViewHolder(BaseViewHolder holder, int position) {
+        if (holder == null) {
+            return;
+        }
+        int realPosition = getRealPosition(holder);
         //TODO 初始化化页面
         if (this.onItemClickListener != null) {
             holder.itemView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    int position = holder.getLayoutPosition();
-                    onItemClickListener.onItemClick(view, position);
+                    onItemClickListener.onItemClick(view, holder.getLayoutPosition());
                 }
             });
             holder.itemView.setOnLongClickListener(new OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
-                    int position = holder.getLayoutPosition();
-                    onItemClickListener.onItemLongClick(view, position);
+                    onItemClickListener.onItemLongClick(view, holder.getLayoutPosition());
                     return false;
                 }
             });
         }
-        if (holder != null) {
-            switch (getItemViewType(position)){
-                case TYPE_HEADER:
-                    ((TextView) holder.getView(R.id.post_content_tv)).setText(new HtmlSpanner().fromHtml(response.postContent));
-                    break;
-                case TYPE_ITEM:
-                    if(TextUtils.isEmpty(commentData.get(position).headShotUrl)){
-                        holder.getView(R.id.head_shortcut_iv).setVisibility(View.GONE);
-                    }else {
-                        holder.getView(R.id.head_shortcut_iv).setVisibility(View.VISIBLE);
-                        //用过Picasso框架对图片处理并显示到iv上
-                        //用with()方法初始化，,
-                        Picasso.with(mContext)
+        switch (getItemViewType(position)) {
+            case TYPE_HEADER:
+                ((TextView) holder.getView(R.id.post_author_tv)).setText(new HtmlSpanner().fromHtml(response.author));
+                ((TextView) holder.getView(R.id.post_time_tv)).setText(new HtmlSpanner().fromHtml(response.postTime));
+                ((TextView) holder.getView(R.id.post_title_tv)).setText(new HtmlSpanner().fromHtml(response.postTitle));
+                ((TextView) holder.getView(R.id.post_content_tv)).setText(new HtmlSpanner().fromHtml(response.postContent));
+                break;
+            case TYPE_ITEM:
+//                if (TextUtils.isEmpty(commentData.get(realPosition).headShotUrl)) {
+//                    holder.getView(R.id.head_shortcut_iv).setVisibility(View.GONE);
+//                } else {
+//                    holder.getView(R.id.head_shortcut_iv).setVisibility(View.VISIBLE);
+                //用过Picasso框架对图片处理并显示到iv上
+                //用with()方法初始化，,
+                Picasso.with(mContext)
 //                        .load("http://g.hiphotos.baidu.com/image/pic/item/c9fcc3cec3fdfc03e426845ed03f8794a5c226fd.jpg")//下载图片
-                                .load(commentData.get(position).headShotUrl)
-                                //                .resize(60,120)
-                                //下载中显示的图片
-                                .placeholder(R.mipmap.ic_launcher)
-                                //下载失败显示的图片
-                                .error(R.mipmap.ic_launcher)
-                                //init()显示到指定控件
-                                .into((ImageView) holder.getView(R.id.head_shortcut_iv));
-                    }
+                        .load(commentData.get(realPosition).headShotUrl)
+                        //                .resize(60,120)
+                        //下载中显示的图片
+                        .placeholder(R.mipmap.ic_launcher)
+                        //下载失败显示的图片
+                        .error(R.mipmap.ic_launcher)
+                        //init()显示到指定控件
+                        .into((ImageView) holder.getView(R.id.head_shortcut_iv));
+//                }
 //
-                    ((TextView) holder.getView(R.id.comment_author_tv)).setText(commentData.get(position).author);
-                    ((TextView) holder.getView(R.id.comment_time_tv)).setText(commentData.get(position).commentTime);
-                    ((TextView) holder.getView(R.id.floor_title_tv)).setText(commentData.get(position).floor);
-                    ((TextView) holder.getView(R.id.comment_content_tv)).setText(new HtmlSpanner().fromHtml(commentData.get(position).commentContent));
-                    break;
-                case TYPE_FOOTER:
-                    break;
-            }
+                ((TextView) holder.getView(R.id.comment_author_tv)).setText(commentData.get(realPosition).author);
+                ((TextView) holder.getView(R.id.comment_time_tv)).setText(commentData.get(realPosition).commentTime);
+                ((TextView) holder.getView(R.id.floor_title_tv)).setText(commentData.get(realPosition).floor);
+                ((TextView) holder.getView(R.id.comment_content_tv)).setText(new HtmlSpanner().fromHtml(commentData.get(realPosition).commentContent));
+                break;
+            case TYPE_FOOTER:
+                break;
         }
     }
+
     @Override
     public int getItemViewType(int position) {
         //TODO 有问题
-        if(headerView != null && position == 0){
+        if (headerView != null && position == 0) {
             return TYPE_HEADER;
-        }else{
+        } else if (headerView != null && footerView != null && position == getItemCount() + 1) {
+            return TYPE_FOOTER;
+        } else {
             return TYPE_ITEM;
         }
     }
@@ -158,7 +166,7 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
         RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
-        if(manager instanceof GridLayoutManager) {//http://blog.csdn.net/qibin0506/article/details/49716795
+        if (manager instanceof GridLayoutManager) {//http://blog.csdn.net/qibin0506/article/details/49716795
             final GridLayoutManager gridManager = ((GridLayoutManager) manager);
             gridManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                 @Override
@@ -168,6 +176,17 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
             });
         }
     }
+
+    //    @Override
+//    public void onViewAttachedToWindow(RecyclerView.ViewHolder holder) {
+//        super.onViewAttachedToWindow(holder);
+//        ViewGroup.LayoutParams lp = holder.itemView.getLayoutParams();
+//        if(lp != null
+//                && lp instanceof StaggeredGridLayoutManager.LayoutParams) {
+//            StaggeredGridLayoutManager.LayoutParams p = (StaggeredGridLayoutManager.LayoutParams) lp;
+//            p.setFullSpan(holder.getLayoutPosition() == 0);
+//        }
+//    }
     public static boolean isSlideToBottom(RecyclerView recyclerView) {
         if (recyclerView == null) return false;
         if (recyclerView.computeVerticalScrollExtent() + recyclerView.computeVerticalScrollOffset()
@@ -194,6 +213,11 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     @Override
     public int getItemCount() {
         return headerView == null ? commentData.size() : commentData.size() + 1;
+    }
+
+    public int getRealPosition(RecyclerView.ViewHolder holder) {
+        int position = holder.getLayoutPosition();
+        return headerView == null ? position : position - 1;
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
