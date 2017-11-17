@@ -2,18 +2,26 @@ package com.llb.subway.view.post_detail;
 
 import android.content.Context;
 import android.support.annotation.LayoutRes;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.llb.subway.R;
 import com.llb.subway.common.BaseViewHolder;
 import com.llb.subway.common.OnItemClickListener;
+import com.llb.subway.model.bean.PostDetailResponse;
 import com.llb.subway.model.bean.PostDetailResponse.CommentInformation;
+import com.squareup.picasso.Picasso;
+
+import net.nightwhistler.htmlspanner.HtmlSpanner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,16 +32,19 @@ import java.util.List;
 
 public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     protected Context mContext;
-    protected static final int TYPE_ITEM = 0;
-    protected static final int TYPE_FOOTER = 1;
-    protected List<CommentInformation> mDatas;
+    protected static final int TYPE_HEADER = 0;
+    protected static final int TYPE_ITEM = 1;
+    protected static final int TYPE_FOOTER = 2;
+    protected List<CommentInformation> commentData;
+    protected PostDetailResponse response;
+    protected View headerView;
     protected OnItemClickListener onItemClickListener;
     protected int layoutId;
     protected boolean isLoadingMore = false;
 
     public PostCommentAdapter(Context mContext, @LayoutRes int layoutId) {
         this.mContext = mContext;
-        this.mDatas = new ArrayList<>();
+        this.commentData = new ArrayList<>();
         this.layoutId = layoutId;
     }
 
@@ -41,24 +52,44 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Log.i("llb", "onCreateViewHolder viewType=" + viewType);
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        if (viewType == TYPE_ITEM) {
-            View itemView = inflater.inflate(layoutId, parent, false);
-            BaseViewHolder viewHolder = new BaseViewHolder(mContext, itemView);
-            return viewHolder;
-        } else if (viewType == TYPE_FOOTER) {
-            View itemView = inflater.inflate(R.layout.item_recyclerview_footer, parent, false);
-            return new BaseViewHolder(mContext, itemView);
-//            return null;
-        } else {
-            return null;
+        View itemView;
+        BaseViewHolder holder = null;
+        switch (viewType){
+            case TYPE_HEADER:
+                if(headerView == null){
+                    headerView = inflater.inflate(R.layout.item_post_detail_header, parent, false);
+                }
+                itemView = headerView;
+                holder = new BaseViewHolder(mContext, itemView);
+                break;
+            case TYPE_ITEM:
+                itemView = inflater.inflate(layoutId, parent, false);
+                holder =  new BaseViewHolder(mContext, itemView);
+                break;
+            case TYPE_FOOTER:
+                itemView = inflater.inflate(R.layout.item_recyclerview_footer, parent, false);
+                holder = new BaseViewHolder(mContext, itemView);
+                break;
+            default:
+                break;
         }
+        return holder;
     }
 
-    public void setData(List mDatas) {
-        this.mDatas = mDatas;
+    public void setData(PostDetailResponse response) {
+        this.commentData.addAll(response.commentList);
+//        response.commentList.clear();
+        this.response = response;
         notifyDataSetChanged();
     }
+    public void setHeaderView(View headerView) {
+        this.headerView = headerView;
+        notifyItemInserted(0);
+    }
 
+    public View getHeaderView() {
+        return headerView;
+    }
     @Override
     public void onBindViewHolder(BaseViewHolder holder, int position) {
         //TODO 初始化化页面
@@ -80,39 +111,61 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
             });
         }
         if (holder != null) {
-            if (getItemViewType(position) == TYPE_ITEM) {
-//                if(TextUtils.isEmpty(mDatas.get(position).iconUrl)){
-//                    holder.getView(R.id.tip_icon_iv).setVisibility(View.GONE);
-//                }else {
-//                    holder.getView(R.id.tip_icon_iv).setVisibility(View.VISIBLE);
-//                    //用过Picasso框架对图片处理并显示到iv上
-//                    //用with()方法初始化，,
-//                    Picasso.with(mContext)
-////                        .load("http://g.hiphotos.baidu.com/image/pic/item/c9fcc3cec3fdfc03e426845ed03f8794a5c226fd.jpg")//下载图片
-//                            .load(SubwayURL.SUBWAY_BASE + mDatas.get(position).iconUrl)
-//                            //                .resize(60,120)
-//                            //下载中显示的图片
-//                            .placeholder(R.mipmap.ic_launcher)
-//                            //下载失败显示的图片
-//                            .error(R.mipmap.ic_launcher)
-//                            //init()显示到指定控件
-//                            .into((ImageView) holder.getView(R.id.tip_icon_iv));
-//                }
+            switch (getItemViewType(position)){
+                case TYPE_HEADER:
+                    ((TextView) holder.getView(R.id.post_content_tv)).setText(new HtmlSpanner().fromHtml(response.postContent));
+                    break;
+                case TYPE_ITEM:
+                    if(TextUtils.isEmpty(commentData.get(position).headShotUrl)){
+                        holder.getView(R.id.head_shortcut_iv).setVisibility(View.GONE);
+                    }else {
+                        holder.getView(R.id.head_shortcut_iv).setVisibility(View.VISIBLE);
+                        //用过Picasso框架对图片处理并显示到iv上
+                        //用with()方法初始化，,
+                        Picasso.with(mContext)
+//                        .load("http://g.hiphotos.baidu.com/image/pic/item/c9fcc3cec3fdfc03e426845ed03f8794a5c226fd.jpg")//下载图片
+                                .load(commentData.get(position).headShotUrl)
+                                //                .resize(60,120)
+                                //下载中显示的图片
+                                .placeholder(R.mipmap.ic_launcher)
+                                //下载失败显示的图片
+                                .error(R.mipmap.ic_launcher)
+                                //init()显示到指定控件
+                                .into((ImageView) holder.getView(R.id.head_shortcut_iv));
+                    }
 //
-//                ((TextView) holder.getView(R.id.post_title_tv)).setText(mDatas.get(position).title);
-//                ((TextView) holder.getView(R.id.post_author_tv)).setText(mDatas.get(position).author);
-//                ((TextView) holder.getView(R.id.comment_number_tv)).setText(mDatas.get(position).commentNum);
-//                ((TextView) holder.getView(R.id.post_time_tv)).setText(mDatas.get(position).time);
-            } else if (getItemViewType(position) == TYPE_FOOTER) {
+                    ((TextView) holder.getView(R.id.comment_author_tv)).setText(commentData.get(position).author);
+                    ((TextView) holder.getView(R.id.comment_time_tv)).setText(commentData.get(position).commentTime);
+                    ((TextView) holder.getView(R.id.floor_title_tv)).setText(commentData.get(position).floor);
+                    ((TextView) holder.getView(R.id.comment_content_tv)).setText(new HtmlSpanner().fromHtml(commentData.get(position).commentContent));
+                    break;
+                case TYPE_FOOTER:
+                    break;
             }
         }
     }
     @Override
     public int getItemViewType(int position) {
-        if (position== mDatas.size()) {//TODO 有问题
-            return TYPE_FOOTER;
-        } else {
+        //TODO 有问题
+        if(headerView != null && position == 0){
+            return TYPE_HEADER;
+        }else{
             return TYPE_ITEM;
+        }
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
+        if(manager instanceof GridLayoutManager) {//http://blog.csdn.net/qibin0506/article/details/49716795
+            final GridLayoutManager gridManager = ((GridLayoutManager) manager);
+            gridManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                @Override
+                public int getSpanSize(int position) {
+                    return getItemViewType(position) == TYPE_HEADER ? gridManager.getSpanCount() : 1;
+                }
+            });
         }
     }
     public static boolean isSlideToBottom(RecyclerView recyclerView) {
@@ -140,7 +193,7 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     @Override
     public int getItemCount() {
-        return mDatas == null ? -1 : mDatas.size();
+        return headerView == null ? commentData.size() : commentData.size() + 1;
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {

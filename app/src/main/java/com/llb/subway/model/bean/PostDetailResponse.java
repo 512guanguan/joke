@@ -123,7 +123,7 @@ public class PostDetailResponse {
                 comment.authorInfoUrl = elements.get(j).select("div.user a").attr("href");
                 comment.floor = elements.get(j).select("div.user span[class=p_nm y]").text();
                 comment.commentTime = elements.get(j).select("div.user span.p_dl").text();
-                comment.commentContent = elements.get(j).select("div.pbody div.mes div.postmessage").text();
+                comment.commentContent =  elements.get(j).select("div.pbody div.mes div.postmessage").toString();
                 //解析引用内容
                 if(elements.get(j).select("div.quote").size()>0){
                     comment.quoteContent = elements.get(j).select("div.quote").text();//TODO 不对，做了登陆态再来

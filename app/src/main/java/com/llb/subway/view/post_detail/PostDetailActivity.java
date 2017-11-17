@@ -7,16 +7,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.llb.subway.R;
 import com.llb.subway.common.OnItemClickListener;
 import com.llb.subway.model.bean.PostDetailResponse;
 import com.llb.subway.model.bean.PostDetailResponse.CommentInformation;
-
-import net.nightwhistler.htmlspanner.HtmlSpanner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +28,7 @@ public class PostDetailActivity extends AppCompatActivity implements PostDetailC
     private PostCommentAdapter adapter = null;
     private SwipeRefreshLayout swipeRefreshLayout;
     private int currentPage = 0;
-    private TextView postTV;
+//    private TextView postTV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +41,7 @@ public class PostDetailActivity extends AppCompatActivity implements PostDetailC
     }
 
     private void initView() {
-        //TODO　布局
-        postTV = (TextView) findViewById(R.id.post_content_tv);
+//        postTV = (TextView) findViewById(R.id.post_content_tv);
         recyclerView = (RecyclerView) findViewById(R.id.comment_list_rv);
         commentListData = new ArrayList<>();
         adapter = new PostCommentAdapter(this, R.layout.item_post_comment_list);
@@ -107,8 +104,14 @@ public class PostDetailActivity extends AppCompatActivity implements PostDetailC
     @Override
     public void setPostDetailData(PostDetailResponse response) {
         Toast.makeText(this, "数据解析完了", Toast.LENGTH_SHORT).show();
-        postTV.setText(new HtmlSpanner().fromHtml(response.postContent));
-        adapter.setData(response.commentList);
+//        postTV.setText(new HtmlSpanner().fromHtml(response.postContent));
+        setHeaderView();
+        adapter.setData(response);
         swipeRefreshLayout.setRefreshing(false);
+    }
+
+    private void setHeaderView() {
+        View header = LayoutInflater.from(this).inflate(R.layout.item_post_detail_header, recyclerView, false);
+        adapter.setHeaderView(header);
     }
 }
