@@ -4,6 +4,8 @@ import android.content.Context;
 import android.support.annotation.LayoutRes;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,14 +18,20 @@ import android.widget.TextView;
 import com.llb.subway.R;
 import com.llb.subway.common.BaseViewHolder;
 import com.llb.subway.common.OnItemClickListener;
+import com.llb.subway.common.htmlspanner.handlers.MyLinkHandler;
 import com.llb.subway.model.bean.PostDetailResponse;
 import com.llb.subway.model.bean.PostDetailResponse.CommentInformation;
 import com.squareup.picasso.Picasso;
 
 import net.nightwhistler.htmlspanner.HtmlSpanner;
+import net.nightwhistler.htmlspanner.handlers.LinkHandler;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Derrick on 2017/11/6.
@@ -40,11 +48,15 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     protected OnItemClickListener onItemClickListener;
     protected int layoutId;
     protected boolean isLoadingMore = false;
+    protected HtmlSpanner htmlSpanner;
 
     public PostCommentAdapter(Context mContext, @LayoutRes int layoutId) {
         this.mContext = mContext;
         this.commentData = new ArrayList<>();
         this.layoutId = layoutId;
+        htmlSpanner = new HtmlSpanner();
+        htmlSpanner.registerHandler("a",new MyLinkHandler());
+        htmlSpanner.setStripExtraWhiteSpace(true);
     }
 
     @Override
@@ -119,7 +131,23 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                 ((TextView) holder.getView(R.id.post_author_tv)).setText(new HtmlSpanner().fromHtml(response.author));
                 ((TextView) holder.getView(R.id.post_time_tv)).setText(new HtmlSpanner().fromHtml(response.postTime));
                 ((TextView) holder.getView(R.id.post_title_tv)).setText(new HtmlSpanner().fromHtml(response.postTitle));
-                ((TextView) holder.getView(R.id.post_content_tv)).setText(new HtmlSpanner().fromHtml(response.postContent));
+//                ((TextView) holder.getView(R.id.post_content_tv)).setText(new HtmlSpanner().fromHtml(response.postContent));
+                Observable.just(response.postContent)
+                        .subscribeOn(Schedulers.io())
+                        .flatMap((String content)->{
+                            Spannable spannable = htmlSpanner.fromHtml(content);
+                            return Observable.just(spannable);
+                        })
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe((Spannable content)->{
+                            ((TextView) holder.getView(R.id.post_content_tv)).setText(content);
+                            ((TextView) holder.getView(R.id.post_content_tv)).setMovementMethod(LinkMovementMethod.getInstance());
+                        },(error)->{
+
+                        },()->{
+
+                        });
+
                 break;
             case TYPE_ITEM:
 //                if (TextUtils.isEmpty(commentData.get(realPosition).headShotUrl)) {
@@ -144,6 +172,24 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                 ((TextView) holder.getView(R.id.comment_time_tv)).setText(commentData.get(realPosition).commentTime);
                 ((TextView) holder.getView(R.id.floor_title_tv)).setText(commentData.get(realPosition).floor);
                 ((TextView) holder.getView(R.id.comment_content_tv)).setText(new HtmlSpanner().fromHtml(commentData.get(realPosition).commentContent));
+
+                Observable.just(commentData.get(realPosition).commentContent)
+                        .subscribeOn(Schedulers.io())
+                        .flatMap((String content)->{
+                            Spannable spannable = htmlSpanner.fromHtml(content);
+                            return Observable.just(spannable);
+                        })
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe((Spannable content)->{
+                            ((TextView) holder.getView(R.id.comment_content_tv)).setText(content);
+                            ((TextView) holder.getView(R.id.comment_content_tv)).setMovementMethod(LinkMovementMethod.getInstance());
+                        },(error)->{
+
+                        },()->{
+
+                        });
+
+
                 break;
             case TYPE_FOOTER:
                 break;

@@ -48,18 +48,18 @@ public class PostDetailActivity extends AppCompatActivity implements PostDetailC
         recyclerView.setLayoutManager(new LinearLayoutManager(this));//这里用线性显示 类似于listview
         recyclerView.setAdapter(adapter);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.comment_swipeRefreshLayout);
-        adapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Log.i("llb", "onItemClick position=" + position);
-                Toast.makeText(mContext,"onItemClick position=" + position,Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onItemLongClick(View view, int position) {
-                Log.i("llb", "onItemLongClick position=" + position);
-            }
-        });
+//        adapter.setOnItemClickListener(new OnItemClickListener() {
+//            @Override
+//            public void onItemClick(View view, int position) {
+//                Log.i("llb", "onItemClick position=" + position);
+//                Toast.makeText(mContext,"onItemClick position=" + position,Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            public void onItemLongClick(View view, int position) {
+//                Log.i("llb", "onItemLongClick position=" + position);
+//            }
+//        });
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
