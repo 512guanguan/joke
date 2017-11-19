@@ -20,4 +20,6 @@ public class SubwayURL {
     /**某帖子的具体信息**/
     public static final String SUBWAY_POST_DETAIL = SUBWAY_HOST + "?mod=viewthread&threads=thread&extra=&ordertype=1";//&tid=3737
 
+    /**登录页**/
+    public static final String SUBWAY_LOGIN_PAGE = SUBWAY_BASE + "member.php?mod=logging&action=login&mobile=yes";
 }

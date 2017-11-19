@@ -39,6 +39,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile 'com.squareup.okhttp3:logging-interceptor:3.8.0'
+    compile project(':HtmlSpanner')
     compile 'com.squareup.okhttp3:logging-interceptor:3.8.0'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:design:25.3.1'
@@ -53,5 +54,4 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'org.jsoup:jsoup:1.10.3'
     testCompile 'junit:junit:4.12'
-    compile project(':HtmlSpanner')
 }

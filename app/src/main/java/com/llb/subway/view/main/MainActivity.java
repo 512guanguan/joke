@@ -1,5 +1,7 @@
 package com.llb.subway.view.main;
 
+import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -24,13 +26,17 @@ import android.widget.Toast;
 import com.llb.common.http.RetrofitServiceManager;
 import com.llb.joke.view.OnFragmentInteractionListener;
 import com.llb.subway.R;
+import com.llb.subway.model.api.SubwayURL;
 import com.llb.subway.view.base.BaseActivity;
+import com.llb.subway.view.forum_home.ForumHomeActivity;
 import com.llb.subway.view.home_fragment.HomeFragment;
+import com.llb.subway.view.login.LoginActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends BaseActivity implements OnFragmentInteractionListener {
+    private Context mContext;
     private ViewPager viewPager;
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
@@ -43,7 +49,7 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        mContext = this;
         fragmentManager = getSupportFragmentManager();
 //        jokeFragemnts = new ArrayList<>();
 //        jokeFragemnts.add(new JokeFirstFragment());
@@ -81,6 +87,14 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+        headerView.findViewById(R.id.imageView).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, LoginActivity.class);
+                mContext.startActivity(intent);
+            }
+        });
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
