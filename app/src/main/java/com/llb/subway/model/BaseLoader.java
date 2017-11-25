@@ -33,13 +33,13 @@ public class BaseLoader {
      * @param url
      * @return
      */
-    protected Observable<String> requestByGet(String url) {
+    protected Observable<String> requestByGet(String url, String referer) {
         return Observable.just("")
                 .observeOn(Schedulers.io())
                 .map((s) -> {
                             try {
                                 GetRequest request = HttpUtil.getInstance().get(url);
-                                request.addHeader("Referer","http://www.ditiezu.com/forum.php?mod=forum");
+                                request.addHeader("Referer",referer);
                                 Response res = HttpUtil.addCommonHeaders(request).execute();
                                 InputStream inputStream = new ByteArrayInputStream(res.body().bytes());
                                 return zipInputStream(inputStream);
@@ -49,9 +49,30 @@ public class BaseLoader {
                             return "";
                         }
                 );
-//                .observeOn(AndroidSchedulers.mainThread());
     }
 
+    /**
+     * 通用的网络请求
+     *
+     * @param url
+     * @return
+     */
+    protected Observable<String> requestByGet(String url) {
+        return Observable.just("")
+                .observeOn(Schedulers.io())
+                .map((s) -> {
+                            try {
+                                GetRequest request = HttpUtil.getInstance().get(url);
+                                Response res = HttpUtil.addCommonHeaders(request).execute();
+                                InputStream inputStream = new ByteArrayInputStream(res.body().bytes());
+                                return zipInputStream(inputStream);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            return "";
+                        }
+                );
+    }
 
     /**
      * 处理gzip,deflate返回流

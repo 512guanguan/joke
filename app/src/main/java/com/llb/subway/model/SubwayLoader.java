@@ -82,7 +82,22 @@ public class SubwayLoader extends BaseLoader {
      * @return
      */
     public Observable<LoginPageResponse> getLoginPage(String url){
-        return requestByGet(url)
+        return requestByGet(url, "http://www.ditiezu.com/forum.php?mod=forum")
+                .flatMap((response) -> {
+                    Log.i("llb","数据回来了，等待解析\n" + response);
+                    // do something like cache
+                    LoginPageResponse res = (new LoginPageResponse()).new Builder().parsePage(response);
+                    return  Observable.just(res);
+                })
+                .compose(DefaultObservableTransformer.defaultTransformer());
+    }
+    /**
+     * TODO　解析登录页的验证码信息
+     * @param url
+     * @return
+     */
+    public Observable<LoginPageResponse> getCaptchaPicture(String url){
+        return requestByGet(url,"http://www.ditiezu.com/member.php?mod=logging&action=login&mobile=yes")
                 .flatMap((response) -> {
                     Log.i("llb","数据回来了，等待解析\n" + response);
                     // do something like cache
