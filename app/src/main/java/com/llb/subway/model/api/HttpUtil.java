@@ -1,5 +1,10 @@
 package com.llb.subway.model.api;
 
+import android.app.Application;
+
+import com.llb.subway.model.http.cookie.CookiesManager;
+import com.llb.subway.view.base.BaseApplication;
+
 import okhttp3.OkHttpClient;
 
 public final class HttpUtil {
@@ -9,18 +14,19 @@ public final class HttpUtil {
     private static HttpUtil instance;
 
 
-//    private CookiesManager cookiesManager;
+    private CookiesManager cookiesManager;
 //
 //
-//    public CookiesManager getCookiesManager() {
-//        return cookiesManager;
-//    }
+    public CookiesManager getCookiesManager() {
+        return cookiesManager;
+    }
 
     private HttpUtil(){
 
-//        cookiesManager=new CookiesManager(AppApplication.context);
+        cookiesManager=new CookiesManager(BaseApplication.mContext);
 //        Log.d("NetActivityXXX","UTIL THRAD"+Thread.currentThread().getName());
         client=new OkHttpClient.Builder()
+                .cookieJar(cookiesManager)
                 .build();
     }
 
