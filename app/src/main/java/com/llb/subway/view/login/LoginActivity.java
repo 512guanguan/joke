@@ -12,6 +12,8 @@ import com.llb.subway.model.SubwayLoader;
 import com.llb.subway.model.api.SubwayURL;
 import com.llb.subway.model.bean.LoginPageResponse;
 import com.llb.subway.model.http.picasso.CommonHeaderInterceptor;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
 
@@ -43,15 +45,19 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
     public void loadCaptchaImage(String url){
         Log.i("llb","captcha url = "+url);
-        final OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .addInterceptor(new CommonHeaderInterceptor())
-                .build();
-        new Picasso.Builder(this)
-                .downloader(new OkHttp3Downloader(okHttpClient))
-                .build()
-                .load(url)
-                .placeholder(R.mipmap.ic_launcher)//下载中显示的图片
-                .error(R.mipmap.ic_launcher)//下载失败显示的图片
-                .into(captchaIV);
+        presenter.getCaptchaImage(url);
+
+//        final OkHttpClient okHttpClient = new OkHttpClient.Builder()
+//                .addInterceptor(new CommonHeaderInterceptor())
+//                .build();
+//        new Picasso.Builder(this)
+//                .downloader(new OkHttp3Downloader(okHttpClient))
+//                .build()
+//                .load(url)
+//                .memoryPolicy(MemoryPolicy.NO_CACHE)
+//                .networkPolicy(NetworkPolicy.NO_CACHE)
+//                .placeholder(R.mipmap.ic_launcher)//下载中显示的图片
+//                .error(R.mipmap.ic_launcher)//下载失败显示的图片
+//                .into(captchaIV);
     }
 }

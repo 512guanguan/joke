@@ -96,13 +96,12 @@ public class SubwayLoader extends BaseLoader {
      * @param url
      * @return
      */
-    public Observable<LoginPageResponse> getCaptchaPicture(String url){
-        return requestByGet(url,"http://www.ditiezu.com/member.php?mod=logging&action=login&mobile=yes")
+    public Observable<String> getCaptchaImage(String url){
+        return requestGzipImageByGet(url,"http://www.ditiezu.com/member.php?mod=logging&action=login&mobile=yes")
                 .flatMap((response) -> {
                     Log.i("llb","数据回来了，等待解析\n" + response);
                     // do something like cache
-                    LoginPageResponse res = (new LoginPageResponse()).new Builder().parsePage(response);
-                    return  Observable.just(res);
+                    return  Observable.just(response);
                 })
                 .compose(DefaultObservableTransformer.defaultTransformer());
     }

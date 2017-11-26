@@ -30,4 +30,16 @@ public class LoginPresenter implements LoginContract.Presenter {
             Log.d("llb", "completed");
         });
     }
+
+    @Override
+    public void getCaptchaImage(String url) {
+        SubwayLoader.getInstance().getCaptchaImage(url)
+                .subscribe((response) -> {
+                    Log.i("llb", "response = " + response);
+                }, (Throwable e) -> {
+                    Log.d("llb", "error " + e.getMessage());
+                }, () -> {
+                    Log.d("llb", "completed");
+                });
+    }
 }

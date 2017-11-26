@@ -6,7 +6,7 @@
 
     <ImageView
         android:id="@+id/captcha_iv"
-        android:layout_width="150dp"
-        android:layout_height="60dp"
-        android:background="#929292"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#3e3e3e"/>
 </LinearLayout>

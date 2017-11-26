@@ -10,6 +10,7 @@ import com.llb.subway.model.bean.PostDetailResponse;
 public interface LoginContract {
     interface Presenter{
         void getLoginPageData(String url);
+        void getCaptchaImage(String url);
     }
 
     interface View{
