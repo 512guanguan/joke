@@ -37,7 +37,7 @@ public class EditTextWithClearButon extends android.support.v7.widget.AppCompatE
                     drawable[0],
                     drawable[1],
                     getContext().getResources().getDrawable(
-                            R.mipmap.ic_clear_1), drawable[3]);
+                            R.drawable.ic_clear_1), drawable[3]);
         } else {
             setCompoundDrawablesWithIntrinsicBounds(drawable[0], drawable[1],
                     null, drawable[3]);
@@ -55,7 +55,7 @@ public class EditTextWithClearButon extends android.support.v7.widget.AppCompatE
                     drawable[0],
                     drawable[1],
                     getContext().getResources().getDrawable(
-                            R.mipmap.ic_clear_1), drawable[3]);
+                            R.drawable.ic_clear_1), drawable[3]);
         } else {
             setCompoundDrawablesWithIntrinsicBounds(drawable[0], drawable[1],
                     null, drawable[3]);
