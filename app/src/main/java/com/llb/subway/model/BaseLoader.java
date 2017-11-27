@@ -3,22 +3,14 @@ package com.llb.subway.model;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Environment;
-import android.util.Log;
 
+import com.llb.subway.common.helper.ImageHelper;
 import com.llb.subway.model.api.GetRequest;
 import com.llb.subway.model.api.HttpUtil;
-import com.llb.subway.model.bean.ForumListItem;
-import com.llb.subway.model.bean.PostDetailResponse;
-import com.llb.subway.model.bean.PostListItem;
-import com.llb.subway.model.http.DefaultObservableTransformer;
-import com.llb.subway.view.base.BaseActivity;
+import com.llb.subway.view.base.BaseApplication;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -37,6 +29,7 @@ public class BaseLoader {
      * 通用的网络请求
      *
      * @param url
+     * @param referer 额外的请求头
      * @return
      */
     protected Observable<String> requestByGet(String url, String referer) {
@@ -58,8 +51,8 @@ public class BaseLoader {
     }
 
     /**
-     * 通用的gzip图片网络请求
-     *
+     * gzip压缩的图片网络请求
+     * 目前仅有验证码图片是这个方式请求的
      * @param url
      * @return
      */
@@ -105,7 +98,7 @@ public class BaseLoader {
     }
 
     /**
-     * 处理gzip,deflate返回流
+     * 处理gzip,deflate页面数据返回流
      *
      * @param is
      * @return
@@ -133,26 +126,9 @@ public class BaseLoader {
     protected String zipImageInputStream(InputStream is) throws IOException {
         GZIPInputStream gzip = new GZIPInputStream(is);
         Bitmap bitmap = BitmapFactory.decodeStream(gzip);
-        String path = savePicture(bitmap);
+        String path = ImageHelper.saveImage(BaseApplication.mContext,bitmap,100);
         gzip.close();
         return path;
-    }
-
-    protected String savePicture(Bitmap bitmap) {
-        String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/captcha"+".jpg";
-        File file = new File(path);
-        FileOutputStream out;
-        try {
-            out = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-            out.flush();
-            out.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return "";
     }
 }
 

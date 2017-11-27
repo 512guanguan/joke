@@ -3,7 +3,6 @@ package com.llb.subway.view.base;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
-import android.widget.ArrayAdapter;
 
 import java.util.ArrayList;
 
@@ -13,7 +12,7 @@ import java.util.ArrayList;
 
 public class BaseApplication extends Application{
     public static Context mContext;
-    private BaseApplication instance;
+    private static BaseApplication instance;
     private ArrayList<Activity> activities;
 
     @Override
@@ -26,7 +25,7 @@ public class BaseApplication extends Application{
     /**
      * 单例模式
      * @return
-     */public BaseApplication getInstance(){
+     */public static BaseApplication getInstance(){
         if(instance == null)
             return new BaseApplication();
         return instance;

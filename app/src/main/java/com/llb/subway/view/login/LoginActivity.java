@@ -1,26 +1,17 @@
 package com.llb.subway.view.login;
 
-import android.support.v7.app.AppCompatActivity;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.jakewharton.picasso.OkHttp3Downloader;
 import com.llb.subway.R;
-import com.llb.subway.model.SubwayLoader;
+import com.llb.subway.common.helper.ImageHelper;
 import com.llb.subway.model.api.SubwayURL;
 import com.llb.subway.model.bean.LoginPageResponse;
-import com.llb.subway.model.http.picasso.CommonHeaderInterceptor;
-import com.squareup.picasso.MemoryPolicy;
-import com.squareup.picasso.NetworkPolicy;
-import com.squareup.picasso.OkHttpDownloader;
-import com.squareup.picasso.Picasso;
-
-import java.util.List;
-
-import okhttp3.Interceptor;
-import okhttp3.OkHttpClient;
 
 public class LoginActivity extends AppCompatActivity implements LoginContract.View{
     private LoginPageResponse loginPageResponse;
@@ -41,6 +32,14 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         loginPageResponse = response;
         Toast.makeText(this, "数据解析完了", Toast.LENGTH_SHORT).show();
         loadCaptchaImage(SubwayURL.SUBWAY_BASE + response.CAPTCHA_URL);
+    }
+
+    @Override
+    public void setCaptchaImage(String path) {
+        if(!TextUtils.isEmpty(path)){
+            Bitmap bitmap = ImageHelper.getBitmap(this, path);
+            captchaIV.setImageBitmap(bitmap);
+        }
     }
 
     public void loadCaptchaImage(String url){

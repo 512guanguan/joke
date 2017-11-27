@@ -4,8 +4,6 @@ import android.util.Log;
 
 import com.llb.subway.model.SubwayLoader;
 import com.llb.subway.model.bean.LoginPageResponse;
-import com.llb.subway.model.bean.PostDetailResponse;
-import com.llb.subway.view.post_detail.PostDetailContract;
 
 /**
  * Created by llb on 2017-09-12.
@@ -35,7 +33,8 @@ public class LoginPresenter implements LoginContract.Presenter {
     public void getCaptchaImage(String url) {
         SubwayLoader.getInstance().getCaptchaImage(url)
                 .subscribe((response) -> {
-                    Log.i("llb", "response = " + response);
+                    Log.i("llb", "存储路径path = " + response);
+                    loginView.setCaptchaImage(response);
                 }, (Throwable e) -> {
                     Log.d("llb", "error " + e.getMessage());
                 }, () -> {

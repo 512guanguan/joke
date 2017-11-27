@@ -98,11 +98,11 @@ public class SubwayLoader extends BaseLoader {
      */
     public Observable<String> getCaptchaImage(String url){
         return requestGzipImageByGet(url,"http://www.ditiezu.com/member.php?mod=logging&action=login&mobile=yes")
-                .flatMap((response) -> {
-                    Log.i("llb","数据回来了，等待解析\n" + response);
-                    // do something like cache
-                    return  Observable.just(response);
-                })
+//                .flatMap((response) -> {
+//                    Log.i("llb","数据回来了，等待解析\n" + response);
+//                    // do something like cache
+//                    return  Observable.just(response);
+//                })
                 .compose(DefaultObservableTransformer.defaultTransformer());
     }
 }
