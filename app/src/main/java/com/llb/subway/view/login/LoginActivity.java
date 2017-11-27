@@ -5,7 +5,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.llb.subway.R;
@@ -13,10 +16,12 @@ import com.llb.subway.common.helper.ImageHelper;
 import com.llb.subway.model.api.SubwayURL;
 import com.llb.subway.model.bean.LoginPageResponse;
 
-public class LoginActivity extends AppCompatActivity implements LoginContract.View{
+public class LoginActivity extends AppCompatActivity implements LoginContract.View, View.OnClickListener{
     private LoginPageResponse loginPageResponse;
     private LoginContract.Presenter presenter;
     private ImageView captchaIV;
+    private TextView nameTV, passwordTV, captchaTV;
+    private Button loginBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +30,10 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         presenter = new LoginPresenter(this);
         presenter.getLoginPageData(SubwayURL.SUBWAY_LOGIN_PAGE);
         captchaIV = (ImageView) findViewById(R.id.captcha_iv);
+        nameTV = (TextView) findViewById(R.id.name_tv);
+        passwordTV = (TextView) findViewById(R.id.password_tv);
+        loginBtn = (Button) findViewById(R.id.login_btn);
+        loginBtn.setOnClickListener(this);
     }
 
     @Override
@@ -40,6 +49,11 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
             Bitmap bitmap = ImageHelper.getBitmap(this, path);
             captchaIV.setImageBitmap(bitmap);
         }
+    }
+
+    @Override
+    public void onLoginSuccess() {
+
     }
 
     public void loadCaptchaImage(String url){
@@ -58,5 +72,25 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 //                .placeholder(R.mipmap.ic_launcher)//下载中显示的图片
 //                .error(R.mipmap.ic_launcher)//下载失败显示的图片
 //                .into(captchaIV);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.login_btn:
+                login();
+                break;
+        }
+    }
+
+    private void login() {
+        String name = nameTV.getText().toString();
+        String password = passwordTV.getText().toString();
+        String captcha = captchaTV.getText().toString();
+        if(TextUtils.isEmpty(name)||TextUtils.isEmpty(password)||TextUtils.isEmpty(captcha)){
+            Toast.makeText(this,"请先填写账户信息",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        presenter.login(SubwayURL.SUBWAY_BASE+loginPageResponse.loginURL,name,password,captcha);
     }
 }

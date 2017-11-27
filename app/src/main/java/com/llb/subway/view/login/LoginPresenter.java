@@ -41,4 +41,9 @@ public class LoginPresenter implements LoginContract.Presenter {
                     Log.d("llb", "completed");
                 });
     }
+
+    @Override
+    public void login(String url, String name, String password, String captcha) {
+
+    }
 }

@@ -10,10 +10,12 @@ public interface LoginContract {
     interface Presenter{
         void getLoginPageData(String url);
         void getCaptchaImage(String url);
+        void login(String url, String name, String password, String captcha);
     }
 
     interface View{
         void setLoginPageData(LoginPageResponse response);
         void setCaptchaImage(String path);
+        void onLoginSuccess();
     }
 }
