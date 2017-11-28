@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import com.llb.subway.common.helper.ImageHelper;
 import com.llb.subway.model.api.GetRequest;
 import com.llb.subway.model.api.HttpUtil;
+import com.llb.subway.model.api.PostRequest;
 import com.llb.subway.view.base.BaseApplication;
 
 import java.io.BufferedReader;
@@ -14,6 +15,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.HashMap;
 import java.util.zip.GZIPInputStream;
 
 import io.reactivex.Observable;
@@ -73,7 +75,28 @@ public class BaseLoader {
                         }
                 );
     }
-
+    /**
+     * 通用的网络请求
+     *
+     * @param url
+     * @return
+     */
+    protected Observable<String> requestByPost(String url, HashMap<String,String> data) {
+        return Observable.just("")
+                .observeOn(Schedulers.io())
+                .map((s) -> {
+                            try {
+                                PostRequest request = HttpUtil.getInstance().post(url,data);
+                                Response res = HttpUtil.addCommonHeaders(request).execute();
+                                InputStream inputStream = new ByteArrayInputStream(res.body().bytes());
+                                return zipInputStream(inputStream);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            return "";
+                        }
+                );
+    }
     /**
      * 通用的网络请求
      *

@@ -7,8 +7,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.llb.subway.R;
@@ -20,7 +20,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     private LoginPageResponse loginPageResponse;
     private LoginContract.Presenter presenter;
     private ImageView captchaIV;
-    private TextView nameTV, passwordTV, captchaTV;
+    private EditText nameTV, passwordTV, captchaTV;
     private Button loginBtn;
 
     @Override
@@ -30,8 +30,9 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         presenter = new LoginPresenter(this);
         presenter.getLoginPageData(SubwayURL.SUBWAY_LOGIN_PAGE);
         captchaIV = (ImageView) findViewById(R.id.captcha_iv);
-        nameTV = (TextView) findViewById(R.id.name_tv);
-        passwordTV = (TextView) findViewById(R.id.password_tv);
+        nameTV = (EditText) findViewById(R.id.name_tv);
+        passwordTV = (EditText) findViewById(R.id.password_tv);
+        captchaTV = (EditText) findViewById(R.id.captcha_tv);
         loginBtn = (Button) findViewById(R.id.login_btn);
         loginBtn.setOnClickListener(this);
     }
@@ -91,6 +92,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
             Toast.makeText(this,"请先填写账户信息",Toast.LENGTH_SHORT).show();
             return;
         }
-        presenter.login(SubwayURL.SUBWAY_BASE+loginPageResponse.loginURL,name,password,captcha);
+        presenter.login(SubwayURL.SUBWAY_BASE+loginPageResponse.loginURL,name,password,captcha,loginPageResponse);
     }
 }

@@ -3,12 +3,9 @@ package com.llb.subway.model;
 
 import android.util.Log;
 
-import com.llb.subway.model.bean.ForumListItem;
-import com.llb.subway.model.bean.LoginPageResponse;
-import com.llb.subway.model.bean.PostDetailResponse;
-import com.llb.subway.model.bean.PostListItem;
 import com.llb.subway.model.http.DefaultObservableTransformer;
-import com.llb.subway.view.base.BaseActivity;
+
+import java.util.HashMap;
 
 import io.reactivex.Observable;
 
@@ -28,6 +25,20 @@ public class AccountLoader extends BaseLoader {
         return instance == null ? new AccountLoader() : instance;
     }
 
+    /**
+     * 解析登录操作返回页面信息
+     * @param url
+     * @return
+     */
+    public Observable<String> login(String url, HashMap<String,String> data){
+        return requestByPost(url,data)
+                .flatMap((response) -> {
+                    Log.i("llb","数据回来了，等待解析\n" + response);
+                    // do something like cache
+                    return  Observable.just(response);
+                })
+                .compose(DefaultObservableTransformer.defaultTransformer());
+    }
 }
 
 

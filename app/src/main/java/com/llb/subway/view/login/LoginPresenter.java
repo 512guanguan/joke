@@ -2,8 +2,11 @@ package com.llb.subway.view.login;
 
 import android.util.Log;
 
+import com.llb.subway.model.AccountLoader;
 import com.llb.subway.model.SubwayLoader;
 import com.llb.subway.model.bean.LoginPageResponse;
+
+import java.util.HashMap;
 
 /**
  * Created by llb on 2017-09-12.
@@ -43,7 +46,37 @@ public class LoginPresenter implements LoginContract.Presenter {
     }
 
     @Override
-    public void login(String url, String name, String password, String captcha) {
-
+    public void login(String url, String name, String password, String captcha,LoginPageResponse loginPageResponse) {
+        HashMap<String,String> data = new HashMap<>();
+        /**
+         * formhash:673e7f41
+         referer:http://www.ditiezu.com/forum.php?mod=forum
+         username:路飞llb
+         password:lailubo
+         sechash:SkSzW
+         seccodeverify:evec
+         questionid:0
+         answer:
+         cookietime:2592000
+         submit:登录
+         */
+        data.put("formhash",loginPageResponse.formHash);
+        data.put("referer",loginPageResponse.referer);
+        data.put("username",name);
+        data.put("password",password);
+        data.put("sechash",loginPageResponse.secHash);
+        data.put("seccodeverify",captcha);
+        data.put("questionid","0");
+        data.put("answer","");
+        data.put("cookietime",loginPageResponse.cookieTime);
+        data.put("submit",loginPageResponse.submit);
+        AccountLoader.getInstance().login(url,data)
+                .subscribe((response) -> {
+                    Log.i("llb", "存储路径path = " + response);
+                }, (Throwable e) -> {
+                    Log.d("llb", "error " + e.getMessage());
+                }, () -> {
+                    Log.d("llb", "completed");
+                });
     }
 }

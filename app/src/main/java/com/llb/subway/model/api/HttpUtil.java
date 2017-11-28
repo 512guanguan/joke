@@ -1,9 +1,9 @@
 package com.llb.subway.model.api;
 
-import android.app.Application;
-
 import com.llb.subway.model.http.cookie.CookiesManager;
 import com.llb.subway.view.base.BaseApplication;
+
+import java.util.HashMap;
 
 import okhttp3.OkHttpClient;
 
@@ -49,7 +49,7 @@ public final class HttpUtil {
      * @param request
      * @return
      */
-    public static IRequest addCommonHeaders(GetRequest request){
+    public static IRequest addCommonHeaders(IRequest request){
           return request.addHeader("Accept-Encoding","gzip,deflate")
                 .addHeader("Accept-Language","zh-CN,zh;q=0.8,en;q=0.6")
                 .addHeader("Accept","text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8")
@@ -58,8 +58,17 @@ public final class HttpUtil {
     }
 
 
-    public PostRequest post(String url){
-
-        //Log.d("NetActivityXXX","POST THREAD"+Thread.currentThread().getName());
-        return new PostRequest(url,client);}
+    /**
+     * 封装post表单数据
+     * @param url
+     * @param data  HashMap<String, String>格式的数据
+     * @return
+     */
+    public PostRequest post(String url, HashMap<String, String> data){
+        PostRequest request = new PostRequest(url, client);
+        for(String item : data.keySet()){
+            request.addParameter(item,data.get(item));
+        }
+        return request;
+    }
 }
