@@ -3,6 +3,7 @@ package com.llb.subway.model;
 
 import android.util.Log;
 
+import com.llb.subway.model.bean.LoginResponse;
 import com.llb.subway.model.http.DefaultObservableTransformer;
 
 import java.util.HashMap;
@@ -30,12 +31,12 @@ public class AccountLoader extends BaseLoader {
      * @param url
      * @return
      */
-    public Observable<String> login(String url, HashMap<String,String> data){
+    public Observable<LoginResponse> login(String url, HashMap<String,String> data){
         return requestByPost(url,data)
                 .flatMap((response) -> {
                     Log.i("llb","数据回来了，等待解析\n" + response);
-                    // do something like cache
-                    return  Observable.just(response);
+                    LoginResponse res = (new LoginResponse()).new Builder().parsePage(response);
+                    return  Observable.just(res);
                 })
                 .compose(DefaultObservableTransformer.defaultTransformer());
     }
