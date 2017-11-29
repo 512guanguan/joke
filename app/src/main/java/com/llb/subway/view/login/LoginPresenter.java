@@ -61,7 +61,6 @@ public class LoginPresenter implements LoginContract.Presenter {
          submit:登录
          */
         data.put("formhash",loginPageResponse.formHash);
-        data.put("referer",loginPageResponse.referer);
         data.put("username",name);
         data.put("password",password);
         data.put("sechash",loginPageResponse.secHash);
@@ -70,6 +69,7 @@ public class LoginPresenter implements LoginContract.Presenter {
         data.put("answer","");
         data.put("cookietime",loginPageResponse.cookieTime);
         data.put("submit",loginPageResponse.submit);
+        data.put("referer",loginPageResponse.referer);
         AccountLoader.getInstance().login(url,data)
                 .subscribe((response) -> {
                     Log.i("llb", "存储路径path = " + response);

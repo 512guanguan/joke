@@ -69,6 +69,7 @@ public final class HttpUtil {
         for(String item : data.keySet()){
             request.addParameter(item,data.get(item));
         }
+        request.addHeader("referer",data.get("referer"));
         return request;
     }
 }
