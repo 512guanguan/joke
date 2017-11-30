@@ -76,6 +76,34 @@ public class PostDetailResponse {
          </div>
          </div>
          </div>
+
+         <div id="post_8280490" class="vb vc">
+         <a href="home.php?mod=space&amp;uid=15329&amp;do=profile&mobile=yes" class="avatar"><img src="http://www.ditiezu.com/uc_server/data/avatar/000/01/53/29_avatar_small.jpg" onerror="this.onerror=null;this.src='http://www.ditiezu.com/uc_server/images/noavatar_small.gif'" /></a>
+         <div class="user">
+         <a href="home.php?mod=space&amp;uid=15329&amp;do=profile&mobile=yes">jason130</a>
+         <span class="p_dl">
+         <em id="authorposton8280490">11-13 13:14</em>
+         </span>
+         <span class="p_nm y">楼主</span>
+         </div>
+         <div class="vbc notb">
+         <div class="pbody mbn">
+         <div class="mes">
+         <div id="postmessage_8280490" class="postmessage">
+         <div class="quote">
+            <blockquote><font size="2"><font color="#999999">comet 发表于 2017-11-13 07:51</font> <a href="http://www.ditiezu.com/forum.php?mod=redirect&amp;goto=findpost&amp;pid=8279577&amp;ptid=476334" target="_blank"><a href="static/image/common/back.gif" target="_blank">[查看图片]</a></a></font><br />
+         感觉这两年全国有轨电车建设的很迅速，像南京的麒麟有轨电车，北京的西郊有轨电车等等，都是今年通车，可否 ...</blockquote>
+         </div><br />
+         前年已经做过有轨电车专辑台历了了<img src="static/image/smiley/default/48.gif" smilieid="80" border="0" alt="" /> </div>
+         </div>
+         </div>
+         <div class="vtrim">
+         <a href="forum.php?mod=post&amp;action=reply&amp;fid=21&amp;tid=476334&amp;repquote=8280490&amp;page=1&mobile=yes">回复</a>
+         <span>
+         </div>
+         <!--// postslist end-->
+         </div>
+         </div>
          */
         public PostDetailResponse parsePage(String html){
             if(TextUtils.isEmpty(html))
@@ -123,7 +151,7 @@ public class PostDetailResponse {
                 comment.authorInfoUrl = elements.get(j).select("div.user a").attr("href");
                 comment.floor = elements.get(j).select("div.user span[class=p_nm y]").text();
                 comment.commentTime = elements.get(j).select("div.user span.p_dl").text();
-                comment.commentContent =  elements.get(j).select("div.pbody div.mes div.postmessage").toString();
+                comment.commentContent =  elements.get(j).select("div.pbody div.mes div.postmessage").toString().replace("[查看图片]","");
                 //解析引用内容
                 if(elements.get(j).select("div.quote").size()>0){
                     comment.quoteContent = elements.get(j).select("div.quote").text();//TODO 不对，做了登陆态再来
