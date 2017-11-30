@@ -3,4 +3,145 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <!-- 字体颜色 -->
+    <color name="text_main">#282828</color>
+    <color name="text_second">#4b4b4b</color>
+    <color name="text_notice">#c8c8c8</color>
+    <color name="text_link">#4699fc</color>
+    <!-- 主要颜色 -->
+    <color name="gf_red">#dc3b00</color>
+    <color name="gf_blue">#1cacff</color>
+    <color name="gf_yellow">#ffc23f</color>
+    <color name="gf_orange">#f56e18</color>
+    <color name="gf_gray">#bbbbbb</color>
+    <color name="gf_green">#009315</color>
+    <color name="gf_title_text">#8d7567</color>
+    <color name="page_bg">#eeeeee</color>
+    <color name="gf_loading_bg">#aa222222</color>
+    <color name="fund_bg">#faf7f6</color>
+    <!--  -->
+    <color name="red">#ff0000</color>
+    <color name="darkred">#aa0000</color>
+    <color name="white">#fff</color>
+    <color name="mainButtonColor">#bbb</color>
+    <color name="light_white">#f7f7f7</color>
+    <color name="green">#00FF66</color>
+    <color name="titlecolor">#fb4400</color>
+
+    <color name="color_text">#f7f7f7</color>
+    <color name="color_bg2">#eee</color>
+    <color name="black">#000</color>
+    <!-- 黄红色 -->
+    <color name="red_yellow">#F4A460</color>
+
+    <!-- 灰色 -->
+    <color name="color_textgray">#7d7d7d</color>
+    <!-- 浅灰色 1 -->
+    <color name="color_small_gray1">#ddd</color>
+    <!-- 浅灰色2 -->
+    <color name="color_small_gray2">#bbb</color>
+    <!-- 浅灰色2 -->
+    <color name="color_small_gray3">#aaa</color>
+    <color name="organge">#ff4500</color>
+    <color name="drakblackblue">#1a2933</color>
+    <!-- 蓝色 -->
+    <color name="colormoney">#157efb</color>
+
+    <!-- 透明 -->
+    <color name="transparent">#00000000</color>
+
+    <!-- 分隔线颜色 -->
+    <color name="colorLine">#e6e6e6</color>
+    <color name="colorBlue">#5eb1f3</color>
+    <color name="gold">#b89766</color>
+
+    <!-- hint颜色 -->
+    <color name="textColorHint">#e6e6e6</color>
+
+    <!-- 账单各字体颜色 -->
+    <color name="cunru">#fa7d01</color>
+    <color name="quchu">#ea5f2c</color>
+    <color name="qita">#03a539</color>
+    <color name="licai">#0278d3</color>
+    <color name="transfer">#0f9fa4</color>
+    <color name="huankuang">#456ed7</color>
+    <color name="jiaoyishibai">#bbbbbb</color>
+    <color name="jiaoyichenggong">#00cc33</color>
+    <color name="chulizhong">#ffc96f</color>
+    <color name="goumai">#E39542</color>
+    <color name="chedan">#F44405</color>
+    <color name="creti">#c5c5c5</color>
+    <color name="gray_array">#c7c7c7</color>
+    <color name="game_button_yellow">#ffd801</color>
+    <color name="text_brown">#a97740</color>
+    <color name="pie_chart_orange_1">#ffb401</color>
+    <color name="pie_chart_orange_2">#ff6307</color>
+    <color name="pie_chart_orange_3">#ff890a</color>
+
+    <!-- 字体颜色 -->
+    <color name="main_orange">#ff6307</color>
+    <color name="btn_orange">#ff6300</color>
+    <color name="main_orange2">#ff9d34</color>
+    <color name="main_orange3">#ff9307</color>
+    <color name="main_orange_light">#ffb401</color>
+    <color name="main_orange_light1">#ff7c06</color>
+    <color name="main_orange_light2">#ffeb7b</color>
+    <color name="main_orange_light3">#ffcd66</color>
+    <color name="main_orange_light4">#ffc30d</color>
+    <color name="main_yellow_light">#fff1b1</color>
+    <color name="main_yellow">#eb960a</color>
+    <color name="main_yellow2">#f0b400</color>
+    <color name="main_yellow3">#ffdd23</color>
+    <color name="main_gray">#929292</color>
+    <color name="main_gray2">#7d7d7d</color>
+    <color name="main_gray3">#cdcdcd</color>
+    <color name="main_gray4">#e3e3e3</color>
+    <color name="line_light_white">#dedede</color>
+
+    <color name="main_line">#e7e1de</color>
+    <color name="main_purple">#b58dc1</color>
+    <color name="main_purple_light">#cb7ee2</color>
+    <color name="main_purple2">#703980</color>
+    <color name="main_purple3">#a270b1</color>
+    <color name="main_red">#f44445</color>
+    <color name="main_red1">#ee2d2d</color>
+    <color name="main_lightblue">#919dd2</color>
+    <color name="main_darkblue">#30364f</color>
+    <color name="main_darkblue1">#6672a7</color>
+    <color name="main_blue">#5AA5ED</color>
+    <color name="main_blue1">#54a2ec</color>
+    <color name="main_red2">#fa5657</color>
+    <color name="main_green">#0e8d27</color>
+    <color name="main_bg">#f5f5f5</color>
+    <color name="top_purple_bg">#30364f</color>
+
+
+    <color name="line_bg">#eeeeee</color>
+    <color name="radio_c">#eb960a</color>
+    <color name="radio_uc">#e8e6e2</color>
+    <color name="radio_t_uc">#ede8e6</color>
+    <color name="radio_text">#8d7567</color>
+    <color name="select_text">#3e3e3e</color>
+    <color name="select_text1">#010101</color>
+    <color name="reflesh_text">#c0ccd5</color>
+
+    <color name="hold_c_1">#f25500</color>
+    <color name="hold_c_2">#9a5eac</color>
+    <color name="hold_c_3">#ff6037</color>
+    <color name="hold_c_4">#a273b0</color>
+    <color name="hold_c_5">#ff890a</color>
+    <color name="hold_c_6">#b58dc1</color>
+    <color name="hold_c_7">#ffb401</color>
+    <color name="hold_c_8">#cca8d7</color>
+    <color name="hold_c_9">#ffd238</color>
+    <color name="hold_c_10">#dec0e7</color>
+
+    <color name="rank_c_1">#ff6307</color>
+    <color name="rank_c_2">#ff8207</color>
+    <color name="rank_c_3">#ff9f07</color>
+    <color name="rank_c_4">#ffba26</color>
+    <color name="rank_c_5">#ffc926</color>
+    <color name="rank_c_6">#f2d7a9</color>
+
 </resources>
