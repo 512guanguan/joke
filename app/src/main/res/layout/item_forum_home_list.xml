@@ -3,7 +3,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="5dp"
-                android:paddingTop="5dp">
+                android:paddingTop="5dp"
+    android:background="@drawable/item_main_list_bg">
 
     <LinearLayout
         android:id="@+id/title_layout_ll"
@@ -85,10 +86,5 @@
         android:padding="15dp"
         android:textColor="@color/main_blue"
         android:text="32"/>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/main_line"
-        android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>

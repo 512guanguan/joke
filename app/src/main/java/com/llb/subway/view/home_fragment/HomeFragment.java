@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.llb.joke.view.OnFragmentInteractionListener;
 import com.llb.subway.R;
 import com.llb.subway.common.OnItemClickListener;
+import com.llb.subway.common.widget.SimpleDividerItemDecoration;
 import com.llb.subway.model.api.SubwayURL;
 import com.llb.subway.model.bean.ForumListItem;
 import com.llb.subway.view.base.BaseActivity;
@@ -72,7 +73,7 @@ public class HomeFragment extends Fragment implements HomeContract.View{
         postListData = new ArrayList<>();
         adapter = new HomeAdapter(this.getActivity(), R.layout.item_subway_home_list);
 //        adapter.setData(postListData);
-
+        recyclerView.addItemDecoration(new SimpleDividerItemDecoration(mContext,R.drawable.item_horizontal_divider,2));
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));//这里用线性显示 类似于listview
         recyclerView.setAdapter(adapter);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.home_swipeRefreshLayout);

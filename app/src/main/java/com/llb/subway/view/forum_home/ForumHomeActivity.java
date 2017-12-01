@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.llb.subway.R;
 import com.llb.subway.common.OnItemClickListener;
+import com.llb.subway.common.widget.SimpleDividerItemDecoration;
 import com.llb.subway.model.api.SubwayURL;
 import com.llb.subway.model.bean.PostListItem;
 import com.llb.subway.view.base.BaseActivity;
@@ -44,6 +45,7 @@ public class ForumHomeActivity extends AppCompatActivity implements ForumHomeCon
         postListData = new ArrayList<>();
         adapter = new ForumHomeAdapter(this, R.layout.item_forum_home_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));//这里用线性显示 类似于listview
+        recyclerView.addItemDecoration(new SimpleDividerItemDecoration(mContext,R.drawable.item_horizontal_divider,2));
         recyclerView.setAdapter(adapter);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.forum_home_swipeRefreshLayout);
         adapter.setOnItemClickListener(new OnItemClickListener() {
