@@ -2,16 +2,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="5dp"
+                android:paddingBottom="3dp"
                 android:paddingLeft="10dp"
-                android:background="@android:color/white"
-                android:layout_marginTop="5dp">
+                android:background="@android:color/white">
 
     <RelativeLayout
         android:id="@+id/title_layout_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="5dp">
+        android:padding="3dp">
 
         <ImageView
             android:id="@+id/head_shortcut_iv"
@@ -19,6 +18,7 @@
             android:layout_height="40dp"
             android:layout_centerVertical="true"
             android:padding="3dp"
+            android:scaleType="fitXY"
             android:src="@drawable/common_full_open_on_phone"
             android:visibility="visible"/>
         <LinearLayout
@@ -26,9 +26,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/head_shortcut_iv"
-            android:layout_toLeftOf="@+id/comment_tv"
+            android:layout_toLeftOf="@+id/floor_title_tv"
             android:paddingBottom="5dp"
-            android:orientation="horizontal">
+            android:orientation="vertical">
             <TextView
                 android:id="@+id/comment_author_tv"
                 android:layout_width="wrap_content"
@@ -37,43 +37,43 @@
                 android:maxLines="1"
                 android:maxWidth="180dp"
                 android:text="逗比dddddddddddddddddddddddd"
+                android:textColor="@color/main_lightblue"
+                android:padding="5dp"
                 android:ellipsize="marquee"
                 android:textSize="16sp"/>
             <TextView
-                android:id="@+id/floor_title_tv"
-                android:layout_width="wrap_content"
+                android:id="@+id/comment_time_tv"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:maxLines="1"
-                android:text="楼主"
-                android:textSize="16sp"
-                android:textColor="#33ff33"
-                android:layout_marginLeft="10dp"/>
+                android:layout_below="@+id/title_top_layout_ll"
+                android:layout_toRightOf="@+id/head_shortcut_iv"
+                android:text="2009-09-10 17:23:11"
+                android:paddingLeft="5dp"
+                android:textSize="13dp"
+                android:textColor="@color/main_darkblue"/>
         </LinearLayout>
         <TextView
-            android:id="@+id/comment_tv"
+            android:id="@+id/floor_title_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:padding="15dp"
-            android:text="回复"/>
-        <TextView
-            android:id="@+id/comment_time_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/title_top_layout_ll"
-            android:layout_toRightOf="@+id/head_shortcut_iv"
-            android:layout_toLeftOf="@+id/comment_tv"
-            android:text="2009-09-10 17:23:11"/>
+            android:layout_alignParentRight="true"
+            android:maxLines="1"
+            android:text="楼主"
+            android:textColor="@color/text_notice"
+            android:padding="10dp"
+            android:textSize="12sp"
+            android:layout_marginLeft="5dp"/>
     </RelativeLayout>
     <TextView
         android:id="@+id/comment_content_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/title_layout_ll"
-        android:minLines="4"
-        android:padding="10dp"
-        android:text="我是评论内容！！！"/>
+        android:minLines="3"
+        android:padding="6dp"
+        android:text="我是评论内容！！！"
+        android:textSize="14dp"
+        android:textColor="@color/main_darkblue"/>
 
 </RelativeLayout>

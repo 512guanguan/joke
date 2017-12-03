@@ -22,15 +22,16 @@ import com.llb.subway.view.post_detail.PostDetailActivity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ForumHomeActivity extends AppCompatActivity implements ForumHomeContract.View{
+public class ForumHomeActivity extends AppCompatActivity implements ForumHomeContract.View {
     private Context mContext;
     private String url = "";
     private RecyclerView recyclerView = null;
-    private List<PostListItem> postListData = null;
+//    private List<PostListItem> postListData = null;
     private ForumHomeAdapter adapter = null;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private int currentPage = 0;
+    private int currentPage = 1;
     private ForumHomeContract.Presenter presenter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,20 +40,21 @@ public class ForumHomeActivity extends AppCompatActivity implements ForumHomeCon
         url = getIntent().getStringExtra("url");
         initView();
     }
+
     private void initView() {
         presenter = new ForumHomePresenter(this);
         recyclerView = (RecyclerView) findViewById(R.id.post_list);
-        postListData = new ArrayList<>();
+//        postListData = new ArrayList<>();
         adapter = new ForumHomeAdapter(this, R.layout.item_forum_home_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));//这里用线性显示 类似于listview
-        recyclerView.addItemDecoration(new SimpleDividerItemDecoration(mContext,R.drawable.item_horizontal_divider,2));
+        recyclerView.addItemDecoration(new SimpleDividerItemDecoration(mContext, R.drawable.item_horizontal_divider, 3));
         recyclerView.setAdapter(adapter);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.forum_home_swipeRefreshLayout);
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 Log.i("llb", "onItemClick position=" + position);
-                Toast.makeText(mContext,"onItemClick position=" + position,Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "onItemClick position=" + position, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(mContext, PostDetailActivity.class);
                 intent.putExtra("url", SubwayURL.SUBWAY_BASE + BaseActivity.postListItems.postList.get(position).postUrl);
                 mContext.startActivity(intent);
@@ -68,40 +70,38 @@ public class ForumHomeActivity extends AppCompatActivity implements ForumHomeCon
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 Log.i("llb", "onScrollStateChanged newState=" + newState);
+                if(newState == RecyclerView.SCROLL_STATE_IDLE){
+                    RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+                    int lastVisiblePosition = ((LinearLayoutManager)layoutManager).findLastVisibleItemPosition();
+                    int visibleItemCount = layoutManager.getChildCount();
+                    int totalItemCount = layoutManager.getItemCount();
+                    if(visibleItemCount>0 && lastVisiblePosition>=totalItemCount-1 && !adapter.isLoadingMore){
+                        adapter.setLoadingMore(true);
+                        presenter.loadMoreData(currentPage);
+                        Log.i("llb", "onScrollStateChanged 底部啦");
+                        Log.i("llb", "lastVisiblePosition="+lastVisiblePosition+" visibleItemCount="+visibleItemCount+" totalItemCount="+totalItemCount);
+                    }
+                }
+
             }
 
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                Log.i("llb", "onScrolled dx=" + dx + "  dy = " + dy);
-//                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                if (recyclerView.computeVerticalScrollOffset() + recyclerView.computeHorizontalScrollExtent() >= recyclerView.computeVerticalScrollRange()) {
-                    Log.i("llb", "onScrolled 底部啦");
-                    // 是否正在下拉刷新
-                    if (swipeRefreshLayout.isRefreshing()) {
-                        adapter.notifyItemRemoved(adapter.getItemCount());
-                        return;
-                    }
-                    // 触发上拉刷新
-                    if (!adapter.isLoadingMore()) {
-//                        adapter.setLoadingMore(true);
-                        Log.i("llb", "触发上拉刷新");
-//                        getForumListData();
-                    }
-                }
             }
         });
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                Log.i("llb", "setOnRefreshListener()");
-//                fetchData();
-                swipeRefreshLayout.setRefreshing(false);
+                presenter.refreshPage();
             }
         });
-
-        presenter.getPostListData();
-        swipeRefreshLayout.setRefreshing(true);
+//        if(BaseActivity.postListItems !=null && BaseActivity.postListItems.postList.size()>0){
+//            adapter.setData(BaseActivity.postListItems.postList);//使用内存缓存即可
+//        }else {
+        BaseActivity.postListItems = null;//清空
+            presenter.refreshPage();
+//        }
     }
 
     @Override
@@ -110,11 +110,28 @@ public class ForumHomeActivity extends AppCompatActivity implements ForumHomeCon
     }
 
     @Override
-    public void parsePostListData(PostListItem response) {
-//        PostListItem.Builder builder= new PostListItem().new Builder();
-//        BaseActivity.postListItems = builder.parse(response);
+    public void onFinishLoadMore(PostListItem response) {
+        Toast.makeText(this, "数据解析完了", Toast.LENGTH_SHORT).show();
+        adapter.setLoadingMore(false);
+        if(response instanceof PostListItem){
+            currentPage++;
+            adapter.setMoreData(response.postList);
+        }
+    }
+
+    @Override
+    public void hideProgressDialog() {
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void showProgressDialog() {
+        swipeRefreshLayout.setRefreshing(true);
+    }
+
+    @Override
+    public void onFinishRefresh(PostListItem response) {
         Toast.makeText(this, "数据解析完了", Toast.LENGTH_SHORT).show();
         adapter.setData(response.postList);
-        swipeRefreshLayout.setRefreshing(false);
     }
 }

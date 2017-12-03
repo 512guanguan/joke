@@ -9,10 +9,28 @@ import com.llb.subway.model.bean.PostListItem;
 
 public interface PostDetailContract {
     interface Presenter{
-        void getPostDetailData(String url);
+//        void getPostDetailData(String url);
+        /**
+         * 下拉刷新页面
+         */
+        void refreshPage(String url);
+        /**
+         * 上拉加载更多
+         */
+        void loadMoreData(String url,int currentPage);
     }
 
     interface View{
-        void setPostDetailData(PostDetailResponse response);
+//        void setPostDetailData(PostDetailResponse response);
+        void hideProgressDialog();
+        void showProgressDialog();
+        /**
+         * 上拉刷新结束
+         */
+        void onFinishLoadMore(PostDetailResponse response);
+        /**
+         * 下拉刷新结束
+         */
+        void onFinishRefresh(PostDetailResponse response);
     }
 }

@@ -67,9 +67,9 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         BaseViewHolder holder = null;
         switch (viewType) {
             case TYPE_HEADER:
-                if (headerView == null) {
-                    headerView = inflater.inflate(R.layout.item_post_detail_header, parent, false);
-                }
+//                if (headerView == null) {
+                headerView = inflater.inflate(R.layout.item_post_detail_header, parent, false);
+//                }
                 holder = new BaseViewHolder(mContext, headerView);
                 break;
             case TYPE_ITEM:
@@ -78,9 +78,9 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                 break;
             case TYPE_FOOTER:
 //                if (footerView == null) {
-//                    footerView = inflater.inflate(R.layout.item_recyclerview_footer, parent, false);
+                footerView = inflater.inflate(R.layout.item_recyclerview_footer, parent, false);
 //                }
-//                holder = new BaseViewHolder(mContext, footerView);
+                holder = new BaseViewHolder(mContext, footerView);
                 break;
             default:
                 break;
@@ -88,10 +88,23 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         return holder;
     }
 
+    /**
+     * 初次刷新加载数据
+     * @param response
+     */
     public void setData(PostDetailResponse response) {
         this.commentData.addAll(response.commentList);
 //        response.commentList.clear();
         this.response = response;
+        notifyDataSetChanged();
+    }
+
+    /**
+     * 上拉加载更多数据合并
+     * @param response
+     */
+    public void setMoreData(PostDetailResponse response){
+        this.commentData.addAll(response.commentList);
         notifyDataSetChanged();
     }
 
@@ -201,7 +214,8 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         //TODO 有问题
         if (headerView != null && position == 0) {
             return TYPE_HEADER;
-        } else if (headerView != null && footerView != null && position == getItemCount() + 1) {
+//        } else if (headerView != null && commentData.size()>0 && position>= commentData.size()) {
+        } else if (position < getItemCount() && position >= getItemCount() - 1) {
             return TYPE_FOOTER;
         } else {
             return TYPE_ITEM;
@@ -223,16 +237,6 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         }
     }
 
-    //    @Override
-//    public void onViewAttachedToWindow(RecyclerView.ViewHolder holder) {
-//        super.onViewAttachedToWindow(holder);
-//        ViewGroup.LayoutParams lp = holder.itemView.getLayoutParams();
-//        if(lp != null
-//                && lp instanceof StaggeredGridLayoutManager.LayoutParams) {
-//            StaggeredGridLayoutManager.LayoutParams p = (StaggeredGridLayoutManager.LayoutParams) lp;
-//            p.setFullSpan(holder.getLayoutPosition() == 0);
-//        }
-//    }
     public static boolean isSlideToBottom(RecyclerView recyclerView) {
         if (recyclerView == null) return false;
         if (recyclerView.computeVerticalScrollExtent() + recyclerView.computeVerticalScrollOffset()
@@ -241,26 +245,17 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         return false;
     }
 
-//    public static boolean isBottom(RecyclerView recyclerView){
-//        LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-//        int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
-//        int visibleItemCount = layoutManager.getChildCount();
-//        //当前RecyclerView的所有子项个数
-//        int totalItemCount = layoutManager.getItemCount();
-//        //RecyclerView的滑动状态
-//        int state = recyclerView.getScrollState();
-//        if(visibleItemCount > 0 && lastVisibleItemPosition == totalItemCount - 1 && state == recyclerView.SCROLL_STATE_IDLE){
-//            return true;
-//        }else {
-//            return false;
-//        }
-//    }
-
     @Override
     public int getItemCount() {
-        return headerView == null ? commentData.size() : commentData.size() + 1;
+        return commentData.size() + getHeadersCount() + getFootersCount();
+    }
+    public int getHeadersCount() {
+        return 1;
     }
 
+    public int getFootersCount() {
+        return 1;
+    }
     public int getRealPosition(RecyclerView.ViewHolder holder) {
         int position = holder.getLayoutPosition();
         return headerView == null ? position : position - 1;

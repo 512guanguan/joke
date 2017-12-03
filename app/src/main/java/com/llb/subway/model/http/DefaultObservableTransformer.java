@@ -3,6 +3,10 @@ package com.llb.subway.model.http;/**
  */
 
 import android.util.Log;
+import android.widget.Toast;
+
+import com.llb.subway.common.util.DialogUtil;
+import com.llb.subway.view.base.BaseApplication;
 
 import io.reactivex.ObservableTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -21,7 +25,8 @@ public class DefaultObservableTransformer {
                 // 统一判断错误码
                 .doOnError((error) -> { // 网络出错时
                     Log.i("llb", "doOnError!!");
-//                    ErrorHandler.handlerNetworkError(error);
+                    Toast.makeText(BaseApplication.mContext,"心碎了，网络失败了！",Toast.LENGTH_SHORT).show();;
+//                    ErrorHandler.handlerNetworkError(error); TODO
                 });
     }
 }

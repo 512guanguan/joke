@@ -59,8 +59,18 @@ public class ForumHomeAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         }
     }
 
+    /**
+     * 更新or初始化数据，会清掉原有数据
+     * @param mDatas
+     */
     public void setData(List mDatas) {
+        this.mDatas.clear();
         this.mDatas = mDatas;
+        notifyDataSetChanged();
+    }
+
+    public void setMoreData(List mDatas){
+        this.mDatas.addAll(mDatas);
         notifyDataSetChanged();
     }
 
@@ -114,7 +124,8 @@ public class ForumHomeAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     }
     @Override
     public int getItemViewType(int position) {
-        if (position== mDatas.size()) {//TODO 有问题
+        if (mDatas.size()>0 && position>= mDatas.size()-1) {
+            Log.i("llb","getItemViewType=TYPE_FOOTER");
             return TYPE_FOOTER;
         } else {
             return TYPE_ITEM;

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/main_bg"
     android:orientation="vertical">
 
     <LinearLayout
@@ -24,6 +25,8 @@
             android:layout_weight="1"
             android:hint="账号"
             android:maxLength="20"
+            android:textSize="15sp"
+            android:textColor="@color/main_purple"
             android:paddingBottom="15dp"
             android:paddingLeft="3dp"
             android:paddingRight="15dp"
