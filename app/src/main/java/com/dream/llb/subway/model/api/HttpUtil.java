@@ -1,9 +1,14 @@
 package com.dream.llb.subway.model.api;
 
+import com.dream.llb.config.Config;
+import com.dream.llb.subway.BuildConfig;
+import com.dream.llb.subway.model.http.MyHttpLoggingInterceptor;
+import com.dream.llb.subway.model.http.MyHttpLoggingInterceptor.Level;
 import com.dream.llb.subway.model.http.cookie.CookiesManager;
 import com.dream.llb.subway.view.base.BaseApplication;
 
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 
@@ -22,12 +27,19 @@ public final class HttpUtil {
     }
 
     private HttpUtil(){
-
+        MyHttpLoggingInterceptor logInterceptor = new MyHttpLoggingInterceptor();
+        logInterceptor.setLevel(Level.BODY);
         cookiesManager=new CookiesManager(BaseApplication.mContext);
-//        Log.d("NetActivityXXX","UTIL THRAD"+Thread.currentThread().getName());
-        client=new OkHttpClient.Builder()
-                .cookieJar(cookiesManager)
-                .build();
+        // 创建 OKHttpClient
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        builder.connectTimeout(Config.DEFAULT_TIME_OUT, TimeUnit.SECONDS);//连接超时时间
+        builder.writeTimeout(Config.DEFAULT_TIME_OUT, TimeUnit.SECONDS);//写操作 超时时间
+        builder.readTimeout(Config.DEFAULT_TIME_OUT, TimeUnit.SECONDS);//读操作超时时间
+        if (BuildConfig.DEBUG) {//如果是测试状态，才打印信息
+            builder.addInterceptor(logInterceptor);
+        }
+        builder.cookieJar(cookiesManager);
+        client = builder.build();
     }
 
     public static HttpUtil getInstance(){
