@@ -3,7 +3,7 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              android:id="@+id/pixabay_second_fragment"
-             tools:context="com.llb.pixabay.view.PixabaySecondFragment">
+             tools:context="com.dream.llb.pixabay.view.PixabaySecondFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView

@@ -17,7 +17,7 @@
             android:layout_marginLeft="15dp"
             android:src="@drawable/ico_papers" />
 
-        <com.llb.subway.common.widget.EditTextWithClearButon
+        <com.dream.llb.subway.common.widget.EditTextWithClearButon
             android:id="@+id/name_tv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -42,7 +42,7 @@
             android:layout_marginLeft="15dp"
             android:src="@drawable/ico_password" />
 
-        <com.llb.subway.common.widget.EditTextWithClearButon
+        <com.dream.llb.subway.common.widget.EditTextWithClearButon
             android:id="@+id/password_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -67,7 +67,7 @@
             android:layout_marginLeft="15dp"
             android:src="@drawable/ico_password" />
 
-        <com.llb.subway.common.widget.EditTextWithClearButon
+        <com.dream.llb.subway.common.widget.EditTextWithClearButon
             android:id="@+id/captcha_tv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

@@ -3,7 +3,7 @@
     <data>
         <variable
             name="jokeData"
-            type="com.llb.joke.model.bean.JokeResponse.JokeData">
+            type="com.dream.llb.joke.model.bean.JokeResponse.JokeData">
         </variable>
     </data>
     <LinearLayout

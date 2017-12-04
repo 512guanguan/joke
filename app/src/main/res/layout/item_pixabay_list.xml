@@ -3,7 +3,7 @@
     <data>
         <variable
             name="hitImages"
-            type="com.llb.pixabay.model.bean.SearchImagesResponse.HitImages">
+            type="com.dream.llb.pixabay.model.bean.SearchImagesResponse.HitImages">
         </variable>
     </data>
     <LinearLayout
