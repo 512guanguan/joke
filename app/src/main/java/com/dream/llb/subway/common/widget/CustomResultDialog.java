@@ -7,7 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import com.llb.subway.R;
+
+import com.dream.llb.subway.R;
 
 public class CustomResultDialog extends Dialog {
     private TextView title_text, notic_text;

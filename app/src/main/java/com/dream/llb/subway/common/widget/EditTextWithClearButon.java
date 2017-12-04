@@ -8,8 +8,7 @@ import android.text.Spannable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
-import com.llb.subway.R;
-
+import com.dream.llb.subway.R;
 
 public class EditTextWithClearButon extends android.support.v7.widget.AppCompatEditText {
 

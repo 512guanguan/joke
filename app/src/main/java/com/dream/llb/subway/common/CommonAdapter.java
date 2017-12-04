@@ -10,7 +10,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 
-import com.llb.subway.R;
+import com.dream.llb.subway.R;
 
 import java.util.ArrayList;
 import java.util.List;

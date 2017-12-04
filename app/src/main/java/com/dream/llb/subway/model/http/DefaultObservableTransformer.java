@@ -5,8 +5,7 @@ package com.dream.llb.subway.model.http;/**
 import android.util.Log;
 import android.widget.Toast;
 
-import com.llb.subway.common.util.DialogUtil;
-import com.llb.subway.view.base.BaseApplication;
+import com.dream.llb.subway.view.base.BaseApplication;
 
 import io.reactivex.ObservableTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;

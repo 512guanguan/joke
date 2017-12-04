@@ -13,12 +13,11 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.dream.llb.config.Config;
-import com.dream.llb.pixabay.model.bean.SearchImagesRequest;
 import com.dream.llb.joke.view.OnFragmentInteractionListener;
 import com.dream.llb.pixabay.model.PixabayLoader;
+import com.dream.llb.pixabay.model.bean.SearchImagesRequest;
 import com.dream.llb.pixabay.model.bean.SearchImagesResponse.HitImages;
-import com.llb.subway.BR;
-import com.llb.subway.R;
+import com.dream.llb.subway.R;
 
 import java.util.ArrayList;
 
@@ -62,7 +61,7 @@ public class PixabayFirstFragment extends Fragment {
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.pixabay_swipe_refresh);
 
         hitsImages = new ArrayList<>();
-        adapter = new PixabayAdapter(this.getActivity(), R.layout.item_pixabay_list, BR.hitImages);
+        adapter = new PixabayAdapter(this.getActivity(), R.layout.item_pixabay_list, 0);
         adapter.setData(hitsImages);
 
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));//这里用线性显示 类似于listview
