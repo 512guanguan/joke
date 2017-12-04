@@ -69,14 +69,14 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//            }
+//        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -100,16 +100,14 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
                 int id = item.getItemId();
                 RetrofitServiceManager.clearInstance();
                 switch (id){
-                    case R.id.nav_pixabay_image:
+                    case R.id.nav_my_post:
 //                        pagerAdapter.addFragments(pixabayFragments);
 //                    fragmentTransaction = fragmentManager.beginTransaction();
 //                    fragmentTransaction.hide(jokeFragemnts.get(0));
 //                    fragmentTransaction.hide(jokeFragemnts.get(1));
                         break;
-                    case R.id.nav_wechat:
-                        break;
-                    case R.id.nav_bbs:
-                        pagerAdapter.addFragments(homeFragments);
+                    case R.id.nav_my_collection:
+//                        pagerAdapter.addFragments(homeFragments);
                         break;
                     default:
                         break;

@@ -8,9 +8,17 @@ import com.dream.llb.subway.model.bean.ForumListItem;
 
 public interface HomeContract {
     public interface Presenter{
-        void getPostListData();
+        /**
+         * 下拉刷新页面
+         */
+        void refreshPage();
     }
     public interface View{
-        void parsePostListData(ForumListItem response);
+        void hideProgressDialog();
+        void showProgressDialog();
+        /**
+         * 下拉刷新结束
+         */
+        void onFinishRefresh(ForumListItem response);
     }
 }

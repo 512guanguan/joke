@@ -1,5 +1,6 @@
 package com.dream.llb.subway.view.forum_home;
 
+
 import com.dream.llb.subway.model.bean.PostListItem;
 
 /**
@@ -8,10 +9,26 @@ import com.dream.llb.subway.model.bean.PostListItem;
 
 public interface ForumHomeContract {
     interface Presenter{
-        void getPostListData();
+        /**
+         * 下拉刷新页面
+         */
+        void refreshPage();
+        /**
+         * 上拉加载更多
+         */
+        void loadMoreData(int currentPage);
     }
     interface View{
+        void hideProgressDialog();
+        void showProgressDialog();
         String getUrl();
-        void parsePostListData(PostListItem response);
+        /**
+         * 上拉刷新结束
+         */
+        void onFinishLoadMore(PostListItem response);
+        /**
+         * 下拉刷新结束
+         */
+        void onFinishRefresh(PostListItem response);
     }
 }

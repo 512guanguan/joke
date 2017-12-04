@@ -59,6 +59,7 @@ public class HomeAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     }
 
     public void setData(List mDatas) {
+        this.mDatas.clear();
         this.mDatas = mDatas;
         notifyDataSetChanged();
     }

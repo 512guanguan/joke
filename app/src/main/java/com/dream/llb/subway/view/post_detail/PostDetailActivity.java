@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.dream.llb.subway.R;
+import com.dream.llb.subway.common.widget.SimpleDividerItemDecoration;
 import com.dream.llb.subway.model.bean.PostDetailResponse;
 import com.dream.llb.subway.model.bean.PostDetailResponse.CommentInformation;
 
@@ -26,7 +27,7 @@ public class PostDetailActivity extends AppCompatActivity implements PostDetailC
     private List<CommentInformation> commentListData = null;
     private PostCommentAdapter adapter = null;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private int currentPage = 0;
+    private int currentPage = 1;
 //    private TextView postTV;
 
     @Override
@@ -45,6 +46,7 @@ public class PostDetailActivity extends AppCompatActivity implements PostDetailC
         commentListData = new ArrayList<>();
         adapter = new PostCommentAdapter(this, R.layout.item_post_comment_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));//这里用线性显示 类似于listview
+        recyclerView.addItemDecoration(new SimpleDividerItemDecoration(mContext,R.drawable.item_horizontal_divider,3));
         recyclerView.setAdapter(adapter);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.comment_swipeRefreshLayout);
 //        adapter.setOnItemClickListener(new OnItemClickListener() {
@@ -64,49 +66,63 @@ public class PostDetailActivity extends AppCompatActivity implements PostDetailC
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 Log.i("llb", "onScrollStateChanged newState=" + newState);
+                if(newState == RecyclerView.SCROLL_STATE_IDLE){
+                    RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+                    int lastVisiblePosition = ((LinearLayoutManager)layoutManager).findLastVisibleItemPosition();
+                    int visibleItemCount = layoutManager.getChildCount();
+                    int totalItemCount = layoutManager.getItemCount();
+                    if(visibleItemCount>0 && lastVisiblePosition>=totalItemCount-1 && !adapter.isLoadingMore){
+                        adapter.setLoadingMore(true);
+                        presenter.loadMoreData(url, currentPage);
+                        Log.i("llb", "onScrollStateChanged 底部啦");
+                        Log.i("llb", "lastVisiblePosition="+lastVisiblePosition+" visibleItemCount="+visibleItemCount+" totalItemCount="+totalItemCount);
+                    }
+                }
             }
 
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                Log.i("llb", "onScrolled dx=" + dx + "  dy = " + dy);
-//                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                if (recyclerView.computeVerticalScrollOffset() + recyclerView.computeHorizontalScrollExtent() >= recyclerView.computeVerticalScrollRange()) {
-                    Log.i("llb", "onScrolled 底部啦");
-                    // 是否正在下拉刷新
-                    if (swipeRefreshLayout.isRefreshing()) {
-                        adapter.notifyItemRemoved(adapter.getItemCount());
-                        return;
-                    }
-                    // 触发上拉刷新
-                    if (!adapter.isLoadingMore()) {
-//                        adapter.setLoadingMore(true);
-                        Log.i("llb", "触发上拉刷新");
-//                        getForumListData();
-                    }
-                }
             }
         });
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                Log.i("llb", "setOnRefreshListener()");
-//                fetchData();
-                swipeRefreshLayout.setRefreshing(false);
+                presenter.refreshPage(url);
             }
         });
 
-        swipeRefreshLayout.setRefreshing(true);
-        presenter.getPostDetailData(url);
+        presenter.refreshPage(url);
     }
 
     @Override
-    public void setPostDetailData(PostDetailResponse response) {
-        Toast.makeText(this, "数据解析完了", Toast.LENGTH_SHORT).show();
-//        postTV.setText(new HtmlSpanner().fromHtml(response.postContent));
-        setHeaderView();
-        adapter.setData(response);
+    public void hideProgressDialog() {
         swipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void showProgressDialog() {
+        swipeRefreshLayout.setRefreshing(true);
+    }
+
+    @Override
+    public void onFinishLoadMore(PostDetailResponse response) {
+        Toast.makeText(this, "数据解析完了", Toast.LENGTH_SHORT).show();
+        adapter.setLoadingMore(false);
+        //TODO
+        if(response instanceof PostDetailResponse){
+            currentPage++;
+            adapter.setMoreData(response);
+        }
+    }
+
+    @Override
+    public void onFinishRefresh(PostDetailResponse response) {
+        Toast.makeText(this, "数据解析完了", Toast.LENGTH_SHORT).show();
+        if(response instanceof PostDetailResponse){
+            setHeaderView();
+            adapter.setData(response);
+        }
     }
 
     private void setHeaderView() {

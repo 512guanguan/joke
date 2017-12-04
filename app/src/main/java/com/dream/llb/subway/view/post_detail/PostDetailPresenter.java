@@ -17,15 +17,34 @@ public class PostDetailPresenter implements PostDetailContract.Presenter {
     }
 
     @Override
-    public void getPostDetailData(String url) {
+    public void refreshPage(String url) {
+        postDetailView.showProgressDialog();
         SubwayLoader.getInstance().getPostDetailData(url)
                 .subscribe((PostDetailResponse response) -> {
-            Log.i("llb", "response = " + response);
-                    postDetailView.setPostDetailData(response);
-        }, (Throwable e) -> {
-            Log.d("llb", "error " + e.getMessage());
-        }, () -> {
-            Log.d("llb", "completed");
-        });
+                    Log.i("llb", "response = " + response);
+                    postDetailView.hideProgressDialog();
+                    postDetailView.onFinishRefresh(response);
+                }, (Throwable e) -> {
+                    postDetailView.hideProgressDialog();
+                    Log.d("llb", "error " + e.getMessage());
+                }, () -> {
+                    postDetailView.hideProgressDialog();
+                    Log.d("llb", "completed");
+                });
+    }
+
+    @Override
+    public void loadMoreData(String url,int currentPage) {
+        currentPage++;
+        SubwayLoader.getInstance().getPostDetailData(url+"&page="+currentPage)
+                .subscribe((PostDetailResponse response) -> {
+                    Log.i("llb", "response = " + response);
+                    postDetailView.onFinishLoadMore(response);
+                }, (Throwable e) -> {
+                    postDetailView.onFinishLoadMore(null);
+                    Log.d("llb", "error " + e.getMessage());
+                }, () -> {
+                    Log.d("llb", "completed");
+                });
     }
 }

@@ -24,7 +24,7 @@
                 android:id="@+id/show_list"
                 android:layout_width="368dp"
                 android:layout_height="wrap_content"
-                android:background="#fed"
+                android:background="@color/main_bg"
                 android:paddingRight="10dp"
                 android:scrollbars="vertical"/>
         </android.support.v4.widget.SwipeRefreshLayout>
