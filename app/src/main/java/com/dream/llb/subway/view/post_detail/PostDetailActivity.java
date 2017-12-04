@@ -2,6 +2,8 @@ package com.dream.llb.subway.view.post_detail;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.dream.llb.subway.R;
+import com.dream.llb.subway.common.util.PermissionUtils;
 import com.dream.llb.subway.common.widget.SimpleDividerItemDecoration;
 import com.dream.llb.subway.model.bean.PostDetailResponse;
 import com.dream.llb.subway.model.bean.PostDetailResponse.CommentInformation;
@@ -19,7 +22,7 @@ import com.dream.llb.subway.model.bean.PostDetailResponse.CommentInformation;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PostDetailActivity extends AppCompatActivity implements PostDetailContract.View{
+public class PostDetailActivity extends AppCompatActivity implements PostDetailContract.View, ActivityCompat.OnRequestPermissionsResultCallback{
     private Context mContext;
     private String url = "";
     private PostDetailContract.Presenter presenter;
@@ -37,7 +40,8 @@ public class PostDetailActivity extends AppCompatActivity implements PostDetailC
         mContext = this;
         presenter = new PostDetailPresenter(this);
         url = getIntent().getStringExtra("url");
-        initView();
+        PermissionUtils.requestPermission(this, PermissionUtils.CODE_READ_EXTERNAL_STORAGE, mPermissionGrant);
+//        initView();
     }
 
     private void initView() {
@@ -128,5 +132,51 @@ public class PostDetailActivity extends AppCompatActivity implements PostDetailC
     private void setHeaderView() {
         View header = LayoutInflater.from(this).inflate(R.layout.item_post_detail_header, recyclerView, false);
         adapter.setHeaderView(header);
+    }
+    private PermissionUtils.PermissionGrant mPermissionGrant = new PermissionUtils.PermissionGrant() {
+        @Override
+        public void onPermissionGranted(int requestCode) {
+            initView();
+            switch (requestCode) {
+                case PermissionUtils.CODE_RECORD_AUDIO:
+                    Toast.makeText(mContext, "Result Permission Grant CODE_RECORD_AUDIO", Toast.LENGTH_SHORT).show();
+                    break;
+                case PermissionUtils.CODE_GET_ACCOUNTS:
+                    Toast.makeText(mContext, "Result Permission Grant CODE_GET_ACCOUNTS", Toast.LENGTH_SHORT).show();
+                    break;
+                case PermissionUtils.CODE_READ_PHONE_STATE:
+                    Toast.makeText(mContext, "Result Permission Grant CODE_READ_PHONE_STATE", Toast.LENGTH_SHORT).show();
+                    break;
+                case PermissionUtils.CODE_CALL_PHONE:
+                    Toast.makeText(mContext, "Result Permission Grant CODE_CALL_PHONE", Toast.LENGTH_SHORT).show();
+                    break;
+                case PermissionUtils.CODE_CAMERA:
+                    Toast.makeText(mContext, "Result Permission Grant CODE_CAMERA", Toast.LENGTH_SHORT).show();
+                    break;
+                case PermissionUtils.CODE_ACCESS_FINE_LOCATION:
+                    Toast.makeText(mContext, "Result Permission Grant CODE_ACCESS_FINE_LOCATION", Toast.LENGTH_SHORT).show();
+                    break;
+                case PermissionUtils.CODE_ACCESS_COARSE_LOCATION:
+                    Toast.makeText(mContext, "Result Permission Grant CODE_ACCESS_COARSE_LOCATION", Toast.LENGTH_SHORT).show();
+                    break;
+                case PermissionUtils.CODE_READ_EXTERNAL_STORAGE:
+                    Toast.makeText(mContext, "Result Permission Grant CODE_READ_EXTERNAL_STORAGE", Toast.LENGTH_SHORT).show();
+                    break;
+                case PermissionUtils.CODE_WRITE_EXTERNAL_STORAGE:
+                    Toast.makeText(mContext, "Result Permission Grant CODE_WRITE_EXTERNAL_STORAGE", Toast.LENGTH_SHORT).show();
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+
+    /**
+     * Callback received when a permissions request has been completed.
+     */
+    @Override
+    public void onRequestPermissionsResult(final int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        PermissionUtils.requestPermissionsResult(this, requestCode, permissions, grantResults, mPermissionGrant);
     }
 }
