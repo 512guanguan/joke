@@ -54,7 +54,7 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         this.commentData = new ArrayList<>();
         this.layoutId = layoutId;
         htmlSpanner = new HtmlSpanner();
-        htmlSpanner.registerHandler("a",new MyLinkHandler());
+        htmlSpanner.registerHandler("a", new MyLinkHandler());
         htmlSpanner.setStripExtraWhiteSpace(true);
     }
 
@@ -66,9 +66,9 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         BaseViewHolder holder = null;
         switch (viewType) {
             case TYPE_HEADER:
-//                if (headerView == null) {
-                headerView = inflater.inflate(R.layout.item_post_detail_header, parent, false);
-//                }
+                if (headerView == null) {
+                    headerView = inflater.inflate(R.layout.item_post_detail_header, parent, false);
+                }
                 holder = new BaseViewHolder(mContext, headerView);
                 break;
             case TYPE_ITEM:
@@ -76,9 +76,9 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                 holder = new BaseViewHolder(mContext, itemView);
                 break;
             case TYPE_FOOTER:
-//                if (footerView == null) {
-                footerView = inflater.inflate(R.layout.item_recyclerview_footer, parent, false);
-//                }
+                if (footerView == null) {
+                    footerView = inflater.inflate(R.layout.item_recyclerview_footer, parent, false);
+                }
                 holder = new BaseViewHolder(mContext, footerView);
                 break;
             default:
@@ -89,6 +89,7 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     /**
      * 初次刷新加载数据
+     *
      * @param response
      */
     public void setData(PostDetailResponse response) {
@@ -100,9 +101,10 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     /**
      * 上拉加载更多数据合并
+     *
      * @param response
      */
-    public void setMoreData(PostDetailResponse response){
+    public void setMoreData(PostDetailResponse response) {
         this.commentData.addAll(response.commentList);
         notifyDataSetChanged();
     }
@@ -146,22 +148,25 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 //                ((TextView) holder.getView(R.id.post_content_tv)).setText(new HtmlSpanner().fromHtml(response.postContent));
                 Observable.just(response.postContent)
                         .subscribeOn(Schedulers.io())
-                        .flatMap((String content)->{
+                        .flatMap((String content) -> {
                             Spannable spannable = htmlSpanner.fromHtml(content);
                             return Observable.just(spannable);
                         })
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe((Spannable content)->{
+                        .subscribe((Spannable content) -> {
                             ((TextView) holder.getView(R.id.post_content_tv)).setText(content);
                             ((TextView) holder.getView(R.id.post_content_tv)).setMovementMethod(LinkMovementMethod.getInstance());
-                        },(error)->{
+                        }, (error) -> {
 
-                        },()->{
+                        }, () -> {
 
                         });
 
                 break;
             case TYPE_ITEM:
+//                if(commentData.size()==0){
+//                    return;
+//                }
 //                if (TextUtils.isEmpty(commentData.get(realPosition).headShotUrl)) {
 //                    holder.getView(R.id.head_shortcut_iv).setVisibility(View.GONE);
 //                } else {
@@ -187,17 +192,17 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
                 Observable.just(commentData.get(realPosition).commentContent)
                         .subscribeOn(Schedulers.io())
-                        .flatMap((String content)->{
+                        .flatMap((String content) -> {
                             Spannable spannable = htmlSpanner.fromHtml(content);
                             return Observable.just(spannable);
                         })
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe((Spannable content)->{
+                        .subscribe((Spannable content) -> {
                             ((TextView) holder.getView(R.id.comment_content_tv)).setText(content);
                             ((TextView) holder.getView(R.id.comment_content_tv)).setMovementMethod(LinkMovementMethod.getInstance());
-                        },(error)->{
+                        }, (error) -> {
 
-                        },()->{
+                        }, () -> {
 
                         });
 
@@ -213,11 +218,10 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         //TODO 有问题
         if (headerView != null && position == 0) {
             return TYPE_HEADER;
-//        } else if (headerView != null && commentData.size()>0 && position>= commentData.size()) {
-        } else if (position < getItemCount() && position >= getItemCount() - 1) {
-            return TYPE_FOOTER;
-        } else {
+        } else if (position > 0 && position < commentData.size()) {
             return TYPE_ITEM;
+        } else {//if(position == commentData.size()+getHeadersCount()){
+            return TYPE_FOOTER;
         }
     }
 
@@ -248,13 +252,23 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     public int getItemCount() {
         return commentData.size() + getHeadersCount() + getFootersCount();
     }
+
     public int getHeadersCount() {
-        return 1;
+        if (headerView == null) {
+            return 0;
+        } else {
+            return 1;
+        }
     }
 
     public int getFootersCount() {
-        return 1;
+        if (footerView == null) {
+            return 0;
+        } else {
+            return 1;
+        }
     }
+
     public int getRealPosition(RecyclerView.ViewHolder holder) {
         int position = holder.getLayoutPosition();
         return headerView == null ? position : position - 1;
