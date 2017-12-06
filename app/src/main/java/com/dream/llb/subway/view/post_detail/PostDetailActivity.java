@@ -40,8 +40,8 @@ public class PostDetailActivity extends AppCompatActivity implements PostDetailC
         mContext = this;
         presenter = new PostDetailPresenter(this);
         url = getIntent().getStringExtra("url");
-        PermissionUtils.requestPermission(this, PermissionUtils.CODE_READ_EXTERNAL_STORAGE, mPermissionGrant);
-//        initView();
+//        PermissionUtils.requestPermission(this, PermissionUtils.CODE_READ_EXTERNAL_STORAGE, mPermissionGrant);
+        initView();
     }
 
     private void initView() {

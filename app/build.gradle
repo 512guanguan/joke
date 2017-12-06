@@ -13,6 +13,7 @@ android {
         jackOptions {
             enabled true
         }
+        multiDexEnabled true
     }
     dataBinding {
         enabled true
@@ -38,7 +39,6 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.squareup.okhttp3:logging-interceptor:3.8.0'
     compile project(':HtmlSpanner')
     compile 'com.squareup.okhttp3:logging-interceptor:3.8.0'
     compile 'com.android.support:appcompat-v7:25.3.1'
@@ -50,10 +50,9 @@ dependencies {
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
     compile 'com.squareup.okhttp3:okhttp:3.8.0'
     compile 'com.android.support:support-v4:25.3.1'
-    compile 'com.google.android.gms:play-services-plus:9.8.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0'
     compile 'org.jsoup:jsoup:1.10.3'
+    compile 'com.google.android.gms:play-services-ads:11.6.0'
     testCompile 'junit:junit:4.12'
-    compile 'com.squareup.okhttp3:logging-interceptor:3.8.0'
 }
