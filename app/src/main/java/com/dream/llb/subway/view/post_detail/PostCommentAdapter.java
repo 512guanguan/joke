@@ -218,7 +218,7 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         //TODO 有问题
         if (headerView != null && position == 0) {
             return TYPE_HEADER;
-        } else if (position > 0 && position < commentData.size()) {
+        } else if (position > 0 && position <= commentData.size()) {
             return TYPE_ITEM;
         } else {//if(position == commentData.size()+getHeadersCount()){
             return TYPE_FOOTER;

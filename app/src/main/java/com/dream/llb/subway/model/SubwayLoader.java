@@ -77,13 +77,29 @@ public class SubwayLoader extends BaseLoader {
     }
 
     /**
+     * 获取更多评论内容信息
+     *
+     * @return
+     */
+    public Observable<PostDetailResponse> getMoreCommentData(String url, String referer) {
+        return requestByGet(url,referer, true)
+                .flatMap((response) -> {//io线程
+                    Log.i("llb", "数据回来了，等待解析\n" + response);
+                    // do something like cache
+                    PostDetailResponse res = (new PostDetailResponse()).new Builder().parsePage(response);
+                    return Observable.just(res);
+                })
+                .compose(DefaultObservableTransformer.defaultTransformer());
+    }
+
+    /**
      * 解析登录页面信息
      *
      * @param url
      * @return
      */
     public Observable<LoginPageResponse> getLoginPage(String url) {
-        return requestByGet(url, "http://www.ditiezu.com/forum.php?mod=forum")
+        return requestByGet(url, "http://www.ditiezu.com/forum.php?mod=forum", false)
                 .flatMap((response) -> {
                     Log.i("llb", "数据回来了，等待解析\n" + response);
                     // do something like cache

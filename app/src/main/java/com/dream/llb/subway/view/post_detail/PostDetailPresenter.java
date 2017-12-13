@@ -35,8 +35,10 @@ public class PostDetailPresenter implements PostDetailContract.Presenter {
 
     @Override
     public void loadMoreData(String url,int currentPage) {
-        currentPage++;
-        SubwayLoader.getInstance().getPostDetailData(url+"&page="+currentPage)
+        currentPage++;//X-Requested-With:XMLHttpRequest
+        //forum.php?mod=viewthread&tid=539523&extra=&ordertype=1&threads=thread&mobile=yes&page=2
+        url += "&extra=&ordertype=1&threads=thread";
+        SubwayLoader.getInstance().getMoreCommentData(url + "&page="+currentPage, url)
                 .subscribe((PostDetailResponse response) -> {
                     Log.i("llb", "response = " + response);
                     postDetailView.onFinishLoadMore(response);

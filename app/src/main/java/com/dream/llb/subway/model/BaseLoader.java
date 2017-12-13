@@ -32,15 +32,20 @@ public class BaseLoader {
      *
      * @param url
      * @param referer 额外的请求头
+     * @param ajaxMode 模拟ajax请求时的X-Requested-With:XMLHttpRequest
      * @return
      */
-    protected Observable<String> requestByGet(String url, String referer) {
+    protected Observable<String> requestByGet(String url, String referer, boolean ajaxMode) {
         return Observable.just("")
                 .observeOn(Schedulers.io())
                 .map((s) -> {
                             try {
                                 GetRequest request = HttpUtil.getInstance().get(url);
                                 request.addHeader("Referer",referer);
+                                if(ajaxMode){
+//                                    request.addHeader("Content-Type","application/json; charset=UTF-8");
+                                    request.addHeader("X-Requested-With","XMLHttpRequest");
+                                }
                                 Response res = HttpUtil.addCommonHeaders(request).execute();
                                 InputStream inputStream = new ByteArrayInputStream(res.body().bytes());
                                 return zipInputStream(inputStream);
