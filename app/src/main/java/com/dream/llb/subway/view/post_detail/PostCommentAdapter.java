@@ -41,13 +41,15 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     protected static final int TYPE_HEADER = 0;
     protected static final int TYPE_ITEM = 1;
     protected static final int TYPE_FOOTER = 2;
+    protected static final int TYPE_FOOTER_NO_MORE_DATA = 3;
     protected List<CommentInformation> commentData;
     protected PostDetailResponse response;
-    protected View headerView, footerView;
+    protected View headerView, footerView, noMoreDataView;
     protected OnItemClickListener onItemClickListener;
     protected int layoutId;
     protected boolean isLoadingMore = false;
     protected HtmlSpanner htmlSpanner;
+    public boolean isLastPage = true;//标记最后一页
 
     public PostCommentAdapter(Context mContext, @LayoutRes int layoutId) {
         this.mContext = mContext;
@@ -81,6 +83,12 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                 }
                 holder = new BaseViewHolder(mContext, footerView);
                 break;
+            case TYPE_FOOTER_NO_MORE_DATA:
+                if(noMoreDataView == null){
+                    noMoreDataView = inflater.inflate(R.layout.item_recyclerview_footer_no_more_data, parent, false);
+                }
+                holder = new BaseViewHolder(mContext, noMoreDataView);
+                break;
             default:
                 break;
         }
@@ -96,6 +104,11 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         this.commentData.addAll(response.commentList);
 //        response.commentList.clear();
         this.response = response;
+        if(this.commentData.size() == Integer.valueOf(response.commentNum)){
+            isLastPage = true;
+        }else {
+            isLastPage = false;
+        }
         notifyDataSetChanged();
     }
 
@@ -106,6 +119,11 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
      */
     public void setMoreData(PostDetailResponse response) {
         this.commentData.addAll(response.commentList);
+        if(this.commentData.size() == Integer.valueOf(response.commentNum)){
+            isLastPage = true;
+        }else {
+            isLastPage = false;
+        }
         notifyDataSetChanged();
     }
 
@@ -120,10 +138,11 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     @Override
     public void onBindViewHolder(BaseViewHolder holder, int position) {
-        if (holder == null) {
+        if (holder == null || headerView == null) {
             return;
         }
         int realPosition = getRealPosition(holder);
+        Log.i("llb", "realPostion="+realPosition+"===postion="+position+"===totalCount="+getItemCount()+"====Commentsize="+commentData.size());
         //TODO 初始化化页面
         if (this.onItemClickListener != null) {
             holder.itemView.setOnClickListener(new OnClickListener() {
@@ -201,14 +220,14 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                             ((TextView) holder.getView(R.id.comment_content_tv)).setText(content);
                             ((TextView) holder.getView(R.id.comment_content_tv)).setMovementMethod(LinkMovementMethod.getInstance());
                         }, (error) -> {
-
                         }, () -> {
-
                         });
-
-
                 break;
             case TYPE_FOOTER:
+                Log.i("llb","getViewHolder TYPE_FOOTER");
+                break;
+            case TYPE_FOOTER_NO_MORE_DATA:
+                Log.i("llb","getViewHolder TYPE_FOOTER_NO_MORE_DATA");
                 break;
         }
     }
@@ -220,8 +239,20 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
             return TYPE_HEADER;
         } else if (position > 0 && position <= commentData.size()) {
             return TYPE_ITEM;
+        } else if(position == commentData.size()+1 && isLastPage){
+            Log.i("llb","最后一页");
+            return TYPE_FOOTER_NO_MORE_DATA;
         } else {//if(position == commentData.size()+getHeadersCount()){
             return TYPE_FOOTER;
+        }
+    }
+
+    @Override
+    public int getItemCount() {
+        if(headerView== null){
+            return 0;
+        }else {
+            return commentData.size() + getHeadersCount() + getFootersCount();
         }
     }
 
@@ -248,11 +279,6 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         return false;
     }
 
-    @Override
-    public int getItemCount() {
-        return commentData.size() + getHeadersCount() + getFootersCount();
-    }
-
     public int getHeadersCount() {
         if (headerView == null) {
             return 0;
@@ -262,16 +288,20 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     }
 
     public int getFootersCount() {
-        if (footerView == null) {
-            return 0;
-        } else {
+//        if (footerView == null && noMoreDataView == null) {
+//            return 0;
+//        } else {
             return 1;
-        }
+//        }
     }
 
     public int getRealPosition(RecyclerView.ViewHolder holder) {
         int position = holder.getLayoutPosition();
         return headerView == null ? position : position - 1;
+    }
+
+    public boolean isLastPage() {
+        return isLastPage;
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {

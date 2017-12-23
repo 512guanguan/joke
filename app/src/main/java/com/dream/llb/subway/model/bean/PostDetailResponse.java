@@ -140,6 +140,8 @@ public class PostDetailResponse {
             }
 
             postDetailResponse.changeOrderUrl = document.select("div.titls a.xi2").attr("href");
+            String str = document.select("div.titls span.y").text();
+            postDetailResponse.commentNum = str.replace("共有","").replace("条回复","");
 
             //TODO 解析帖子评论列表信息
             elements.clear();

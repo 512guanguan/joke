@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.dream.llb.subway.R;
+import com.dream.llb.subway.common.OnItemClickListener;
 import com.dream.llb.subway.common.util.PermissionUtils;
 import com.dream.llb.subway.common.widget.SimpleDividerItemDecoration;
 import com.dream.llb.subway.model.bean.PostDetailResponse;
@@ -53,24 +54,24 @@ public class PostDetailActivity extends AppCompatActivity implements PostDetailC
         recyclerView.addItemDecoration(new SimpleDividerItemDecoration(mContext,R.drawable.item_horizontal_divider,3));
         recyclerView.setAdapter(adapter);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.comment_swipeRefreshLayout);
-//        adapter.setOnItemClickListener(new OnItemClickListener() {
-//            @Override
-//            public void onItemClick(View view, int position) {
-//                Log.i("llb", "onItemClick position=" + position);
-//                Toast.makeText(mContext,"onItemClick position=" + position,Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onItemLongClick(View view, int position) {
-//                Log.i("llb", "onItemLongClick position=" + position);
-//            }
-//        });
+        adapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Log.i("llb", "onItemClick position=" + position);
+                Toast.makeText(mContext,"onItemClick position=" + position,Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onItemLongClick(View view, int position) {
+                Log.i("llb", "onItemLongClick position=" + position);
+            }
+        });
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 Log.i("llb", "onScrollStateChanged newState=" + newState);
-                if(newState == RecyclerView.SCROLL_STATE_IDLE){
+                if(newState == RecyclerView.SCROLL_STATE_IDLE && !adapter.isLastPage){//不是最后一页
                     RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
                     int lastVisiblePosition = ((LinearLayoutManager)layoutManager).findLastVisibleItemPosition();
                     int visibleItemCount = layoutManager.getChildCount();
@@ -78,8 +79,6 @@ public class PostDetailActivity extends AppCompatActivity implements PostDetailC
                     if(visibleItemCount>0 && lastVisiblePosition>=totalItemCount-1 && !adapter.isLoadingMore){
                         adapter.setLoadingMore(true);
                         presenter.loadMoreData(url, currentPage);
-                        Log.i("llb", "onScrollStateChanged 底部啦");
-                        Log.i("llb", "lastVisiblePosition="+lastVisiblePosition+" visibleItemCount="+visibleItemCount+" totalItemCount="+totalItemCount);
                     }
                 }
             }
@@ -133,50 +132,50 @@ public class PostDetailActivity extends AppCompatActivity implements PostDetailC
         View header = LayoutInflater.from(this).inflate(R.layout.item_post_detail_header, recyclerView, false);
         adapter.setHeaderView(header);
     }
-    private PermissionUtils.PermissionGrant mPermissionGrant = new PermissionUtils.PermissionGrant() {
-        @Override
-        public void onPermissionGranted(int requestCode) {
-            initView();
-            switch (requestCode) {
-                case PermissionUtils.CODE_RECORD_AUDIO:
-                    Toast.makeText(mContext, "Result Permission Grant CODE_RECORD_AUDIO", Toast.LENGTH_SHORT).show();
-                    break;
-                case PermissionUtils.CODE_GET_ACCOUNTS:
-                    Toast.makeText(mContext, "Result Permission Grant CODE_GET_ACCOUNTS", Toast.LENGTH_SHORT).show();
-                    break;
-                case PermissionUtils.CODE_READ_PHONE_STATE:
-                    Toast.makeText(mContext, "Result Permission Grant CODE_READ_PHONE_STATE", Toast.LENGTH_SHORT).show();
-                    break;
-                case PermissionUtils.CODE_CALL_PHONE:
-                    Toast.makeText(mContext, "Result Permission Grant CODE_CALL_PHONE", Toast.LENGTH_SHORT).show();
-                    break;
-                case PermissionUtils.CODE_CAMERA:
-                    Toast.makeText(mContext, "Result Permission Grant CODE_CAMERA", Toast.LENGTH_SHORT).show();
-                    break;
-                case PermissionUtils.CODE_ACCESS_FINE_LOCATION:
-                    Toast.makeText(mContext, "Result Permission Grant CODE_ACCESS_FINE_LOCATION", Toast.LENGTH_SHORT).show();
-                    break;
-                case PermissionUtils.CODE_ACCESS_COARSE_LOCATION:
-                    Toast.makeText(mContext, "Result Permission Grant CODE_ACCESS_COARSE_LOCATION", Toast.LENGTH_SHORT).show();
-                    break;
-                case PermissionUtils.CODE_READ_EXTERNAL_STORAGE:
-                    Toast.makeText(mContext, "Result Permission Grant CODE_READ_EXTERNAL_STORAGE", Toast.LENGTH_SHORT).show();
-                    break;
-                case PermissionUtils.CODE_WRITE_EXTERNAL_STORAGE:
-                    Toast.makeText(mContext, "Result Permission Grant CODE_WRITE_EXTERNAL_STORAGE", Toast.LENGTH_SHORT).show();
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
+//    private PermissionUtils.PermissionGrant mPermissionGrant = new PermissionUtils.PermissionGrant() {
+//        @Override
+//        public void onPermissionGranted(int requestCode) {
+//            initView();
+//            switch (requestCode) {
+//                case PermissionUtils.CODE_RECORD_AUDIO:
+//                    Toast.makeText(mContext, "Result Permission Grant CODE_RECORD_AUDIO", Toast.LENGTH_SHORT).show();
+//                    break;
+//                case PermissionUtils.CODE_GET_ACCOUNTS:
+//                    Toast.makeText(mContext, "Result Permission Grant CODE_GET_ACCOUNTS", Toast.LENGTH_SHORT).show();
+//                    break;
+//                case PermissionUtils.CODE_READ_PHONE_STATE:
+//                    Toast.makeText(mContext, "Result Permission Grant CODE_READ_PHONE_STATE", Toast.LENGTH_SHORT).show();
+//                    break;
+//                case PermissionUtils.CODE_CALL_PHONE:
+//                    Toast.makeText(mContext, "Result Permission Grant CODE_CALL_PHONE", Toast.LENGTH_SHORT).show();
+//                    break;
+//                case PermissionUtils.CODE_CAMERA:
+//                    Toast.makeText(mContext, "Result Permission Grant CODE_CAMERA", Toast.LENGTH_SHORT).show();
+//                    break;
+//                case PermissionUtils.CODE_ACCESS_FINE_LOCATION:
+//                    Toast.makeText(mContext, "Result Permission Grant CODE_ACCESS_FINE_LOCATION", Toast.LENGTH_SHORT).show();
+//                    break;
+//                case PermissionUtils.CODE_ACCESS_COARSE_LOCATION:
+//                    Toast.makeText(mContext, "Result Permission Grant CODE_ACCESS_COARSE_LOCATION", Toast.LENGTH_SHORT).show();
+//                    break;
+//                case PermissionUtils.CODE_READ_EXTERNAL_STORAGE:
+//                    Toast.makeText(mContext, "Result Permission Grant CODE_READ_EXTERNAL_STORAGE", Toast.LENGTH_SHORT).show();
+//                    break;
+//                case PermissionUtils.CODE_WRITE_EXTERNAL_STORAGE:
+//                    Toast.makeText(mContext, "Result Permission Grant CODE_WRITE_EXTERNAL_STORAGE", Toast.LENGTH_SHORT).show();
+//                    break;
+//                default:
+//                    break;
+//            }
+//        }
+//    };
 
     /**
      * Callback received when a permissions request has been completed.
      */
-    @Override
-    public void onRequestPermissionsResult(final int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        PermissionUtils.requestPermissionsResult(this, requestCode, permissions, grantResults, mPermissionGrant);
-    }
+//    @Override
+//    public void onRequestPermissionsResult(final int requestCode, @NonNull String[] permissions,
+//                                           @NonNull int[] grantResults) {
+//        PermissionUtils.requestPermissionsResult(this, requestCode, permissions, grantResults, mPermissionGrant);
+//    }
 }
