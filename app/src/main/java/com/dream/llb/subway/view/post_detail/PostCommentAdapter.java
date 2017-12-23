@@ -207,7 +207,8 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                 ((TextView) holder.getView(R.id.comment_author_tv)).setText(commentData.get(realPosition).author);
                 ((TextView) holder.getView(R.id.comment_time_tv)).setText(commentData.get(realPosition).commentTime);
                 ((TextView) holder.getView(R.id.floor_title_tv)).setText(commentData.get(realPosition).floor);
-                ((TextView) holder.getView(R.id.comment_content_tv)).setText(new HtmlSpanner().fromHtml(commentData.get(realPosition).commentContent));
+                //下面这句话可能在主线程loadimage，闪退
+//                ((TextView) holder.getView(R.id.comment_content_tv)).setText(new HtmlSpanner().fromHtml(commentData.get(realPosition).commentContent));
 
                 Observable.just(commentData.get(realPosition).commentContent)
                         .subscribeOn(Schedulers.io())
