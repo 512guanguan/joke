@@ -1,6 +1,7 @@
 package com.dream.llb.subway.view.post_detail;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.LayoutRes;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,6 +22,8 @@ import com.dream.llb.subway.common.OnItemClickListener;
 import com.dream.llb.subway.common.htmlspanner.handlers.MyLinkHandler;
 import com.dream.llb.subway.model.bean.PostDetailResponse;
 import com.dream.llb.subway.model.bean.PostDetailResponse.CommentInformation;
+import com.dream.llb.subway.view.base.BaseApplication;
+import com.dream.llb.subway.view.edit_comment.EditCommentActivity;
 import com.squareup.picasso.Picasso;
 
 import net.nightwhistler.htmlspanner.HtmlSpanner;
@@ -183,15 +186,7 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
                 break;
             case TYPE_ITEM:
-//                if(commentData.size()==0){
-//                    return;
-//                }
-//                if (TextUtils.isEmpty(commentData.get(realPosition).headShotUrl)) {
-//                    holder.getView(R.id.head_shortcut_iv).setVisibility(View.GONE);
-//                } else {
-//                    holder.getView(R.id.head_shortcut_iv).setVisibility(View.VISIBLE);
-                //用过Picasso框架对图片处理并显示到iv上
-                //用with()方法初始化，,
+                //用with()方法初始化，,//用过Picasso框架对图片处理并显示到iv上
                 Picasso.with(mContext)
 //                        .load("http://g.hiphotos.baidu.com/image/pic/item/c9fcc3cec3fdfc03e426845ed03f8794a5c226fd.jpg")//下载图片
                         .load(commentData.get(realPosition).headShotUrl)
@@ -206,9 +201,23 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 //
                 ((TextView) holder.getView(R.id.comment_author_tv)).setText(commentData.get(realPosition).author);
                 ((TextView) holder.getView(R.id.comment_time_tv)).setText(commentData.get(realPosition).commentTime);
-                ((TextView) holder.getView(R.id.floor_title_tv)).setText(commentData.get(realPosition).floor);
+                ((TextView) holder.getView(R.id.floor_title_tv)).setText(commentData.get(realPosition).floor.replace("#","楼"));
                 //下面这句话可能在主线程loadimage，闪退
 //                ((TextView) holder.getView(R.id.comment_content_tv)).setText(new HtmlSpanner().fromHtml(commentData.get(realPosition).commentContent));
+                if(BaseApplication.isLogin){
+                    holder.getView(R.id.reply_tv).setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //TODO 只有登陆态才能跳转哟，登录态的判定待完善
+                            Intent intent = new Intent(mContext, EditCommentActivity.class);
+                            intent.putExtra("pageURL",commentData.get(realPosition).replyUrl);
+                            intent.putExtra("referer",response.currentPageUrl);
+                            mContext.startActivity(intent);
+                        }
+                    });
+                }else {
+                    holder.getView(R.id.reply_tv).setVisibility(View.GONE);
+                }
 
                 Observable.just(commentData.get(realPosition).commentContent)
                         .subscribeOn(Schedulers.io())

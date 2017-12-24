@@ -34,7 +34,7 @@ public class LoginPresenter implements LoginContract.Presenter {
 
     @Override
     public void getCaptchaImage(String url) {
-        SubwayLoader.getInstance().getCaptchaImage(url)
+        SubwayLoader.getInstance().getCaptchaImage(url,"http://www.ditiezu.com/member.php?mod=logging&action=login&mobile=yes")
                 .subscribe((response) -> {
                     Log.i("llb", "存储路径path = " + response);
                     loginView.setCaptchaImage(response);

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/quote_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minLines="3"
+        android:gravity="center_vertical"
+        android:padding="10dp"
+        android:textColor="@color/select_text"
+        android:textSize="13sp"
+        android:text="RE: 22号线有两处中间盾构井动工（广祈，祈番）"/>
+    <TextView
+        android:id="@+id/comment_tv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:layout_below="@+id/quote_tv"
+        android:layout_above="@+id/captcha_layout_rl"
+        android:lines="10"
+        android:gravity="start"
+        android:padding="10dp"
+        android:textColor="@color/select_text"
+        android:textSize="13sp"
+        android:text="层主说得好呀！！举双脚赞成！！"/>
+    <RelativeLayout
+        android:id="@+id/captcha_layout_rl"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="10dp"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/left_tv"
+            android:layout_width="25dp"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:src="@drawable/ico_password" />
+
+        <com.dream.llb.subway.common.widget.EditTextWithClearButon
+            android:id="@+id/captcha_tv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/left_tv"
+            android:layout_toLeftOf="@+id/captcha_iv"
+            android:hint="验证码"
+            android:imeOptions="actionDone"
+            android:paddingBottom="15dp"
+            android:paddingLeft="3dp"
+            android:paddingRight="15dp"
+            android:paddingTop="15dp"/>
+        <ImageView
+            android:id="@+id/captcha_iv"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:scaleType="fitXY"/>
+    </RelativeLayout>
+
+</RelativeLayout>

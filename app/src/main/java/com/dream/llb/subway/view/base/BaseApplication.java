@@ -19,6 +19,7 @@ public class BaseApplication extends Application{
     private static BaseApplication instance;
     private ArrayList<Activity> activities;
     public static InterstitialAd mInterstitialAd;//admod插屏广告
+    public static Boolean isLogin = false;//TODO 标记是否登录了
 
     @Override
     public void onCreate() {

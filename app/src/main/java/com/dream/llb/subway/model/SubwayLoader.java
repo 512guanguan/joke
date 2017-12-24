@@ -3,6 +3,7 @@ package com.dream.llb.subway.model;
 
 import android.util.Log;
 
+import com.dream.llb.subway.model.bean.EditCommentPageResponse;
 import com.dream.llb.subway.model.bean.ForumListItem;
 import com.dream.llb.subway.model.bean.LoginPageResponse;
 import com.dream.llb.subway.model.bean.PostDetailResponse;
@@ -71,6 +72,7 @@ public class SubwayLoader extends BaseLoader {
                     Log.i("llb", "数据回来了，等待解析\n" + response);
                     // do something like cache
                     PostDetailResponse res = (new PostDetailResponse()).new Builder().parsePage(response);
+                    res.currentPageUrl = url;
                     return Observable.just(res);
                 })
                 .compose(DefaultObservableTransformer.defaultTransformer());
@@ -110,13 +112,30 @@ public class SubwayLoader extends BaseLoader {
     }
 
     /**
+     * 解析登录页面信息
+     *
+     * @param url
+     * @return
+     */
+    public Observable<EditCommentPageResponse> getEditCommentPage(String url,String referer) {
+        return requestByGet(url, referer, false)
+                .flatMap((response) -> {
+                    Log.i("llb", "数据回来了，等待解析\n" + response);
+                    // do something like cache
+                    EditCommentPageResponse res = (new EditCommentPageResponse()).new Builder().parse(response);
+                    return Observable.just(res);
+                })
+                .compose(DefaultObservableTransformer.defaultTransformer());
+    }
+
+    /**
      * TODO　解析登录页的验证码信息
      *
      * @param url
      * @return
      */
-    public Observable<String> getCaptchaImage(String url) {
-        return requestGzipImageByGet(url, "http://www.ditiezu.com/member.php?mod=logging&action=login&mobile=yes")
+    public Observable<String> getCaptchaImage(String url,String referer) {
+        return requestGzipImageByGet(url, referer)
 //                .flatMap((response) -> {
 //                    Log.i("llb","数据回来了，等待解析\n" + response);
 //                    // do something like cache

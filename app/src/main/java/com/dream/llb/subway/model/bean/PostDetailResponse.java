@@ -1,6 +1,10 @@
 package com.dream.llb.subway.model.bean;
 
 import android.text.TextUtils;
+import android.util.Log;
+
+import com.dream.llb.subway.model.api.SubwayURL;
+import com.dream.llb.subway.view.base.BaseApplication;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -15,12 +19,14 @@ import java.util.ArrayList;
  */
 
 public class PostDetailResponse {
+    public String pageWaring;//例如权限不够之类的报错信息，弹框提醒后退出
+    public String currentPageUrl;//当前帖子链接，存着备用
     public String postTitle;//帖子名称
     public String author;//楼主
     public String authorInfoUrl;//楼主信息页
     public String postTime;//发帖时间
     public String postContent;//帖子内容
-    public String correctUrl;//
+    public String collectUrl;//收藏链接
     public String commentNum;//总评论数
     public String changeOrderUrl;//评论顺序or逆序显示切换
     public ArrayList<CommentInformation> commentList;
@@ -41,10 +47,20 @@ public class PostDetailResponse {
         public String commentTime;//评论时间
         public String quoteOrigin;//引用处的作者
         public String quoteContent;//引用内容
+        public String replyUrl;//点击回复
     }
 
     public class Builder{
         /**
+         * 有些时候权限不够之类的会报错
+         * <div class="showmg">
+         <div class="warning" id="messagetext">
+         <p class="mbn">抱歉，本帖要求阅读权限高于 20 才能浏览</p>
+         <p><a href="http://www.ditiezu.com/./?mobile=yes">点击此链接进行跳转</a></p>
+         </div>
+         </div>
+         </div></div>
+         *
          * <div class="ct">
          <div id="post_8132669" class="vb notb">
          <h1 class="vt_th">
@@ -110,6 +126,16 @@ public class PostDetailResponse {
                 return null;
             PostDetailResponse postDetailResponse = new PostDetailResponse();
             Document document= Jsoup.parse(html);
+            //解析看有没有报错信息出现
+            try {
+                //抱歉，本帖要求阅读权限高于 20 才能浏览
+                postDetailResponse.pageWaring = document.select("div.showmg div.warning p.mbn").get(0).text();
+                return postDetailResponse;
+            }catch (Exception e){
+                e.printStackTrace();
+                Log.i("llb","没有页面报错信息出现");
+            }
+
 //            //解析帖子信息
             Elements elements = document.select("div.ct div[class=vb notb]");//帖子
             Document doc= Jsoup.parse(elements.toString());
@@ -123,7 +149,7 @@ public class PostDetailResponse {
             if(elements.size()>0){
                 Elements es = elements.select("a");
                 if(es.size()>1){
-                    postDetailResponse.correctUrl = es.first().attr("href");
+                    postDetailResponse.collectUrl = es.first().attr("href");
                     postDetailResponse.author = es.get(1).text();
                     postDetailResponse.authorInfoUrl = es.get(1).attr("href");
                 }
@@ -158,6 +184,16 @@ public class PostDetailResponse {
                 if(elements.get(j).select("div.quote").size()>0){
                     comment.quoteContent = elements.get(j).select("div.quote").text();//TODO 不对，做了登陆态再来
                     comment.quoteOrigin = elements.get(j).select("div.quote font font").text();
+                }
+                //解析回复按钮链接
+                try {
+                    comment.replyUrl = elements.get(j).select("div.vtrim a").get(0).attr("href");
+                    comment.replyUrl = SubwayURL.SUBWAY_BASE + comment.replyUrl;
+                    BaseApplication.isLogin = true;
+                }catch (Exception e){
+                    e.printStackTrace();
+                    BaseApplication.isLogin = false;
+                    Log.i("llb","找不到回复按钮,未登录");
                 }
                 postDetailResponse.commentList.add(comment);
             }

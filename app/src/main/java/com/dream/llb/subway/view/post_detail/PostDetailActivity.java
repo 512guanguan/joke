@@ -8,6 +8,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -123,8 +124,14 @@ public class PostDetailActivity extends AppCompatActivity implements PostDetailC
     public void onFinishRefresh(PostDetailResponse response) {
         Toast.makeText(this, "数据解析完了", Toast.LENGTH_SHORT).show();
         if(response instanceof PostDetailResponse){
-            setHeaderView();
-            adapter.setData(response);
+            if(!TextUtils.isEmpty(response.pageWaring)){
+                Toast.makeText(this,response.pageWaring,Toast.LENGTH_SHORT).show();
+                finish();
+            }else {
+                setHeaderView();
+                adapter.setData(response);
+            }
+
         }
     }
 
