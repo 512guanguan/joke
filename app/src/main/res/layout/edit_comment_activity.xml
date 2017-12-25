@@ -13,26 +13,20 @@
         android:textSize="13sp"
         android:text="RE: 22号线有两处中间盾构井动工（广祈，祈番）"/>
     <TextView
-        android:id="@+id/comment_tv"
+        android:id="@+id/content_tv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:lines="8"
         android:background="@color/white"
-        android:layout_below="@+id/quote_tv"
-        android:layout_above="@+id/captcha_layout_rl"
-        android:lines="10"
-        android:gravity="start"
-        android:padding="10dp"
-        android:textColor="@color/select_text"
-        android:textSize="13sp"
-        android:text="层主说得好呀！！举双脚赞成！！"/>
+        android:layout_below="@+id/quote_tv"/>
+
     <RelativeLayout
         android:id="@+id/captcha_layout_rl"
         android:layout_width="match_parent"
+        android:layout_below="@+id/content_tv"
         android:layout_height="60dp"
         android:layout_marginTop="10dp"
-        android:layout_alignParentBottom="true"
-        android:visibility="gone">
-
+        android:visibility="visible">
         <ImageView
             android:id="@+id/left_tv"
             android:layout_width="25dp"
@@ -63,5 +57,38 @@
             android:paddingTop="5dp"
             android:scaleType="fitXY"/>
     </RelativeLayout>
-
+    <RelativeLayout
+        android:id="@+id/edit_layout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/main_bg"
+        android:layout_below="@+id/captcha_layout_rl"
+        android:layout_above="@+id/emotion_layout">
+        <EditText
+            android:id="@+id/comment_edit"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:layout_toLeftOf="@+id/emotion_iv"
+            android:lines="2"
+            android:gravity="start|center_vertical"
+            android:padding="10dp"
+            android:textColor="@color/select_text"
+            android:textSize="13sp"
+            android:text="层主说得好呀！！举双脚赞成！！"/>
+        <ImageView
+            android:id="@+id/emotion_iv"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_clear"/>
+    </RelativeLayout>
+    <!--表情区-->
+    <com.lqr.emoji.EmotionLayout
+        android:id="@+id/emotion_layout"
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_height="270dp"
+        android:visibility="visible"/>
 </RelativeLayout>

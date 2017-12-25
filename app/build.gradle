@@ -5,7 +5,7 @@ android {
     buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "com.dream.llb.subway"
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
@@ -55,4 +55,6 @@ dependencies {
     compile 'org.jsoup:jsoup:1.10.3'
     compile 'com.google.android.gms:play-services-ads:11.6.0'
     testCompile 'junit:junit:4.12'
+    //引入表情输入lib
+    compile 'com.lqr.emoji:library:1.0.2'
 }

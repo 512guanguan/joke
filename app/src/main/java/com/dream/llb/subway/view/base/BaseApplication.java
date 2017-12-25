@@ -3,10 +3,15 @@ package com.dream.llb.subway.view.base;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.widget.ImageView;
 
+import com.dream.llb.subway.R;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
+import com.lqr.emoji.IImageLoader;
+import com.lqr.emoji.LQREmotionKit;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -26,6 +31,14 @@ public class BaseApplication extends Application{
         super.onCreate();
         mContext = getApplicationContext();
         activities = new ArrayList<>();
+        //初始化表情编辑lib
+        LQREmotionKit.init(this, new IImageLoader() {
+            @Override
+            public void displayImage(Context context, String path, ImageView imageView) {
+//                Glide.with(context).load(path).centerCrop().diskCacheStrategy(DiskCacheStrategy.SOURCE).into(imageView);
+                Picasso.with(context).load(path).centerCrop().into(imageView);
+            }
+        });
 
         MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");
         mInterstitialAd = new InterstitialAd(this);
