@@ -4,6 +4,7 @@ package com.dream.llb.subway.model;
 import android.util.Log;
 
 import com.dream.llb.subway.model.bean.EditCommentPageResponse;
+import com.dream.llb.subway.model.bean.EditPostPageResponse;
 import com.dream.llb.subway.model.bean.ForumListItem;
 import com.dream.llb.subway.model.bean.LoginPageResponse;
 import com.dream.llb.subway.model.bean.PostDetailResponse;
@@ -112,7 +113,7 @@ public class SubwayLoader extends BaseLoader {
     }
 
     /**
-     * 解析登录页面信息
+     * 解析评论编辑页面信息
      *
      * @param url
      * @return
@@ -123,6 +124,21 @@ public class SubwayLoader extends BaseLoader {
                     Log.i("llb", "数据回来了，等待解析\n" + response);
                     // do something like cache
                     EditCommentPageResponse res = (new EditCommentPageResponse()).new Builder().parse(response);
+                    return Observable.just(res);
+                })
+                .compose(DefaultObservableTransformer.defaultTransformer());
+    }
+    /**
+     * 解析帖子编辑页面信息
+     * @param url
+     * @return
+     */
+    public Observable<EditPostPageResponse> getEditPostPage(String url, String referer) {
+        return requestByGet(url, referer, false)
+                .flatMap((response) -> {
+                    Log.i("llb", "编辑帖子页面数据回来了，等待解析\n" + response);
+                    // do something like cache
+                    EditPostPageResponse res = (new EditPostPageResponse()).new Builder().parse(response);
                     return Observable.just(res);
                 })
                 .compose(DefaultObservableTransformer.defaultTransformer());

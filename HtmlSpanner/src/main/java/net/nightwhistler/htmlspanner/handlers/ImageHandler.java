@@ -38,6 +38,7 @@ import android.text.style.ImageSpan;
  * override loadBitmap() to implement your own loading.
  * 
  * @author Alex Kuiper
+ * https://blog.csdn.net/dodouaj/article/details/52005842
  * 
  */
 public class ImageHandler extends TagNodeHandler {
@@ -62,13 +63,16 @@ public class ImageHandler extends TagNodeHandler {
 
 	/**
 	 * Loads a Bitmap from the given url.
-	 * 
+	 * TODO 对于图片太多的帖子会出现OOM错误
 	 * @param url
 	 * @return a Bitmap, or null if it could not be loaded.
+	 * https://blog.csdn.net/buaaroid/article/details/50619226
 	 */
 	protected Bitmap loadBitmap(String url) {
 		try {
-			return BitmapFactory.decodeStream(new URL(url).openStream());
+			BitmapFactory.Options options = new BitmapFactory.Options();
+			options.inPreferredConfig = Bitmap.Config.RGB_565;
+			return BitmapFactory.decodeStream(new URL(url).openStream(),null,options);
 		} catch (IOException io) {
 			return null;
 		}

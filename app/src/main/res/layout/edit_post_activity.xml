@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/headLayout"
+        layout="@layout/common_header_bar" />
+
+    <LinearLayout
+        android:id="@+id/titleLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/headLayout"
+        android:background="@color/main_line"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="15dp"
+            android:text="标题:"
+            android:textColor="@color/main_darkblue"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/postTitleET"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="请输入标题"
+            android:lines="1" />
+    </LinearLayout>
+
+    <Spinner
+        android:id="@+id/lineSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_below="@+id/titleLayout"
+        android:layout_margin="10dp"
+        android:spinnerMode="dropdown"></Spinner>
+
+    <EditText
+        android:id="@+id/postContentET"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/lineSpinner"
+        android:gravity="start"
+        android:hint="请编辑帖子内容"
+        android:padding="10dp"
+        android:textSize="20sp" />
+</RelativeLayout>

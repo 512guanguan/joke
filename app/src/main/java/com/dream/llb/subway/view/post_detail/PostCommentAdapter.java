@@ -18,7 +18,6 @@ import android.widget.TextView;
 
 import com.dream.llb.subway.R;
 import com.dream.llb.subway.common.BaseViewHolder;
-import com.dream.llb.subway.common.OnItemClickListener;
 import com.dream.llb.subway.common.htmlspanner.handlers.MyLinkHandler;
 import com.dream.llb.subway.model.bean.PostDetailResponse;
 import com.dream.llb.subway.model.bean.PostDetailResponse.CommentInformation;
@@ -104,6 +103,7 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
      * @param response
      */
     public void setData(PostDetailResponse response) {
+        this.commentData.clear();
         this.commentData.addAll(response.commentList);
 //        response.commentList.clear();
         this.response = response;
@@ -192,9 +192,9 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                         .load(commentData.get(realPosition).headShotUrl)
                         //                .resize(60,120)
                         //下载中显示的图片
-                        .placeholder(R.mipmap.ic_launcher)
+                        .placeholder(R.drawable.default_head_icon)
                         //下载失败显示的图片
-                        .error(R.mipmap.ic_launcher)
+                        .error(R.drawable.default_head_icon)
                         //init()显示到指定控件
                         .into((ImageView) holder.getView(R.id.head_shortcut_iv));
 //                }
@@ -209,10 +209,7 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                         @Override
                         public void onClick(View v) {
                             //TODO 只有登陆态才能跳转哟，登录态的判定待完善
-                            Intent intent = new Intent(mContext, EditCommentActivity.class);
-                            intent.putExtra("pageURL",commentData.get(realPosition).replyUrl);
-                            intent.putExtra("referer",response.currentPageUrl);
-                            mContext.startActivity(intent);
+                            onItemClickListener.onReplyButtonClick(commentData.get(realPosition).replyUrl,commentData.get(realPosition).author);
                         }
                     });
                 }else {
@@ -324,5 +321,18 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     public void setLoadingMore(boolean loadingMore) {
         isLoadingMore = loadingMore;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
+
+        void onItemLongClick(View view, int position);
+
+        /**
+         * 点击某一层的回复按钮
+         * @param replyPageUrl 请求回复页面的链接
+         * @param authorName 层主的昵称，用来@用
+         */
+        void onReplyButtonClick(String replyPageUrl, String authorName);
     }
 }

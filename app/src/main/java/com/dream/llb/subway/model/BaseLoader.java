@@ -86,12 +86,12 @@ public class BaseLoader {
      * @param url
      * @return
      */
-    protected Observable<String> requestByPost(String url, HashMap<String,String> data) {
+    protected Observable<String> requestByPost(String url, HashMap<String,String> data,String referer) {
         return Observable.just("")
                 .observeOn(Schedulers.io())
                 .map((s) -> {
                             try {
-                                PostRequest request = HttpUtil.getInstance().post(url,data);
+                                PostRequest request = HttpUtil.getInstance().post(url,data,referer);
                                 Response res = HttpUtil.addCommonHeaders(request).execute();
                                 InputStream inputStream = new ByteArrayInputStream(res.body().bytes());
                                 return zipInputStream(inputStream);

@@ -1,11 +1,15 @@
 package com.dream.llb.subway.model.api;
 
+import android.text.TextUtils;
+
 import com.dream.llb.config.Config;
 import com.dream.llb.subway.BuildConfig;
 import com.dream.llb.subway.model.http.MyHttpLoggingInterceptor;
 import com.dream.llb.subway.model.http.MyHttpLoggingInterceptor.Level;
 import com.dream.llb.subway.model.http.cookie.CookiesManager;
 import com.dream.llb.subway.view.base.BaseApplication;
+
+import net.nightwhistler.htmlspanner.TextUtil;
 
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
@@ -76,12 +80,14 @@ public final class HttpUtil {
      * @param data  HashMap<String, String>格式的数据
      * @return
      */
-    public PostRequest post(String url, HashMap<String, String> data){
+    public PostRequest post(String url, HashMap<String, String> data, String referer){
         PostRequest request = new PostRequest(url, client);
         for(String item : data.keySet()){
             request.addParameter(item,data.get(item));
         }
-        request.addHeader("referer",data.get("referer"));
+        if(!TextUtils.isEmpty(referer)){
+            request.addHeader("referer",referer);
+        }
         return request;
     }
 }

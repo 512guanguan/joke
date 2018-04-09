@@ -4,33 +4,34 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.dream.llb.subway.R;
 import com.dream.llb.subway.common.OnItemClickListener;
+import com.dream.llb.subway.common.util.SharedPreferencesUtil;
 import com.dream.llb.subway.common.widget.SimpleDividerItemDecoration;
 import com.dream.llb.subway.model.api.SubwayURL;
 import com.dream.llb.subway.model.bean.PostListItem;
 import com.dream.llb.subway.view.base.BaseActivity;
+import com.dream.llb.subway.view.edit_post.EditPostActivity;
 import com.dream.llb.subway.view.post_detail.PostDetailActivity;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class ForumHomeActivity extends AppCompatActivity implements ForumHomeContract.View {
+public class ForumHomeActivity extends BaseActivity implements ForumHomeContract.View, View.OnClickListener {
     private Context mContext;
     private String url = "";
     private RecyclerView recyclerView = null;
-//    private List<PostListItem> postListData = null;
+    //    private List<PostListItem> postListData = null;
     private ForumHomeAdapter adapter = null;
     private SwipeRefreshLayout swipeRefreshLayout;
     private int currentPage = 1;
     private ForumHomeContract.Presenter presenter;
+    private String subjectName;
+    private String subjectID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +39,23 @@ public class ForumHomeActivity extends AppCompatActivity implements ForumHomeCon
         setContentView(R.layout.forum_home_activity);
         mContext = this;
         url = getIntent().getStringExtra("url");
+        subjectName = getIntent().getStringExtra("subjectName");
+        subjectID = getIntent().getStringExtra("subjectID");
+
+        if (!TextUtils.isEmpty(subjectName) && !TextUtils.isEmpty(subjectID)) {
+            SharedPreferencesUtil.put(this, "currentSubjectName", subjectName);
+            SharedPreferencesUtil.put(this, "currentSubjectID", subjectID);
+        } else {
+            subjectName = (String) SharedPreferencesUtil.get(this, SharedPreferencesUtil.currentSubjectName, "地铁族");
+            subjectID = (String) SharedPreferencesUtil.get(this, SharedPreferencesUtil.currentSubjectID, "");
+        }
         initView();
     }
 
     private void initView() {
+        initHeadView();
+        headTitleTV.setText(subjectName);
+        headRightTV.setOnClickListener(this);
         presenter = new ForumHomePresenter(this);
         recyclerView = (RecyclerView) findViewById(R.id.post_list);
 //        postListData = new ArrayList<>();
@@ -70,16 +84,16 @@ public class ForumHomeActivity extends AppCompatActivity implements ForumHomeCon
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 Log.i("llb", "onScrollStateChanged newState=" + newState);
-                if(newState == RecyclerView.SCROLL_STATE_IDLE){
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-                    int lastVisiblePosition = ((LinearLayoutManager)layoutManager).findLastVisibleItemPosition();
+                    int lastVisiblePosition = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
                     int visibleItemCount = layoutManager.getChildCount();
                     int totalItemCount = layoutManager.getItemCount();
-                    if(visibleItemCount>0 && lastVisiblePosition>=totalItemCount-1 && !adapter.isLoadingMore){
+                    if (visibleItemCount > 0 && lastVisiblePosition >= totalItemCount - 1 && !adapter.isLoadingMore) {
                         adapter.setLoadingMore(true);
                         presenter.loadMoreData(currentPage);
                         Log.i("llb", "onScrollStateChanged 底部啦");
-                        Log.i("llb", "lastVisiblePosition="+lastVisiblePosition+" visibleItemCount="+visibleItemCount+" totalItemCount="+totalItemCount);
+                        Log.i("llb", "lastVisiblePosition=" + lastVisiblePosition + " visibleItemCount=" + visibleItemCount + " totalItemCount=" + totalItemCount);
                     }
                 }
 
@@ -100,7 +114,7 @@ public class ForumHomeActivity extends AppCompatActivity implements ForumHomeCon
 //            adapter.setData(BaseActivity.postListItems.postList);//使用内存缓存即可
 //        }else {
         BaseActivity.postListItems = null;//清空
-            presenter.refreshPage();
+        presenter.refreshPage();
 //        }
     }
 
@@ -113,7 +127,7 @@ public class ForumHomeActivity extends AppCompatActivity implements ForumHomeCon
     public void onFinishLoadMore(PostListItem response) {
         Toast.makeText(this, "数据解析完了", Toast.LENGTH_SHORT).show();
         adapter.setLoadingMore(false);
-        if(response instanceof PostListItem){
+        if (response instanceof PostListItem) {
             currentPage++;
             adapter.setMoreData(response.postList);
         }
@@ -133,5 +147,18 @@ public class ForumHomeActivity extends AppCompatActivity implements ForumHomeCon
     public void onFinishRefresh(PostListItem response) {
         Toast.makeText(this, "数据解析完了", Toast.LENGTH_SHORT).show();
         adapter.setData(response.postList);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.headRightTV:
+                //TODO　测试，跳转去发表帖子入口
+                Intent intentTest = new Intent(mContext, EditPostActivity.class);
+                intentTest.putExtra("referer", url);
+                intentTest.putExtra("pageURL", SubwayURL.SUBWAY_EDIT_PAGE.replace("FID", subjectID));
+                startActivity(intentTest);
+                break;
+        }
     }
 }

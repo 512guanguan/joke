@@ -2,6 +2,8 @@ package com.dream.llb.subway.model.bean;
 
 import android.text.TextUtils;
 
+import com.dream.llb.subway.model.api.SubwayURL;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -88,7 +90,7 @@ public class LoginPageResponse {
                 loginPageResponse.referer = doc.getElementsByAttributeValue("name","referer").attr("value");
                 loginPageResponse.secHash = doc.getElementsByAttributeValue("name","sechash").attr("value");
                 loginPageResponse.submit = doc.getElementsByAttributeValue("name","submit").attr("value");
-                loginPageResponse.CAPTCHA_URL = doc.select("img.scod").first().attr("src");
+                loginPageResponse.CAPTCHA_URL = SubwayURL.SUBWAY_BASE + doc.select("img.scod").first().attr("src");
             }catch (Exception e){
                 e.printStackTrace();
             }

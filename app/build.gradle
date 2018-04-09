@@ -40,6 +40,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile project(':HtmlSpanner')
+    //引入表情输入lib
     compile 'com.squareup.okhttp3:logging-interceptor:3.8.0'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:design:25.3.1'
@@ -54,7 +55,7 @@ dependencies {
     compile 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0'
     compile 'org.jsoup:jsoup:1.10.3'
     compile 'com.google.android.gms:play-services-ads:11.6.0'
-    testCompile 'junit:junit:4.12'
-    //引入表情输入lib
     compile 'com.lqr.emoji:library:1.0.2'
+    compile 'com.bm.photoview:library:1.4.1'
+    testCompile 'junit:junit:4.12'
 }

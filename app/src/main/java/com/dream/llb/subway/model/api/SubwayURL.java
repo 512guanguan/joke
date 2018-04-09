@@ -22,4 +22,10 @@ public class SubwayURL {
 
     /**登录页**/
     public static final String SUBWAY_LOGIN_PAGE = SUBWAY_BASE + "member.php?mod=logging&action=login&mobile=yes";
+
+    /**发帖页**/
+    public static final String SUBWAY_EDIT_PAGE = SUBWAY_BASE + "forum.php?mod=post&action=newthread&fid=FID&mobile=yes";//TODO fid
+
+    /**发帖URL**/
+    public static final String SUBWAY_SUBMIT_POST = SUBWAY_BASE + "forum.php?mod=post&action=newthread&fid=FID&extra=&topicsubmit=yes";// TODO　fid
 }

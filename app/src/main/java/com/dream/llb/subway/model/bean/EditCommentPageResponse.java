@@ -33,10 +33,13 @@ public class EditCommentPageResponse {
     public String posttime;
     public String wysiwyg;//TODO 这个参数不知道啥意思
     public String noticeauthor;
+    public String noticetrimstr;
     public String noticeauthormsg;
     public String reppid;
     public String reppost;
+    public String subject;
     public String usesig;//是否使用个人签名 好像默认都是传1
+    public String replysubmit;//貌似都是true
 
     //验证码模块，不一定有
     public String sechash;
@@ -172,6 +175,21 @@ public class EditCommentPageResponse {
             Document document= Jsoup.parse(html);
             //解析所有引用内容信息
             response.quoteText = document.select("div.inbox div[class=ipcl xg1]").toString();
+            /**
+             * <div class="ipcl xg1">RE: 抓紧买票上船！
+             <span id="subjectbox" style="display:none">
+             <input type="text" name="subject" id="subject" value="" onkeyup="strLenCalc(this, 'checklen', 80);" style="width:100%;" />
+             </span>
+             <div class="quote"><blockquote><font color="#999999">市二宫 发表于 2017-12-23 22:42</font><br /><font color="#999999">。。。看标题我还以为是哪个不知好歹的小子又来地铁族发广告</font></blockquote>
+             </div>
+             </div>
+             */
+            try{
+                response.subject = document.select("div.inbox div[class=ipcl xg1] span input[name=subject]").get(0).attr("value");
+
+            }catch (Exception e){
+                e.printStackTrace();
+            }
             try {
                 Elements elements = document.select("form#postform");
                 //解析回复操作所需的参数
@@ -181,14 +199,19 @@ public class EditCommentPageResponse {
                 response.posttime = doc.getElementsByAttributeValue("name","posttime").attr("value");
                 response.wysiwyg = doc.getElementsByAttributeValue("name","wysiwyg").attr("value");
                 response.noticeauthor = doc.select("input[name=noticeauthor]").get(0).attr("value");
+                response.noticetrimstr = doc.select("input[name=noticetrimstr]").get(0).attr("value");
                 response.noticeauthormsg = doc.select("input[name=noticeauthormsg]").get(0).attr("value");
                 response.reppid = doc.select("input[name=reppid]").get(0).attr("value");
                 response.reppost = doc.select("input[name=reppost]").get(0).attr("value");
                 response.usesig = doc.select("input[name=usesig]").get(0).attr("value");
+                response.replysubmit = doc.select("div.inbox button[name=replysubmit]").get(0).attr("value");
                 //解析可能存在验证码
                 try {
                     response.sechash = doc.getElementsByAttributeValue("name","sechash").attr("value");
                     response.captchaUrl = doc.select("div.ips table img.scod").attr("src");
+                    if(!TextUtils.isEmpty(response.captchaUrl)){
+                        response.captchaUrl = SubwayURL.SUBWAY_BASE + response.captchaUrl;
+                    }
                 }catch (Exception e){
                     e.printStackTrace();
                     Log.i("llb","解析验证码所需的参数出错");

@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -31,12 +32,14 @@ public class EditCommentActivity extends AppCompatActivity implements View.OnCli
     private TextView quoteTV,contentTV;//引用内容
     private EmotionLayout emotionLayout;
     private EmotionKeyboard mEmotionKeyboard;
+    private LinearLayout topLayout;
 
     private EditText commentET;
     private RelativeLayout captchaLayout;//有些帐号是不需要验证码的
     private ImageView captchaIV,emotion_iv;
     private String pageURL;//传进来的回复页面url
     private String referer;//原页面url
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,11 +50,12 @@ public class EditCommentActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void initView() {
+        topLayout = (LinearLayout) findViewById(R.id.top_layout);
         quoteTV = (TextView) findViewById(R.id.quote_tv);
         contentTV = (TextView) findViewById(R.id.content_tv);
         commentET = (EditText) findViewById(R.id.comment_edit);
         emotion_iv = (ImageView) findViewById(R.id.emotion_iv);
-        emotion_iv.setOnClickListener(this);
+//        emotion_iv.setOnClickListener(this);
         captchaLayout = (RelativeLayout) findViewById(R.id.captcha_layout_rl);
         captchaIV = (ImageView) findViewById(R.id.captcha_iv);
         emotionLayout = (EmotionLayout) findViewById(R.id.emotion_layout);
@@ -88,7 +92,7 @@ public class EditCommentActivity extends AppCompatActivity implements View.OnCli
         });
 
         mEmotionKeyboard = EmotionKeyboard.with(this);
-        mEmotionKeyboard.bindToContent(contentTV);
+        mEmotionKeyboard.bindToContent(topLayout);
         mEmotionKeyboard.bindToEmotionButton(emotion_iv);
         mEmotionKeyboard.bindToEditText(commentET);
         mEmotionKeyboard.setEmotionLayout(emotionLayout);
@@ -97,7 +101,8 @@ public class EditCommentActivity extends AppCompatActivity implements View.OnCli
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-
+            case R.id.emotion_iv:
+                break;
         }
     }
 

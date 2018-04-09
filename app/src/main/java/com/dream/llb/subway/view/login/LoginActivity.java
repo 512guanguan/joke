@@ -1,5 +1,6 @@
 package com.dream.llb.subway.view.login;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,8 @@ import com.dream.llb.subway.R;
 import com.dream.llb.subway.common.helper.ImageHelper;
 import com.dream.llb.subway.model.api.SubwayURL;
 import com.dream.llb.subway.model.bean.LoginPageResponse;
+
+import static com.dream.llb.subway.view.post_detail.PostDetailActivity.LOGIN_CODE;
 
 public class LoginActivity extends AppCompatActivity implements LoginContract.View, View.OnClickListener{
     private LoginPageResponse loginPageResponse;
@@ -41,7 +44,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     public void setLoginPageData(LoginPageResponse response) {
         loginPageResponse = response;
         Toast.makeText(this, "数据解析完了", Toast.LENGTH_SHORT).show();
-        loadCaptchaImage(SubwayURL.SUBWAY_BASE + response.CAPTCHA_URL);
+        loadCaptchaImage(response.CAPTCHA_URL);
     }
 
     @Override
@@ -54,7 +57,10 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
     @Override
     public void onLoginSuccess() {
-
+        Intent intent = new Intent();
+        setResult(RESULT_OK,intent);
+        Toast.makeText(this,"登录成功",Toast.LENGTH_SHORT).show();
+        finish();
     }
 
     public void loadCaptchaImage(String url){

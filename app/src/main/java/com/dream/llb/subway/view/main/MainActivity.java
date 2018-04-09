@@ -18,6 +18,7 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -67,6 +68,8 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
 //        fragmentTransaction.commit();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("地铁族");
+        toolbar.setSubtitle("畅想城市的美好未来");
         setSupportActionBar(toolbar);
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -180,7 +183,8 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_edit) {
+            Log.i("llb","首页点击编辑按钮干嘛呢");
             return true;
         }
 

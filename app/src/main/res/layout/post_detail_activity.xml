@@ -1,20 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/headLayout"
+        layout="@layout/common_header_bar" />
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/comment_swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@+id/edit_layout"
+        android:layout_below="@+id/headLayout"
         android:orientation="vertical">
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/comment_list_rv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/main_bg"
-            android:scrollbars="vertical"/>
+            android:scrollbars="vertical" />
     </android.support.v4.widget.SwipeRefreshLayout>
 
-</LinearLayout>
+    <RelativeLayout
+        android:id="@+id/edit_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/main_bg"
+        android:visibility="visible">
+
+        <EditText
+            android:id="@+id/comment_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/post_comment_tv"
+            android:background="@color/white"
+            android:gravity="start|center_vertical"
+            android:hint="评论点啥好呢"
+            android:padding="10dp"
+            android:textColor="@color/select_text"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/post_comment_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/comment_edit"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@color/colorPrimary"
+            android:gravity="center_vertical"
+            android:padding="10dp"
+            android:text="发送"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/login_btn"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/btn_orange"
+        android:minHeight="0dp"
+        android:text="立即登录"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:visibility="gone" />
+</RelativeLayout>

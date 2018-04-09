@@ -18,7 +18,7 @@ import java.util.ArrayList;
  * Created by llb on 2017-09-11.
  */
 
-public class PostDetailResponse {
+public class PostDetailResponse extends BaseResponse{
     public String pageWaring;//例如权限不够之类的报错信息，弹框提醒后退出
     public String currentPageUrl;//当前帖子链接，存着备用
     public String postTitle;//帖子名称
@@ -30,6 +30,13 @@ public class PostDetailResponse {
     public String commentNum;//总评论数
     public String changeOrderUrl;//评论顺序or逆序显示切换
     public ArrayList<CommentInformation> commentList;
+
+    //回复模块
+    public String replyCommentUrl;//回复主贴的链接
+    public String replysubmit;//貌似都是传“回复”
+    public String CAPTCHA_URL;//可能有，回复主贴需要的验证码图片链接
+    public String replyFormHash;//回复必须的
+    public String sechash_CAPTCHA;//可能有，回复主贴需要的验证码sechash
 
     public PostDetailResponse() {
         this.commentList = new ArrayList<>();
@@ -120,6 +127,52 @@ public class PostDetailResponse {
          <!--// postslist end-->
          </div>
          </div>
+
+
+         //需要验证码的主贴回复模块
+         <div class="ct ctpd">
+         <div class="ipc">
+             <form method="post" name="inputform" autocomplete="off" id="fastpostform" action="forum.php?mod=post&amp;action=reply&amp;fid=23&amp;tid=546332&amp;extra=&amp;replysubmit=yes">
+                 <input type="hidden" name="formhash" value="55423c47" />
+                 <div class="ipcp">
+                 <div class="ipcc">
+                 <textarea name="message" id="fastpostmessage" cols="25" rows="7"></textarea>
+                 </div>
+                 </div>
+                 <input name="sechash" type="hidden" value="Svn20" />
+                 <div class="ips">
+                 <table cellspacing="0" cellpadding="0">
+                 <tr>
+                 <th>
+                 <p><input name="seccodeverify" id="seccodeverify_Svn20" type="text" autocomplete="off" /></p>
+                 </th>
+                 <td>
+                 <img src="misc.php?mod=seccode&amp;update=47349&amp;idhash=Svn20" class="scod" />
+                 </td>
+                 </tr>
+                 </table>
+                 </div>
+                 <div class="inbox"><input type="submit" name="replysubmit" id="fastpostsubmit" value="回复" class="ibt ibtp" /></div>
+             </form>
+         </div>
+
+         //不需要验证码
+         <div class="ct ctpd">
+         <div class="ipc">
+             <form method="post" name="inputform" autocomplete="off" id="fastpostform" action="forum.php?mod=post&amp;action=reply&amp;fid=7&amp;tid=547858&amp;extra=&amp;replysubmit=yes">
+                 <input type="hidden" name="formhash" value="5e4293fb" />
+                 <div class="ipcp">
+                 <div class="ipcc">
+                 <textarea name="message" id="fastpostmessage" cols="25" rows="7"></textarea>
+                 </div>
+                 </div>
+                 <div class="inbox"><input type="submit" name="replysubmit" id="fastpostsubmit" value="回复" class="ibt ibtp" /></div>
+             </form>
+         </div>
+
+
+
+
          */
         public PostDetailResponse parsePage(String html){
             if(TextUtils.isEmpty(html))
@@ -143,6 +196,7 @@ public class PostDetailResponse {
             elements = doc.select("h1.vt_th a");
             if(elements.size()>0){
                 postDetailResponse.postTitle = elements.first().text();
+                postDetailResponse.currentPageUrl = SubwayURL.SUBWAY_BASE + elements.first().attr("href");
             }
             elements.clear();
             elements = doc.select("div.user_first");
@@ -197,6 +251,53 @@ public class PostDetailResponse {
                 }
                 postDetailResponse.commentList.add(comment);
             }
+
+            //解析回复主贴的模块
+            /**
+             * <div class="ct ctpd">
+             <div class="ipc">
+                 <form method="post" name="inputform" autocomplete="off" id="fastpostform" action="forum.php?mod=post&amp;action=reply&amp;fid=23&amp;tid=546332&amp;extra=&amp;replysubmit=yes">
+                 <input type="hidden" name="formhash" value="55423c47" />
+                 <div class="ipcp">
+                 <div class="ipcc">
+                 <textarea name="message" id="fastpostmessage" cols="25" rows="7"></textarea>
+                 </div>
+                 </div>
+                 <input name="sechash" type="hidden" value="Svn20" />
+                 <div class="ips">
+                 <table cellspacing="0" cellpadding="0">
+                 <tr>
+                 <th>
+                 <p><input name="seccodeverify" id="seccodeverify_Svn20" type="text" autocomplete="off" /></p>
+                 </th>
+                 <td>
+                 <img src="misc.php?mod=seccode&amp;update=47349&amp;idhash=Svn20" class="scod" />
+                 </td>
+                 </tr>
+                 </table>
+                 </div>
+                 <div class="inbox"><input type="submit" name="replysubmit" id="fastpostsubmit" value="回复" class="ibt ibtp" /></div>
+                 </form>
+             </div>
+             */
+            elements.clear();
+            elements = document.select("div[class=ct ctpd] div.ipc form");//回复form表单
+            try {
+                if(elements.size()>0){
+                    doc= Jsoup.parse(elements.toString());
+                    postDetailResponse.replyCommentUrl = SubwayURL.SUBWAY_BASE+doc.select("form").attr("action");
+                    postDetailResponse.replyFormHash = doc.select("input[name=formhash]").get(0).attr("value");
+                    postDetailResponse.replysubmit = doc.select("div.inbox input[name=replysubmit]").get(0).attr("value");
+                    if(doc.select("input[name=sechash]").size()>0){
+                        postDetailResponse.sechash_CAPTCHA = doc.select("input[name=sechash]").get(0).attr("value");
+                        postDetailResponse.CAPTCHA_URL = SubwayURL.SUBWAY_BASE + doc.select("img.scod").first().attr("src");
+                    }
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+
             return postDetailResponse;
         }
     }

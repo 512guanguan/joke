@@ -80,9 +80,11 @@ public class HomeFragment extends Fragment implements HomeContract.View {
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Log.i("llb", "onItemClick position=" + position);
+                Log.i("llb", "onItemClick adapter.getItemId(position)=" + adapter.getItemId(position));
                 Toast.makeText(mContext, "onItemClick position=" + position, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(mContext, ForumHomeActivity.class);
+                intent.putExtra("subjectID",BaseActivity.forumListItems.forumInformations.get(position).subjectID);
+                intent.putExtra("subjectName",BaseActivity.forumListItems.forumInformations.get(position).subjectName);
                 intent.putExtra("url", SubwayURL.SUBWAY_BASE + BaseActivity.forumListItems.forumInformations.get(position).subjectUrl);
                 mContext.startActivity(intent);
             }

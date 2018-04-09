@@ -70,9 +70,10 @@ public class LoginPresenter implements LoginContract.Presenter {
         data.put("cookietime",loginPageResponse.cookieTime);
         data.put("submit",loginPageResponse.submit);
         data.put("referer",loginPageResponse.referer);
-        AccountLoader.getInstance().login(url,data)
+        AccountLoader.getInstance().login(url,data,loginPageResponse.referer)
                 .subscribe((response) -> {
                     Log.i("llb", "存储路径path = " + response);
+                    loginView.onLoginSuccess();
                 }, (Throwable e) -> {
                     Log.d("llb", "error " + e.getMessage());
                 }, () -> {
