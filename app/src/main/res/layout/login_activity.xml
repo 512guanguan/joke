@@ -1,106 +1,150 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/main_bg"
-    android:orientation="vertical">
+    android:background="@color/grey_bg">
 
+    <include
+        android:id="@+id/headLayout"
+        layout="@layout/common_header_bar" />
+    <ImageView
+        android:id="@+id/topIV"
+        android:src="@drawable/login_top"
+        android:layout_below="@+id/headLayout"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:scaleType="fitXY"/>
     <LinearLayout
+        android:id="@+id/middleLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp">
+        android:layout_below="@+id/topIV"
+        android:orientation="vertical">
 
-        <ImageView
-            android:layout_width="25dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="15dp"
-            android:src="@drawable/ico_papers" />
-
-        <com.dream.llb.subway.common.widget.EditTextWithClearButon
-            android:id="@+id/name_tv"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="账号"
-            android:maxLength="20"
-            android:textSize="15sp"
-            android:textColor="@color/main_purple"
-            android:paddingBottom="15dp"
-            android:paddingLeft="3dp"
-            android:paddingRight="15dp"
-            android:paddingTop="15dp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp">
-
-        <ImageView
-            android:layout_width="25dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="15dp"
-            android:src="@drawable/ico_password" />
-
-        <com.dream.llb.subway.common.widget.EditTextWithClearButon
-            android:id="@+id/password_tv"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="密码"
-            android:imeOptions="actionDone"
-            android:paddingBottom="15dp"
-            android:paddingLeft="3dp"
-            android:paddingRight="15dp"
-            android:paddingTop="15dp"
-            android:inputType="textPassword"/>
-    </LinearLayout>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginTop="10dp">
-
-        <ImageView
-            android:id="@+id/left_tv"
-            android:layout_width="25dp"
-            android:layout_height="match_parent"
-            android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
-            android:src="@drawable/ico_password" />
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="15dp"
+            android:background="@color/white">
 
-        <com.dream.llb.subway.common.widget.EditTextWithClearButon
-            android:id="@+id/captcha_tv"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="15dp"
+                android:padding="2dp"
+                android:text="用户名："
+                android:textColor="@color/main_darkblue"
+                android:textSize="15sp" />
+
+            <com.dream.llb.subway.common.widget.EditTextWithClearButon
+                android:id="@+id/name_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="@color/main_darkblue"
+                android:hint="请输入地铁族账号"
+                android:maxLength="20"
+                android:paddingBottom="15dp"
+                android:paddingLeft="3dp"
+                android:paddingRight="15dp"
+                android:lines="1"
+                android:paddingTop="15dp"
+                android:textColor="@color/main_purple"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_toRightOf="@+id/left_tv"
-            android:layout_toLeftOf="@+id/captcha_iv"
-            android:hint="验证码"
-            android:imeOptions="actionDone"
-            android:paddingBottom="15dp"
-            android:paddingLeft="3dp"
-            android:paddingRight="15dp"
-            android:paddingTop="15dp"/>
-        <ImageView
-            android:id="@+id/captcha_iv"
-            android:layout_width="150dp"
-            android:layout_height="50dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:paddingBottom="5dp"
-            android:paddingTop="5dp"
-            android:scaleType="fitXY"/>
-    </RelativeLayout>
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@color/white">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="15dp"
+                android:padding="2dp"
+                android:text="密    码："
+                android:textColor="@color/main_darkblue"
+                android:textSize="15sp" />
+
+            <com.dream.llb.subway.common.widget.EditTextWithClearButon
+                android:id="@+id/password_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/main_darkblue"
+                android:hint="请输入密码"
+                android:lines="1"
+                android:imeOptions="actionDone"
+                android:inputType="textPassword"
+                android:paddingBottom="15dp"
+                android:paddingLeft="3dp"
+                android:paddingRight="15dp"
+                android:paddingTop="15dp" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/captchaLayout"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@color/white"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/left_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:padding="2dp"
+                android:text="验证码："
+                android:textColor="@color/main_darkblue"
+                android:textSize="15sp" />
+
+            <com.dream.llb.subway.common.widget.EditTextWithClearButon
+                android:id="@+id/captcha_tv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_toLeftOf="@+id/captcha_iv"
+                android:layout_toRightOf="@+id/left_tv"
+                android:backgroundTint="@color/main_darkblue"
+                android:lines="1"
+                android:maxLines="1"
+                android:imeOptions="actionDone"
+                android:paddingBottom="15dp"
+                android:paddingLeft="3dp"
+                android:paddingRight="15dp"
+                android:paddingTop="15dp" />
+
+            <ImageView
+                android:id="@+id/captcha_iv"
+                android:layout_width="110dp"
+                android:layout_height="50dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:scaleType="fitXY" />
+        </RelativeLayout>
+    </LinearLayout>
 
     <Button
         android:id="@+id/login_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@color/gf_blue"
         android:text="登录"
-        android:textSize="25sp"
-        android:textColor="#3e45ee"/>
-</LinearLayout>
+        android:textColor="@color/white"
+        android:textSize="25sp" />
+</RelativeLayout>

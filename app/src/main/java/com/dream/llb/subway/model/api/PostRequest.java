@@ -49,7 +49,7 @@ public class PostRequest extends IRequest {
 
     private void postForm(Request.Builder builder){
         if(isFisrtParamter==false){
-            Log.d("post", "postForm: ");
+//            Log.d("post", "postForm: ");
             builder.post(parameter.build());
         }
     }

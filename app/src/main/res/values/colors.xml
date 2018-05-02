@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="main_bg">#FAFAFA</color>
+    <color name="grey_bg">#EBF2F9</color>
 
     <!-- 字体颜色 -->
     <color name="text_main">#282828</color>

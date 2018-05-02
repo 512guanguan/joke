@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SubwayForum</string>
+    <string name="app_name">地铁族</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -19,5 +19,5 @@
     <string name="permission_read_external_hint">没有此权限，无法开启这个功能，请开启权限。PERMISSION_READ_EXTERNAL_STORAGE</string>
     <string name="permission_white_external_hint">没有此权限，无法开启这个功能，请开启权限。PERMISSION_WRITE_EXTERNAL_STORAGE</string>
     <string name="permission_recode_audio_hint">没有此权限，无法开启这个功能，请开启权限。PERMISSION_RECORD_AUDIO</string>
-
+    <string name="about_text">&#160;&#160;&#160;&#160;地铁族建站于2006年7月26日，正式日期为2006年8月1日，有管理员1人（Levi），超版5人（下一站永丰、jason130、kimipippo、我爱柯南、howchou），总版区数41个，下设子版块36个。地铁族是全国最大的有关的都市地铁生活的讨论区。\n\n&#160;&#160;&#160;&#160;本客户端原是本程序猿送给地铁族某女神坛友的表白作品，后来在女神的怂恿下稍加完善分享出来的。这个客户端提供了较全面的论坛帖子浏览、发表、回复功能，帐号相关的功能目前支持地铁族论坛帐号登录、登出和最新消息提醒功能。\n\n&#160;&#160;&#160;&#160;如果坛友需要，后续还会继续抽空完善更多常用功能，欢迎反馈建议~~</string>
 </resources>

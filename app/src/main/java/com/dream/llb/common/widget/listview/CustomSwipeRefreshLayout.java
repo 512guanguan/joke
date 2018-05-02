@@ -58,7 +58,7 @@ public class CustomSwipeRefreshLayout extends SwipeRefreshLayout implements Swip
         //了解一下控件绘制流程
         if (mListView == null) {
             int count = getChildCount();
-            Log.i("llb", "onLayout-> getChildCount = " + count);
+//            Log.i("llb", "onLayout-> getChildCount = " + count);
             //获取子类布局控件
             if (count > 0) {
                 View view = getChildAt(0);

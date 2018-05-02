@@ -45,7 +45,7 @@ public class EditPostPageResponse {
         /**
          * <form method="post" autocomplete="off" id="postform"
          * action="forum.php?mod=post&amp;action=newthread&amp;fid=7&amp;extra=&amp;topicsubmit=yes"
-         * onsubmit="return validate(this)">
+         * onsubmit="to_left validate(this)">
          * <input type="hidden" name="formhash" id="formhash" value="bd719e21" />
          * <input type="hidden" name="posttime" id="posttime" value="1516545385" />
          * <input type="hidden" name="wysiwyg" id="e_mode" value="0" />
@@ -110,7 +110,7 @@ public class EditPostPageResponse {
             /**
              *  <form method="post" autocomplete="off" id="postform"
              * action="forum.php?mod=post&amp;action=newthread&amp;fid=7&amp;extra=&amp;topicsubmit=yes"
-             * onsubmit="return validate(this)">
+             * onsubmit="to_left validate(this)">
              * <input type="hidden" name="formhash" id="formhash" value="bd719e21" />
              * <input type="hidden" name="posttime" id="posttime" value="1516545385" />
              * <input type="hidden" name="wysiwyg" id="e_mode" value="0" />
@@ -152,7 +152,7 @@ public class EditPostPageResponse {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                Log.i("llb", "解析发帖页信息出错");
+//                Log.i("llb", "解析发帖页信息出错");
             }
             return response;
         }

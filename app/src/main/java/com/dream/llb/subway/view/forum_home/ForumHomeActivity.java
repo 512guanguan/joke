@@ -17,9 +17,13 @@ import com.dream.llb.subway.common.util.SharedPreferencesUtil;
 import com.dream.llb.subway.common.widget.SimpleDividerItemDecoration;
 import com.dream.llb.subway.model.api.SubwayURL;
 import com.dream.llb.subway.model.bean.PostListItem;
-import com.dream.llb.subway.view.base.BaseActivity;
+import com.dream.llb.subway.view.base.BaseApplication;
+import com.dream.llb.subway.view.base.base_activity.BaseActivity;
 import com.dream.llb.subway.view.edit_post.EditPostActivity;
+import com.dream.llb.subway.view.login.LoginActivity;
 import com.dream.llb.subway.view.post_detail.PostDetailActivity;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 public class ForumHomeActivity extends BaseActivity implements ForumHomeContract.View, View.OnClickListener {
     private Context mContext;
@@ -32,6 +36,7 @@ public class ForumHomeActivity extends BaseActivity implements ForumHomeContract
     private ForumHomeContract.Presenter presenter;
     private String subjectName;
     private String subjectID;
+    private AdView mAdView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +61,13 @@ public class ForumHomeActivity extends BaseActivity implements ForumHomeContract
         initHeadView();
         headTitleTV.setText(subjectName);
         headRightTV.setOnClickListener(this);
+        headLeftIcon.setOnClickListener(this);
+        mAdView = (AdView) findViewById(R.id.adView);
+//        mAdView.setAdUnitId(Constants.ADMOB_FORUM_BOTTOM_ID);
+//        mAdView.setAdSize(AdSize.BANNER);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+
         presenter = new ForumHomePresenter(this);
         recyclerView = (RecyclerView) findViewById(R.id.post_list);
 //        postListData = new ArrayList<>();
@@ -67,8 +79,8 @@ public class ForumHomeActivity extends BaseActivity implements ForumHomeContract
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Log.i("llb", "onItemClick position=" + position);
-                Toast.makeText(mContext, "onItemClick position=" + position, Toast.LENGTH_SHORT).show();
+//                Log.i("llb", "onItemClick position=" + position);
+//                Toast.makeText(mContext, "onItemClick position=" + position, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(mContext, PostDetailActivity.class);
                 intent.putExtra("url", SubwayURL.SUBWAY_BASE + BaseActivity.postListItems.postList.get(position).postUrl);
                 mContext.startActivity(intent);
@@ -76,14 +88,14 @@ public class ForumHomeActivity extends BaseActivity implements ForumHomeContract
 
             @Override
             public void onItemLongClick(View view, int position) {
-                Log.i("llb", "onItemLongClick position=" + position);
+//                Log.i("llb", "onItemLongClick position=" + position);
             }
         });
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                Log.i("llb", "onScrollStateChanged newState=" + newState);
+//                Log.i("llb", "onScrollStateChanged newState=" + newState);
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
                     int lastVisiblePosition = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
@@ -92,8 +104,8 @@ public class ForumHomeActivity extends BaseActivity implements ForumHomeContract
                     if (visibleItemCount > 0 && lastVisiblePosition >= totalItemCount - 1 && !adapter.isLoadingMore) {
                         adapter.setLoadingMore(true);
                         presenter.loadMoreData(currentPage);
-                        Log.i("llb", "onScrollStateChanged 底部啦");
-                        Log.i("llb", "lastVisiblePosition=" + lastVisiblePosition + " visibleItemCount=" + visibleItemCount + " totalItemCount=" + totalItemCount);
+//                        Log.i("llb", "onScrollStateChanged 底部啦");
+//                        Log.i("llb", "lastVisiblePosition=" + lastVisiblePosition + " visibleItemCount=" + visibleItemCount + " totalItemCount=" + totalItemCount);
                     }
                 }
 
@@ -125,7 +137,7 @@ public class ForumHomeActivity extends BaseActivity implements ForumHomeContract
 
     @Override
     public void onFinishLoadMore(PostListItem response) {
-        Toast.makeText(this, "数据解析完了", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "数据解析完了", Toast.LENGTH_SHORT).show();
         adapter.setLoadingMore(false);
         if (response instanceof PostListItem) {
             currentPage++;
@@ -145,7 +157,7 @@ public class ForumHomeActivity extends BaseActivity implements ForumHomeContract
 
     @Override
     public void onFinishRefresh(PostListItem response) {
-        Toast.makeText(this, "数据解析完了", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "数据解析完了", Toast.LENGTH_SHORT).show();
         adapter.setData(response.postList);
     }
 
@@ -154,10 +166,18 @@ public class ForumHomeActivity extends BaseActivity implements ForumHomeContract
         switch (v.getId()) {
             case R.id.headRightTV:
                 //TODO　测试，跳转去发表帖子入口
-                Intent intentTest = new Intent(mContext, EditPostActivity.class);
-                intentTest.putExtra("referer", url);
-                intentTest.putExtra("pageURL", SubwayURL.SUBWAY_EDIT_PAGE.replace("FID", subjectID));
-                startActivity(intentTest);
+                if(BaseApplication.isLogin){
+                    Intent intentTest = new Intent(mContext, EditPostActivity.class);
+                    intentTest.putExtra("referer", url);
+                    intentTest.putExtra("pageURL", SubwayURL.SUBWAY_EDIT_PAGE.replace("FID", subjectID));
+                    startActivity(intentTest);
+                }else {
+                    Intent intent = new Intent(mContext, LoginActivity.class);
+                    startActivity(intent);
+                }
+                break;
+            case R.id.headLeftIcon:
+                finish();
                 break;
         }
     }

@@ -1,14 +1,19 @@
 package com.dream.llb.subway.model;
 
 
+import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.dream.llb.common.Constants;
 import com.dream.llb.subway.model.bean.BaseResponse;
+import com.dream.llb.subway.model.bean.HomePageResponse;
 import com.dream.llb.subway.model.bean.LoginResponse;
 import com.dream.llb.subway.model.bean.PostDetailResponse;
 import com.dream.llb.subway.model.bean.WarningPageResponse;
 import com.dream.llb.subway.model.http.DefaultObservableTransformer;
+import com.dream.llb.subway.view.base.BaseApplication;
+import com.dream.llb.subway.view.base.base_activity.BaseActivity;
 
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
@@ -40,13 +45,30 @@ public class AccountLoader extends BaseLoader {
         return requestByPost(url,data,referer)
                 .debounce(300, TimeUnit.MICROSECONDS)
                 .flatMap((response) -> {
-                    Log.i("llb","数据回来了，等待解析\n" + response);
+//                    Log.i("llb","数据回来了，等待解析\n" + response);
                     LoginResponse res = (new LoginResponse()).new Builder().parsePage(response);
                     return  Observable.just(res);
                 })
                 .compose(DefaultObservableTransformer.defaultTransformer());
     }
-
+    /**
+     * 解析退出操作返回页面信息
+     * @param url
+     * @return
+     */
+    public Observable<HomePageResponse> logOut(String url, HashMap<String,String> data,String referer){
+        return requestByPost(url,data,referer)
+                .debounce(300, TimeUnit.MICROSECONDS)
+                .flatMap((response) -> {
+//                    Log.i("llb","退出登录请求后的数据回来了，等待解析\n" + response);
+                    // do something like cache
+                    HomePageResponse homePageResponse = (new HomePageResponse()).new Builder().parse(response);
+                    BaseActivity.homePageResponse.accountInfoUrls = new HomePageResponse.AccountInfoUrl();
+                    BaseApplication.isLogin = false;
+                    return Observable.just(homePageResponse);
+                })
+                .compose(DefaultObservableTransformer.defaultTransformer());
+    }
     /**
      * 发表评论信息
      * @param url
@@ -56,7 +78,7 @@ public class AccountLoader extends BaseLoader {
         return requestByPost(url,data,referer)
                 .debounce(300, TimeUnit.MICROSECONDS)
                 .flatMap((response) -> {
-                    Log.i("llb","评论发送后的页面：\n" + response);
+//                    Log.i("llb","评论发送后的页面：\n" + response);
                     try {
                         PostDetailResponse res = (new PostDetailResponse()).new Builder().parsePage(response);
                         if(!TextUtils.isEmpty(res.author)){
@@ -83,7 +105,7 @@ public class AccountLoader extends BaseLoader {
         return requestByPost(url,data,referer)
                 .debounce(300, TimeUnit.MICROSECONDS)
                 .flatMap((response) -> {
-                    Log.i("llb","帖子发送后的页面：\n" + response);
+//                    Log.i("llb","帖子发送后的页面：\n" + response);
                     try {
                         PostDetailResponse res = (new PostDetailResponse()).new Builder().parsePage(response);
                         if(!TextUtils.isEmpty(res.author)){

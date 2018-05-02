@@ -119,7 +119,7 @@ public class EditCommentPageResponse {
 
          <form method="post" autocomplete="off" id="postform"
          action="forum.php?mod=post&amp;action=reply&amp;fid=23&amp;tid=546461&amp;extra=&amp;replysubmit=yes"
-         onsubmit="return validate(this)">
+         onsubmit="to_left validate(this)">
              <input type="hidden" name="formhash" id="formhash" value="5e4293fb" />
              <input type="hidden" name="posttime" id="posttime" value="1514040200" />
              <input type="hidden" name="wysiwyg" id="e_mode" value="0" />
@@ -214,11 +214,11 @@ public class EditCommentPageResponse {
                     }
                 }catch (Exception e){
                     e.printStackTrace();
-                    Log.i("llb","解析验证码所需的参数出错");
+//                    Log.i("llb","解析验证码所需的参数出错");
                 }
             }catch (Exception e){
                 e.printStackTrace();
-                Log.i("llb","解析回复操作所需的参数出错");
+//                Log.i("llb","解析回复操作所需的参数出错");
             }
 
             try {
@@ -230,7 +230,7 @@ public class EditCommentPageResponse {
                 response.uploadImageUid = doc.select("input[name=uid]").get(0).attr("value");
             }catch (Exception e){
                 e.printStackTrace();
-                Log.i("llb","解析上传图片需要的参数出错");
+//                Log.i("llb","解析上传图片需要的参数出错");
             }
             return response;
         }

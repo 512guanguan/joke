@@ -51,7 +51,7 @@ public class SearchImagesResponse {
     public class HitImages{
         public String id; //	A unique identifier for updating expired image URLs.
         public String total; //	The total number of hits.
-        public String totalHits; //	The number of images accessible through the API. By default, the API is limited to return a maximum of 500 images per query.
+        public String totalHits; //	The number of images accessible through the API. By default, the API is limited to to_left a maximum of 500 images per query.
         public String pageURL; //	Source page on Pixabay, which provides a download link for the original image of the dimension imageWidth x imageHeight and the file size imageSize.
         public String type;// 类型
         public String tags;// 图片标签

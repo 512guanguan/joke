@@ -144,7 +144,7 @@ public class JokeFirstFragment extends Fragment {
     }
 
     public void fetchData() {
-        Toast.makeText(this.getActivity(), "到头啦！！", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this.getActivity(), "到头啦！！", Toast.LENGTH_SHORT).show();
         swipeRefreshLayout.setRefreshing(false);
         return;
     }

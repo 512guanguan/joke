@@ -5,8 +5,9 @@ import android.util.Log;
 
 import com.dream.llb.subway.model.bean.EditCommentPageResponse;
 import com.dream.llb.subway.model.bean.EditPostPageResponse;
-import com.dream.llb.subway.model.bean.ForumListItem;
+import com.dream.llb.subway.model.bean.HomePageResponse;
 import com.dream.llb.subway.model.bean.LoginPageResponse;
+import com.dream.llb.subway.model.bean.NoticeMsgResponse;
 import com.dream.llb.subway.model.bean.PostDetailResponse;
 import com.dream.llb.subway.model.bean.PostListItem;
 import com.dream.llb.subway.model.http.DefaultObservableTransformer;
@@ -35,13 +36,13 @@ public class SubwayLoader extends BaseLoader {
      *
      * @return
      */
-    public Observable<ForumListItem> getForumListData(String url) {
+    public Observable<HomePageResponse> getForumListData(String url) {
         return requestByGet(url)
                 .flatMap((response) -> {//io线程
-                    Log.i("llb", "数据回来了，等待解析\n" + response);
+//                    Log.i("llb", "数据回来了，等待解析\n" + response);
                     // do something like cache
-                    ForumListItem forumListItems = (new ForumListItem()).new Builder().parse(response);
-                    return Observable.just(forumListItems);
+                    HomePageResponse homePageResponse = (new HomePageResponse()).new Builder().parse(response);
+                    return Observable.just(homePageResponse);
                 })
                 .compose(DefaultObservableTransformer.defaultTransformer());
     }
@@ -54,10 +55,25 @@ public class SubwayLoader extends BaseLoader {
     public Observable<PostListItem> getPostListData(String url) {
         return requestByGet(url)
                 .flatMap((response) -> {//io线程
-                    Log.i("llb", "数据回来了，等待解析\n" + response);
+//                    Log.i("llb", "数据回来了，等待解析\n" + response);
                     // do something like cache
                     PostListItem postListItems = (new PostListItem()).new Builder().parse(response);
                     return Observable.just(postListItems);
+                })
+                .compose(DefaultObservableTransformer.defaultTransformer());
+    }
+    /**
+     * 获取提醒消息的列表信息
+     *
+     * @return
+     */
+    public Observable<NoticeMsgResponse> getNoticeListData(String url) {
+        return requestByGet(url)
+                .flatMap((response) -> {//io线程
+//                    Log.i("llb", "数据回来了，等待解析\n" + response);
+                    // do something like cache
+                    NoticeMsgResponse res = (new NoticeMsgResponse()).new Builder().parsePage(response);
+                    return Observable.just(res);
                 })
                 .compose(DefaultObservableTransformer.defaultTransformer());
     }
@@ -70,7 +86,7 @@ public class SubwayLoader extends BaseLoader {
     public Observable<PostDetailResponse> getPostDetailData(String url) {
         return requestByGet(url)
                 .flatMap((response) -> {//io线程
-                    Log.i("llb", "数据回来了，等待解析\n" + response);
+//                    Log.i("llb", "数据回来了，等待解析\n" + response);
                     // do something like cache
                     PostDetailResponse res = (new PostDetailResponse()).new Builder().parsePage(response);
                     res.currentPageUrl = url;
@@ -87,7 +103,7 @@ public class SubwayLoader extends BaseLoader {
     public Observable<PostDetailResponse> getMoreCommentData(String url, String referer) {
         return requestByGet(url,referer, true)
                 .flatMap((response) -> {//io线程
-                    Log.i("llb", "数据回来了，等待解析\n" + response);
+//                    Log.i("llb", "数据回来了，等待解析\n" + response);
                     // do something like cache
                     PostDetailResponse res = (new PostDetailResponse()).new Builder().parsePage(response);
                     return Observable.just(res);
@@ -104,7 +120,7 @@ public class SubwayLoader extends BaseLoader {
     public Observable<LoginPageResponse> getLoginPage(String url) {
         return requestByGet(url, "http://www.ditiezu.com/forum.php?mod=forum", false)
                 .flatMap((response) -> {
-                    Log.i("llb", "数据回来了，等待解析\n" + response);
+//                    Log.i("llb", "数据回来了，等待解析\n" + response);
                     // do something like cache
                     LoginPageResponse res = (new LoginPageResponse()).new Builder().parsePage(response);
                     return Observable.just(res);
@@ -121,7 +137,7 @@ public class SubwayLoader extends BaseLoader {
     public Observable<EditCommentPageResponse> getEditCommentPage(String url,String referer) {
         return requestByGet(url, referer, false)
                 .flatMap((response) -> {
-                    Log.i("llb", "数据回来了，等待解析\n" + response);
+//                    Log.i("llb", "数据回来了，等待解析\n" + response);
                     // do something like cache
                     EditCommentPageResponse res = (new EditCommentPageResponse()).new Builder().parse(response);
                     return Observable.just(res);
@@ -136,7 +152,7 @@ public class SubwayLoader extends BaseLoader {
     public Observable<EditPostPageResponse> getEditPostPage(String url, String referer) {
         return requestByGet(url, referer, false)
                 .flatMap((response) -> {
-                    Log.i("llb", "编辑帖子页面数据回来了，等待解析\n" + response);
+//                    Log.i("llb", "编辑帖子页面数据回来了，等待解析\n" + response);
                     // do something like cache
                     EditPostPageResponse res = (new EditPostPageResponse()).new Builder().parse(response);
                     return Observable.just(res);
@@ -155,7 +171,7 @@ public class SubwayLoader extends BaseLoader {
 //                .flatMap((response) -> {
 //                    Log.i("llb","数据回来了，等待解析\n" + response);
 //                    // do something like cache
-//                    return  Observable.just(response);
+//                    to_left  Observable.just(response);
 //                })
                 .compose(DefaultObservableTransformer.defaultTransformer());
     }

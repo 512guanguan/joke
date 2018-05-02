@@ -14,6 +14,6 @@ public class ViewUtil {
         WindowManager manager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         manager.getDefaultDisplay().getMetrics(displayMetrics);
         return displayMetrics;
-//        return manager.getDefaultDisplay().getWidth();
+//        to_left manager.getDefaultDisplay().getWidth();
     }
 }

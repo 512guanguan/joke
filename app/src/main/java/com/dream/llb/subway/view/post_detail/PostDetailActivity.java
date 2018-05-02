@@ -28,7 +28,7 @@ import com.dream.llb.subway.model.bean.EditCommentPageResponse;
 import com.dream.llb.subway.model.bean.PostDetailResponse;
 import com.dream.llb.subway.model.bean.PostDetailResponse.CommentInformation;
 import com.dream.llb.subway.model.bean.WarningPageResponse;
-import com.dream.llb.subway.view.base.BaseActivity;
+import com.dream.llb.subway.view.base.base_activity.BaseActivity;
 import com.dream.llb.subway.view.base.BaseApplication;
 import com.dream.llb.subway.view.edit_post.EditPostActivity;
 import com.dream.llb.subway.view.login.LoginActivity;
@@ -54,7 +54,6 @@ public class PostDetailActivity extends BaseActivity implements PostDetailContra
     private EditText commentEdit;
     private EditCommentPageResponse editCommentPageResponse;//回复别人的评论时页面信息
     private CaptchaPopupWindow captchaPopupWindow;
-    private String subjectID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,13 +62,6 @@ public class PostDetailActivity extends BaseActivity implements PostDetailContra
         mContext = this;
         presenter = new PostDetailPresenter(this);
         url = getIntent().getStringExtra("url");
-        try{
-            String s = url.substring(url.indexOf("fid="));
-            subjectID = s.substring(4, s.indexOf("&"));
-            Log.i("llb", "s=" + s + " subjectID=" + subjectID);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
 //        PermissionUtils.requestPermission(this, PermissionUtils.CODE_READ_EXTERNAL_STORAGE, mPermissionGrant);
         initView();
     }
@@ -77,6 +69,7 @@ public class PostDetailActivity extends BaseActivity implements PostDetailContra
     private void initView() {
         initHeadView();
         headTitleTV.setText("地铁族");
+        headRightTV.setVisibility(View.GONE);
         headRightTV.setOnClickListener(this);
 //        postTV = (TextView) findViewById(R.id.post_content_tv);
         loginBtn = (Button) findViewById(R.id.login_btn);
@@ -96,14 +89,14 @@ public class PostDetailActivity extends BaseActivity implements PostDetailContra
         adapter.setOnItemClickListener(new PostCommentAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Log.i("llb", "onItemClick position=" + position);
-                Toast.makeText(mContext, "onItemClick position=" + position, Toast.LENGTH_SHORT).show();
+//                Log.i("llb", "onItemClick position=" + position);
+//                Toast.makeText(mContext, "onItemClick position=" + position, Toast.LENGTH_SHORT).show();
 //                captchaPopupWindow.showAtLocation(recyclerView, Gravity.CENTER, 0, 0);
             }
 
             @Override
             public void onItemLongClick(View view, int position) {
-                Log.i("llb", "onItemLongClick position=" + position);
+//                Log.i("llb", "onItemLongClick position=" + position);
             }
 
             @Override
@@ -125,7 +118,7 @@ public class PostDetailActivity extends BaseActivity implements PostDetailContra
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                Log.i("llb", "onScrollStateChanged newState=" + newState);
+//                Log.i("llb", "onScrollStateChanged newState=" + newState);
                 if (newState == RecyclerView.SCROLL_STATE_IDLE && !adapter.isLastPage) {//不是最后一页
                     RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
                     int lastVisiblePosition = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
@@ -160,7 +153,7 @@ public class PostDetailActivity extends BaseActivity implements PostDetailContra
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        Log.i("llb", "onNewIntent");
+//        Log.i("llb", "onNewIntent");
         url = getIntent().getStringExtra("url");
         presenter.refreshPage(url);
     }
@@ -168,7 +161,7 @@ public class PostDetailActivity extends BaseActivity implements PostDetailContra
     @Override
     public void setReplyPageData(EditCommentPageResponse response) {
         editCommentPageResponse = response;
-        Toast.makeText(mContext, "quoteText = " + response.quoteText, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(mContext, "quoteText = " + response.quoteText, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -183,7 +176,7 @@ public class PostDetailActivity extends BaseActivity implements PostDetailContra
 
     @Override
     public void onFinishLoadMore(PostDetailResponse response) {
-        Toast.makeText(this, "数据解析完了", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "数据解析完了", Toast.LENGTH_SHORT).show();
         adapter.setLoadingMore(false);
         //TODO
         if (response instanceof PostDetailResponse) {
@@ -194,20 +187,25 @@ public class PostDetailActivity extends BaseActivity implements PostDetailContra
 
     @Override
     public void onFinishRefresh(PostDetailResponse response) {
-        Toast.makeText(this, "数据解析完了", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "数据解析完了", Toast.LENGTH_SHORT).show();
         if (response instanceof PostDetailResponse) {
-            if (!TextUtils.isEmpty(response.pageWaring)) {
-                Toast.makeText(this, response.pageWaring, Toast.LENGTH_SHORT).show();
+            if (!TextUtils.isEmpty(response.pageWarning)) {
+                Toast.makeText(this, response.pageWarning, Toast.LENGTH_SHORT).show();
                 finish();
             } else {
                 postDetailResponse = response;
+                headRightTV.setVisibility(View.VISIBLE);
                 setHeaderView();
                 adapter.setData(response);
             }
 
         }
         if (BaseApplication.isLogin) {
-            editLayout.setVisibility(View.VISIBLE);
+            if(!TextUtils.isEmpty(response.replyCommentUrl)){
+                editLayout.setVisibility(View.VISIBLE);
+            }else{
+                editLayout.setVisibility(View.GONE);
+            }
             loginBtn.setVisibility(View.GONE);
         } else {
             editLayout.setVisibility(View.INVISIBLE);
@@ -302,10 +300,18 @@ public class PostDetailActivity extends BaseActivity implements PostDetailContra
                 break;
             case R.id.headRightTV:
                 //跳转去发表帖子入口
-                Intent intentTest = new Intent(mContext, EditPostActivity.class);
-                intentTest.putExtra("referer", url);
-                intentTest.putExtra("pageURL", SubwayURL.SUBWAY_EDIT_PAGE.replace("FID", subjectID));
-                startActivity(intentTest);
+                if(BaseApplication.isLogin){
+                    Intent intentTest = new Intent(mContext, EditPostActivity.class);
+                    intentTest.putExtra("referer", url);
+                    intentTest.putExtra("pageURL", SubwayURL.SUBWAY_EDIT_PAGE.replace("FID", postDetailResponse.subjectID));
+                    startActivity(intentTest);
+                }else {
+                    Intent intent1 = new Intent(mContext, LoginActivity.class);
+                    startActivity(intent1);
+                }
+                break;
+            case R.id.headLeftIcon:
+                finish();
                 break;
         }
     }
@@ -321,50 +327,5 @@ public class PostDetailActivity extends BaseActivity implements PostDetailContra
             }
         }
     }
-    //    private PermissionUtils.PermissionGrant mPermissionGrant = new PermissionUtils.PermissionGrant() {
-//        @Override
-//        public void onPermissionGranted(int requestCode) {
-//            initView();
-//            switch (requestCode) {
-//                case PermissionUtils.CODE_RECORD_AUDIO:
-//                    Toast.makeText(mContext, "Result Permission Grant CODE_RECORD_AUDIO", Toast.LENGTH_SHORT).show();
-//                    break;
-//                case PermissionUtils.CODE_GET_ACCOUNTS:
-//                    Toast.makeText(mContext, "Result Permission Grant CODE_GET_ACCOUNTS", Toast.LENGTH_SHORT).show();
-//                    break;
-//                case PermissionUtils.CODE_READ_PHONE_STATE:
-//                    Toast.makeText(mContext, "Result Permission Grant CODE_READ_PHONE_STATE", Toast.LENGTH_SHORT).show();
-//                    break;
-//                case PermissionUtils.CODE_CALL_PHONE:
-//                    Toast.makeText(mContext, "Result Permission Grant CODE_CALL_PHONE", Toast.LENGTH_SHORT).show();
-//                    break;
-//                case PermissionUtils.CODE_CAMERA:
-//                    Toast.makeText(mContext, "Result Permission Grant CODE_CAMERA", Toast.LENGTH_SHORT).show();
-//                    break;
-//                case PermissionUtils.CODE_ACCESS_FINE_LOCATION:
-//                    Toast.makeText(mContext, "Result Permission Grant CODE_ACCESS_FINE_LOCATION", Toast.LENGTH_SHORT).show();
-//                    break;
-//                case PermissionUtils.CODE_ACCESS_COARSE_LOCATION:
-//                    Toast.makeText(mContext, "Result Permission Grant CODE_ACCESS_COARSE_LOCATION", Toast.LENGTH_SHORT).show();
-//                    break;
-//                case PermissionUtils.CODE_READ_EXTERNAL_STORAGE:
-//                    Toast.makeText(mContext, "Result Permission Grant CODE_READ_EXTERNAL_STORAGE", Toast.LENGTH_SHORT).show();
-//                    break;
-//                case PermissionUtils.CODE_WRITE_EXTERNAL_STORAGE:
-//                    Toast.makeText(mContext, "Result Permission Grant CODE_WRITE_EXTERNAL_STORAGE", Toast.LENGTH_SHORT).show();
-//                    break;
-//                default:
-//                    break;
-//            }
-//        }
-//    };
 
-    /**
-     * Callback received when a permissions request has been completed.
-     */
-//    @Override
-//    public void onRequestPermissionsResult(final int requestCode, @NonNull String[] permissions,
-//                                           @NonNull int[] grantResults) {
-//        PermissionUtils.requestPermissionsResult(this, requestCode, permissions, grantResults, mPermissionGrant);
-//    }
 }

@@ -16,10 +16,14 @@ import com.dream.llb.subway.R;
 import com.dream.llb.subway.common.util.SharedPreferencesUtil;
 import com.dream.llb.subway.common.widget.CaptchaPopupWindow;
 import com.dream.llb.subway.model.api.SubwayURL;
+import com.dream.llb.subway.model.bean.BaseResponse;
 import com.dream.llb.subway.model.bean.EditPostPageResponse;
 import com.dream.llb.subway.model.bean.PostDetailResponse;
-import com.dream.llb.subway.view.base.BaseActivity;
+import com.dream.llb.subway.model.bean.WarningPageResponse;
+import com.dream.llb.subway.view.base.base_activity.BaseActivity;
 import com.dream.llb.subway.view.post_detail.PostDetailActivity;
+
+import net.nightwhistler.htmlspanner.TextUtil;
 
 public class EditPostActivity extends BaseActivity implements View.OnClickListener, EditPostContract.View, AdapterView.OnItemSelectedListener {
     private EditPostContract.Presenter presenter;
@@ -48,6 +52,7 @@ public class EditPostActivity extends BaseActivity implements View.OnClickListen
         headTitleTV.setText("发帖");
         headRightTV.setText("发送");
         headRightTV.setOnClickListener(this);
+        headLeftIcon.setOnClickListener(this);
         presenter = new EditPostPresenter(this);
         presenter.getPageData(pageURL, referer);
 //        middleLayout = (RelativeLayout) findViewById(R.id.middleLayout);
@@ -89,18 +94,27 @@ public class EditPostActivity extends BaseActivity implements View.OnClickListen
                             content, title, typeID, "");
                 }
                 break;
+            case R.id.headLeftIcon:
+                finish();
+                break;
             case R.id.popup_send_btn:
-                String subjectID = (String) SharedPreferencesUtil.get(this, SharedPreferencesUtil.currentSubjectID, "");
-                presenter.submitPostData(SubwayURL.SUBWAY_SUBMIT_POST.replace("FID", subjectID), referer, response,
-                        content, title, typeID, captchaPopupWindow.getCaptcha());
-                captchaPopupWindow.dismiss();
+                String captcha = captchaPopupWindow.getCaptcha();
+                if(!TextUtils.isEmpty(captcha)){
+                    String subjectID = (String) SharedPreferencesUtil.get(this, SharedPreferencesUtil.currentSubjectID, "");
+                    presenter.submitPostData(SubwayURL.SUBWAY_SUBMIT_POST.replace("FID", subjectID), referer, response,
+                            content, title, typeID, captcha);
+                    captchaPopupWindow.dismiss();
+                }else {
+                    Toast.makeText(this, "验证码不能为空", Toast.LENGTH_SHORT).show();
+                }
+
                 break;
         }
     }
 
     @Override
     public void setPageData(EditPostPageResponse response) {
-        Log.i("llb", response.toString());
+//        Log.i("llb", response.toString());
         this.response = response;
         arrayAdapter.addAll(response.subjectMap.keySet());
     }
@@ -110,22 +124,32 @@ public class EditPostActivity extends BaseActivity implements View.OnClickListen
         captchaPopupWindow = new CaptchaPopupWindow(this, this, LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT, false);
         captchaPopupWindow.showAtLocation(lineSpinner, Gravity.CENTER, 0, 0);
-        captchaPopupWindow.setCaptchaImage(response.captchaUrl);
+        captchaPopupWindow.setCaptchaImage(path);
     }
 
     @Override
-    public void onSubmitPostSuccess(PostDetailResponse response) {
-        Log.i("llb", response.toString());
-        Intent intent = new Intent(this, PostDetailActivity.class);
-        intent.putExtra("url", response.currentPageUrl);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-        finish();
+    public void onSubmitPostSuccess(BaseResponse response) {
+//        Log.i("llb", response.toString());
+        if(response instanceof WarningPageResponse){
+            WarningPageResponse res = (WarningPageResponse)response;
+            if (!TextUtils.isEmpty(res.warning)) {
+                Toast.makeText(this, res.warning, Toast.LENGTH_SHORT).show();
+            }
+        }else if(response instanceof PostDetailResponse){
+            PostDetailResponse res = (PostDetailResponse)response;
+            Intent intent = new Intent(this, PostDetailActivity.class);
+            intent.putExtra("url", res.currentPageUrl);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            finish();
+        }else {
+            // do nothing
+        }
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        Log.i("llb", arrayAdapter.getItem(position).toString());
+//        Log.i("llb", arrayAdapter.getItem(position).toString());
         this.typeID = response.subjectMap.get(arrayAdapter.getItem(position).toString());
     }
 

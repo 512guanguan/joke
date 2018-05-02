@@ -3,7 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="45dp"
     android:background="@color/colorPrimary">
-
+    <ImageView
+        android:id="@+id/headLeftIcon"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_centerVertical="true"
+        android:paddingLeft="10dp"
+        android:src="@drawable/to_left"/>
     <TextView
         android:id="@+id/headTitleTV"
         android:layout_width="wrap_content"

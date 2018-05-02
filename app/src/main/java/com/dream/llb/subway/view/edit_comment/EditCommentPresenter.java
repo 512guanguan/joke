@@ -25,12 +25,12 @@ public class EditCommentPresenter implements EditCommentContract.Presenter {
     public void getPageData(String url,String referer) {
         SubwayLoader.getInstance().getEditCommentPage(url,referer)
                 .subscribe((EditCommentPageResponse response) -> {
-            Log.i("llb", "response = " + response);
+//            Log.i("llb", "response = " + response);
                     editCommentView.setPageData(response);
         }, (Throwable e) -> {
-            Log.d("llb", "error " + e.getMessage());
+//            Log.d("llb", "error " + e.getMessage());
         }, () -> {
-            Log.d("llb", "completed");
+//            Log.d("llb", "completed");
         });
     }
 
@@ -39,12 +39,12 @@ public class EditCommentPresenter implements EditCommentContract.Presenter {
         //"http://www.ditiezu.com/forum.php?mod=viewthread&tid=546302&extra=&ordertype=1&threads=thread"
         SubwayLoader.getInstance().getCaptchaImage(url,referer)
                 .subscribe((response) -> {
-                    Log.i("llb", "存储路径path = " + response);
+//                    Log.i("llb", "存储路径path = " + response);
                     editCommentView.setCaptchaImage(response);
                 }, (Throwable e) -> {
-                    Log.d("llb", "error " + e.getMessage());
+//                    Log.d("llb", "error " + e.getMessage());
                 }, () -> {
-                    Log.d("llb", "completed");
+//                    Log.d("llb", "completed");
                 });
     }
 

@@ -3,11 +3,16 @@
     package="com.dream.llb.subway">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <!-- <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/> -->
-    <!-- <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/> -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!--<uses-permission android:name="android.permission.READ_PHONE_STATE" />-->
+
+    <!--<uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />-->
+    <!--<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />-->
+    <!--<uses-permission android:name="android.permission.WRITE_SETTINGS" />-->
+
 
     <!-- <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> -->
     <application
@@ -30,7 +35,7 @@
         <activity
             android:name="com.dream.llb.pixabay.view.PixabayMainActivity"
             android:label="@string/title_activity_pixabay_main" />
-        <activity android:name=".view.base.BaseActivity" />
+        <activity android:name=".view.base.base_activity.BaseActivity" />
         <activity android:name=".view.forum_home.ForumHomeActivity" />
         <activity android:name=".view.post_detail.PostDetailActivity" />
         <activity android:name=".view.login.LoginActivity" />
@@ -41,6 +46,23 @@
         <activity
             android:name=".view.edit_post.EditPostActivity"
             android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".view.notice_msg.NoticeMsgActivity" />
+        <activity android:name=".view.about.AboutActivity"></activity>
+
+        <!--baidu ad-->
+        <!--<receiver android:name="com.baidu.appx.app_download.CompleteReceiver">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.DOWNLOAD_COMPLETE" />-->
+                <!--<action android:name="android.intent.action.DOWNLOAD_NOTIFICATION_CLICKED" />-->
+            <!--</intent-filter>-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.PACKAGE_ADDED" />-->
+                <!--<data android:scheme="package" />-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
+        <!--<activity-->
+            <!--android:name="com.baidu.appx.uikit.BDActivity"-->
+            <!--android:configChanges="orientation|screenSize"></activity>-->
     </application>
 
 </manifest>

@@ -1,5 +1,6 @@
 package com.dream.llb.subway.view.edit_post;
 
+import com.dream.llb.subway.model.bean.BaseResponse;
 import com.dream.llb.subway.model.bean.EditPostPageResponse;
 import com.dream.llb.subway.model.bean.PostDetailResponse;
 
@@ -22,6 +23,6 @@ public interface EditPostContract {
 
         void setCaptchaImage(String path);
 
-        void onSubmitPostSuccess(PostDetailResponse response);
+        void onSubmitPostSuccess(BaseResponse response);
     }
 }

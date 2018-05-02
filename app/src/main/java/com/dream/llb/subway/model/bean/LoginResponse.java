@@ -59,6 +59,18 @@ public class LoginResponse {
                  </div>
              </div>
          </div></div>
+
+         <div class="ct">
+         <div class="pt bb">
+         <a href="forum.php?mobile=yes">首页</a> <em> &gt; </em> <a href="javascript:history.back();" onclick="javascript:history.back();" >返回</a>
+         </div>
+         <div class="showmg">
+         <div class="warning" id="messagetext">
+         <p class="mbn">抱歉，验证码填写错误</p>
+         <p><a href="http://www.ditiezu.com/forum.php?mod=forum&mobile=yes">点击此链接进行跳转</a></p>
+         </div>
+         </div>
+         </div></div>
          */
         public LoginResponse parsePage(String html){
             if(TextUtils.isEmpty(html))

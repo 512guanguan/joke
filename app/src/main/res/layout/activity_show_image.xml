@@ -14,17 +14,17 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/closeIV"
         android:layout_below="@+id/headLayout"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
+        android:layout_marginTop="2dp"
         android:scaleType="fitCenter" />
 
     <ImageView
         android:id="@+id/closeIV"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:padding="10dp"
-        android:src="@drawable/icon_close" />
+        android:padding="5dp"
+        android:src="@drawable/to_left_green" />
 </RelativeLayout>

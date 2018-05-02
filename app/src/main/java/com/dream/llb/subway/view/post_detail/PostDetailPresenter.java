@@ -10,6 +10,8 @@ import com.dream.llb.subway.model.bean.PostDetailResponse;
 
 import java.util.HashMap;
 
+import io.reactivex.Observable;
+
 /**
  * Created by llb on 2017-09-12.
  */
@@ -26,15 +28,15 @@ public class PostDetailPresenter implements PostDetailContract.Presenter {
         postDetailView.showProgressDialog();
         SubwayLoader.getInstance().getPostDetailData(url)
                 .subscribe((PostDetailResponse response) -> {
-                    Log.i("llb", "response = " + response);
+//                    Log.i("llb", "response = " + response);
                     postDetailView.hideProgressDialog();
                     postDetailView.onFinishRefresh(response);
                 }, (Throwable e) -> {
                     postDetailView.hideProgressDialog();
-                    Log.d("llb", "error " + e.getMessage());
+//                    Log.d("llb", "error " + e.getMessage());
                 }, () -> {
                     postDetailView.hideProgressDialog();
-                    Log.d("llb", "completed");
+//                    Log.d("llb", "completed");
                 });
     }
 
@@ -45,13 +47,13 @@ public class PostDetailPresenter implements PostDetailContract.Presenter {
         url += "&extra=&ordertype=1&threads=thread";
         SubwayLoader.getInstance().getMoreCommentData(url + "&page="+currentPage, url)
                 .subscribe((PostDetailResponse response) -> {
-                    Log.i("llb", "response = " + response);
+//                    Log.i("llb", "response = " + response);
                     postDetailView.onFinishLoadMore(response);
                 }, (Throwable e) -> {
                     postDetailView.onFinishLoadMore(null);
-                    Log.d("llb", "error " + e.getMessage());
+//                    Log.d("llb", "error " + e.getMessage());
                 }, () -> {
-                    Log.d("llb", "completed");
+//                    Log.d("llb", "completed");
                 });
     }
 
@@ -73,12 +75,12 @@ public class PostDetailPresenter implements PostDetailContract.Presenter {
         }
         AccountLoader.getInstance().postComment(postDetailResponse.replyCommentUrl,data,postDetailResponse.currentPageUrl)
                 .subscribe((response) -> {
-                    Log.i("llb", "评论完了？？");
+//                    Log.i("llb", "评论完了？？");
                     postDetailView.onPostCommentFinished(response);
                 }, (Throwable e) -> {
-                    Log.d("llb", "error " + e.getMessage());
+//                    Log.d("llb", "error " + e.getMessage());
                 }, () -> {
-                    Log.d("llb", "completed");
+//                    Log.d("llb", "completed");
                 });
     }
 
@@ -137,12 +139,12 @@ public class PostDetailPresenter implements PostDetailContract.Presenter {
         }
         AccountLoader.getInstance().postComment(editCommentPageResponse.replyUrl,data,referer)
                 .subscribe((response) -> {
-                    Log.i("llb", "评论完了？？");
+//                    Log.i("llb", "评论完了？？");
                     postDetailView.onPostCommentFinished(response);
                 }, (Throwable e) -> {
-                    Log.d("llb", "error " + e.getMessage());
+//                    Log.d("llb", "error " + e.getMessage());
                 }, () -> {
-                    Log.d("llb", "completed");
+//                    Log.d("llb", "completed");
                 });
     }
 
@@ -150,12 +152,12 @@ public class PostDetailPresenter implements PostDetailContract.Presenter {
     public void getCaptchaImage(String url,String referer) {
         SubwayLoader.getInstance().getCaptchaImage(url,referer)
                 .subscribe((response) -> {
-                    Log.i("llb", "存储路径path = " + response);
+//                    Log.i("llb", "存储路径path = " + response);
                     postDetailView.setCaptchaImage(response);
                 }, (Throwable e) -> {
-                    Log.d("llb", "error " + e.getMessage());
+//                    Log.d("llb", "error " + e.getMessage());
                 }, () -> {
-                    Log.d("llb", "completed");
+//                    Log.d("llb", "completed");
                 });
     }
 
@@ -163,12 +165,12 @@ public class PostDetailPresenter implements PostDetailContract.Presenter {
     public void getReplyPageData(String url,String referer) {
         SubwayLoader.getInstance().getEditCommentPage(url,referer)
                 .subscribe((EditCommentPageResponse response) -> {
-                    Log.i("llb", "response = " + response);
+//                    Log.i("llb", "response = " + response);
                     postDetailView.setReplyPageData(response);
                 }, (Throwable e) -> {
-                    Log.d("llb", "error " + e.getMessage());
+//                    Log.d("llb", "error " + e.getMessage());
                 }, () -> {
-                    Log.d("llb", "completed");
+//                    Log.d("llb", "completed");
                 });
     }
 }

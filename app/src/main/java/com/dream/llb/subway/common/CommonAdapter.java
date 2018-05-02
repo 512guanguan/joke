@@ -40,7 +40,7 @@ public class CommonAdapter<T> extends RecyclerView.Adapter<BaseViewHolder> {
 
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Log.i("llb", "onCreateViewHolder viewType=" + viewType);
+//        Log.i("llb", "onCreateViewHolder viewType=" + viewType);
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         if (viewType == TYPE_ITEM) {
             View itemView = inflater.inflate(layoutId, parent, false);
@@ -49,7 +49,7 @@ public class CommonAdapter<T> extends RecyclerView.Adapter<BaseViewHolder> {
         } else if (viewType == TYPE_FOOTER) {
             View itemView = inflater.inflate(R.layout.item_recyclerview_footer, parent, false);
             return new BaseViewHolder(mContext, itemView);
-//            return null;
+//            to_left null;
         } else {
             return null;
         }

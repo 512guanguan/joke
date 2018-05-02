@@ -23,31 +23,31 @@ public class LoginPresenter implements LoginContract.Presenter {
     public void getLoginPageData(String url) {
         SubwayLoader.getInstance().getLoginPage(url)
                 .subscribe((LoginPageResponse response) -> {
-            Log.i("llb", "response = " + response);
+//                    Log.i("llb", "response = " + response);
                     loginView.setLoginPageData(response);
-        }, (Throwable e) -> {
-            Log.d("llb", "error " + e.getMessage());
-        }, () -> {
-            Log.d("llb", "completed");
-        });
-    }
-
-    @Override
-    public void getCaptchaImage(String url) {
-        SubwayLoader.getInstance().getCaptchaImage(url,"http://www.ditiezu.com/member.php?mod=logging&action=login&mobile=yes")
-                .subscribe((response) -> {
-                    Log.i("llb", "存储路径path = " + response);
-                    loginView.setCaptchaImage(response);
                 }, (Throwable e) -> {
-                    Log.d("llb", "error " + e.getMessage());
+//                    Log.d("llb", "error " + e.getMessage());
                 }, () -> {
-                    Log.d("llb", "completed");
+//                    Log.d("llb", "completed");
                 });
     }
 
     @Override
-    public void login(String url, String name, String password, String captcha,LoginPageResponse loginPageResponse) {
-        HashMap<String,String> data = new HashMap<>();
+    public void getCaptchaImage(String url) {
+        SubwayLoader.getInstance().getCaptchaImage(url, "http://www.ditiezu.com/member.php?mod=logging&action=login&mobile=yes")
+                .subscribe((response) -> {
+//                    Log.i("llb", "存储路径path = " + response);
+                    loginView.setCaptchaImage(response);
+                }, (Throwable e) -> {
+//                    Log.d("llb", "error " + e.getMessage());
+                }, () -> {
+//                    Log.d("llb", "completed");
+                });
+    }
+
+    @Override
+    public void login(String url, String name, String password, String captcha, LoginPageResponse loginPageResponse) {
+        HashMap<String, String> data = new HashMap<>();
         /**
          * formhash:673e7f41
          referer:http://www.ditiezu.com/forum.php?mod=forum
@@ -60,24 +60,28 @@ public class LoginPresenter implements LoginContract.Presenter {
          cookietime:2592000
          submit:登录
          */
-        data.put("formhash",loginPageResponse.formHash);
-        data.put("username",name);
-        data.put("password",password);
-        data.put("sechash",loginPageResponse.secHash);
-        data.put("seccodeverify",captcha);
-        data.put("questionid","0");
-        data.put("answer","");
-        data.put("cookietime",loginPageResponse.cookieTime);
-        data.put("submit",loginPageResponse.submit);
-        data.put("referer",loginPageResponse.referer);
-        AccountLoader.getInstance().login(url,data,loginPageResponse.referer)
+        data.put("formhash", loginPageResponse.formHash);
+        data.put("username", name);
+        data.put("password", password);
+        data.put("sechash", loginPageResponse.secHash);
+        data.put("seccodeverify", captcha);
+        data.put("questionid", "0");
+        data.put("answer", "");
+        data.put("cookietime", loginPageResponse.cookieTime);
+        data.put("submit", loginPageResponse.submit);
+        data.put("referer", loginPageResponse.referer);
+        AccountLoader.getInstance().login(url, data, loginPageResponse.referer)
                 .subscribe((response) -> {
-                    Log.i("llb", "存储路径path = " + response);
-                    loginView.onLoginSuccess();
+//                    Log.i("llb", "存储路径path = " + response);
+                    if (response.warning.indexOf("欢迎") != -1) {
+                        loginView.onLoginSuccess();
+                    } else {
+                        loginView.onLoginFailed(response);
+                    }
                 }, (Throwable e) -> {
-                    Log.d("llb", "error " + e.getMessage());
+//                    Log.d("llb", "error " + e.getMessage());
                 }, () -> {
-                    Log.d("llb", "completed");
+//                    Log.d("llb", "completed");
                 });
     }
 }

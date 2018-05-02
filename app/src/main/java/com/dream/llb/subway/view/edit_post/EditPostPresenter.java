@@ -25,12 +25,12 @@ public class EditPostPresenter implements EditPostContract.Presenter {
     public void getPageData(String url, String referer) {
         SubwayLoader.getInstance().getEditPostPage(url, referer)
                 .subscribe((EditPostPageResponse response) -> {
-                    Log.i("llb", "response = " + response);
+//                    Log.i("llb", "response = " + response);
                     editPostView.setPageData(response);
                 }, (Throwable e) -> {
-                    Log.d("llb", "error " + e.getMessage());
+//                    Log.d("llb", "error " + e.getMessage());
                 }, () -> {
-                    Log.d("llb", "completed");
+//                    Log.d("llb", "completed");
                 });
     }
 
@@ -39,12 +39,12 @@ public class EditPostPresenter implements EditPostContract.Presenter {
         //"http://www.ditiezu.com/forum.php?mod=viewthread&tid=546302&extra=&ordertype=1&threads=thread"
         SubwayLoader.getInstance().getCaptchaImage(url, referer)
                 .subscribe((response) -> {
-                    Log.i("llb", "存储路径path = " + response);
+//                    Log.i("llb", "存储路径path = " + response);
                     editPostView.setCaptchaImage(response);
                 }, (Throwable e) -> {
-                    Log.d("llb", "error " + e.getMessage());
+//                    Log.d("llb", "error " + e.getMessage());
                 }, () -> {
-                    Log.d("llb", "completed");
+//                    Log.d("llb", "completed");
                 });
     }
 
@@ -78,12 +78,12 @@ public class EditPostPresenter implements EditPostContract.Presenter {
         }
         AccountLoader.getInstance().submitPost(url, data, referer)
                 .subscribe((res) -> {
-                    Log.i("llb", "发帖成功了！！");
-                    editPostView.onSubmitPostSuccess((PostDetailResponse) res);
+//                    Log.i("llb", "发帖成功了！！");
+                    editPostView.onSubmitPostSuccess(res);
                 }, (Throwable e) -> {
-                    Log.d("llb", "error " + e.getMessage());
+//                    Log.d("llb", "error " + e.getMessage());
                 }, () -> {
-                    Log.d("llb", "completed");
+//                    Log.d("llb", "completed");
                 });
     }
 

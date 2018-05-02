@@ -16,7 +16,7 @@ import com.dream.llb.subway.R;
 import com.dream.llb.subway.common.BaseViewHolder;
 import com.dream.llb.subway.common.OnItemClickListener;
 import com.dream.llb.subway.model.api.SubwayURL;
-import com.dream.llb.subway.model.bean.ForumListItem;
+import com.dream.llb.subway.model.bean.HomePageResponse;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ public class HomeAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     protected Context mContext;
     protected static final int TYPE_ITEM = 0;
     protected static final int TYPE_FOOTER = 1;
-    protected List<ForumListItem.ForumInformation> mDatas;
+    protected List<HomePageResponse.ForumInformation> mDatas;
     protected OnItemClickListener onItemClickListener;
     protected int layoutId;
     protected boolean isLoadingMore = false;
@@ -43,7 +43,7 @@ public class HomeAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Log.i("llb", "onCreateViewHolder viewType=" + viewType);
+//        Log.i("llb", "onCreateViewHolder viewType=" + viewType);
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         if (viewType == TYPE_ITEM) {
             View itemView = inflater.inflate(layoutId, parent, false);
@@ -52,7 +52,7 @@ public class HomeAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         } else if (viewType == TYPE_FOOTER) {
             View itemView = inflater.inflate(R.layout.item_recyclerview_footer, parent, false);
             return new BaseViewHolder(mContext, itemView);
-//            return null;
+//            to_left null;
         } else {
             return null;
         }
@@ -130,9 +130,9 @@ public class HomeAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 //        //RecyclerView的滑动状态
 //        int state = recyclerView.getScrollState();
 //        if(visibleItemCount > 0 && lastVisibleItemPosition == totalItemCount - 1 && state == recyclerView.SCROLL_STATE_IDLE){
-//            return true;
+//            to_left true;
 //        }else {
-//            return false;
+//            to_left false;
 //        }
 //    }
 

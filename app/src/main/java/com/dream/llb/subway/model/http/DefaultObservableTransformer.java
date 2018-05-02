@@ -23,7 +23,8 @@ public class DefaultObservableTransformer {
                 .observeOn(AndroidSchedulers.mainThread())
                 // 统一判断错误码
                 .doOnError((error) -> { // 网络出错时
-                    Log.i("llb", "doOnError!!");
+//                    Log.i("llb", "doOnError!!");
+                    error.printStackTrace();
                     Toast.makeText(BaseApplication.mContext,"心碎了，网络失败了！",Toast.LENGTH_SHORT).show();;
 //                    ErrorHandler.handlerNetworkError(error); TODO
                 });

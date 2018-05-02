@@ -3,6 +3,7 @@ package com.dream.llb.subway.common.helper;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -23,6 +24,7 @@ public class ImageHelper {
      */
     public static Bitmap getBitmap(Context mContext, String filePath){
         try {
+//            Log.i("llb","filePath = "+ filePath);
             FileInputStream fin = new FileInputStream(filePath);
             return BitmapFactory.decodeStream(fin);
         } catch (IOException e) {

@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.dream.llb.subway.model.SubwayLoader;
 import com.dream.llb.subway.model.bean.PostListItem;
-import com.dream.llb.subway.view.base.BaseActivity;
+import com.dream.llb.subway.view.base.base_activity.BaseActivity;
 
 
 /**
@@ -23,7 +23,7 @@ public class ForumHomePresenter implements ForumHomeContract.Presenter {
         forumHomeView.showProgressDialog();
         SubwayLoader.getInstance().getPostListData(forumHomeView.getUrl())
                 .subscribe((PostListItem response) -> {
-                    Log.i("llb", "response = " + response);
+//                    Log.i("llb", "response = " + response);
                     forumHomeView.hideProgressDialog();
                     if (response instanceof PostListItem) {
                         BaseActivity.postListItems = response;
@@ -31,10 +31,10 @@ public class ForumHomePresenter implements ForumHomeContract.Presenter {
                     }
                 }, (Throwable e) -> {
                     forumHomeView.hideProgressDialog();
-                    Log.d("llb", "error " + e.getMessage());
+//                    Log.d("llb", "error " + e.getMessage());
                 }, () -> {
                     forumHomeView.hideProgressDialog();
-                    Log.d("llb", "completed");
+//                    Log.d("llb", "completed");
                 });
     }
 
@@ -43,16 +43,16 @@ public class ForumHomePresenter implements ForumHomeContract.Presenter {
         currentPage++;
         SubwayLoader.getInstance().getPostListData(forumHomeView.getUrl()+"&page="+currentPage)
                 .subscribe((PostListItem response) -> {
-                    Log.i("llb", "response = " + response);
+//                    Log.i("llb", "response = " + response);
                     if (response instanceof PostListItem) {
                         BaseActivity.postListItems.postList.addAll(response.postList);
                     }
                     forumHomeView.onFinishLoadMore(response);
                 }, (Throwable e) -> {
                     forumHomeView.onFinishLoadMore(null);
-                    Log.d("llb", "error " + e.getMessage());
+//                    Log.d("llb", "error " + e.getMessage());
                 }, () -> {
-                    Log.d("llb", "completed");
+//                    Log.d("llb", "completed");
                 });
     }
 }

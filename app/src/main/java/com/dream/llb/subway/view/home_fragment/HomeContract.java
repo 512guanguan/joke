@@ -1,6 +1,6 @@
 package com.dream.llb.subway.view.home_fragment;
 
-import com.dream.llb.subway.model.bean.ForumListItem;
+import com.dream.llb.subway.model.bean.HomePageResponse;
 
 /**
  * Created by llb on 2017-09-12.
@@ -19,6 +19,6 @@ public interface HomeContract {
         /**
          * 下拉刷新结束
          */
-        void onFinishRefresh(ForumListItem response);
+        void onFinishRefresh(HomePageResponse response);
     }
 }

@@ -7,19 +7,22 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.dream.llb.common.Constants;
 import com.dream.llb.joke.view.OnFragmentInteractionListener;
 import com.dream.llb.subway.R;
 import com.dream.llb.subway.common.OnItemClickListener;
 import com.dream.llb.subway.common.widget.SimpleDividerItemDecoration;
 import com.dream.llb.subway.model.api.SubwayURL;
-import com.dream.llb.subway.model.bean.ForumListItem;
-import com.dream.llb.subway.view.base.BaseActivity;
+import com.dream.llb.subway.model.bean.HomePageResponse;
+import com.dream.llb.subway.view.base.base_activity.BaseActivity;
+import com.dream.llb.subway.view.base.BaseApplication;
 import com.dream.llb.subway.view.forum_home.ForumHomeActivity;
 
 import java.util.ArrayList;
@@ -38,7 +41,7 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     private OnFragmentInteractionListener mListener;
     private View view;
     private RecyclerView recyclerView = null;
-    private List<ForumListItem> postListData = null;
+    private List<HomePageResponse> postListData = null;
     private HomeAdapter adapter = null;
     private SwipeRefreshLayout swipeRefreshLayout;
     private int currentPage = 0;
@@ -68,7 +71,7 @@ public class HomeFragment extends Fragment implements HomeContract.View {
 
     private void initView() {
         presenter = new HomePresenter(this);
-        Log.i("llb", "onCreateView");
+//        Log.i("llb", "onCreateView");
         recyclerView = (RecyclerView) view.findViewById(R.id.show_list);
         postListData = new ArrayList<>();
         adapter = new HomeAdapter(this.getActivity(), R.layout.item_subway_home_list);
@@ -80,33 +83,33 @@ public class HomeFragment extends Fragment implements HomeContract.View {
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Log.i("llb", "onItemClick adapter.getItemId(position)=" + adapter.getItemId(position));
-                Toast.makeText(mContext, "onItemClick position=" + position, Toast.LENGTH_SHORT).show();
+//                Log.i("llb", "onItemClick adapter.getItemId(position)=" + adapter.getItemId(position));
+//                Toast.makeText(mContext, "onItemClick position=" + position, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(mContext, ForumHomeActivity.class);
-                intent.putExtra("subjectID",BaseActivity.forumListItems.forumInformations.get(position).subjectID);
-                intent.putExtra("subjectName",BaseActivity.forumListItems.forumInformations.get(position).subjectName);
-                intent.putExtra("url", SubwayURL.SUBWAY_BASE + BaseActivity.forumListItems.forumInformations.get(position).subjectUrl);
+                intent.putExtra("subjectID", BaseActivity.homePageResponse.forumInformations.get(position).subjectID);
+                intent.putExtra("subjectName", BaseActivity.homePageResponse.forumInformations.get(position).subjectName);
+                intent.putExtra("url", SubwayURL.SUBWAY_BASE + BaseActivity.homePageResponse.forumInformations.get(position).subjectUrl);
                 mContext.startActivity(intent);
             }
 
             @Override
             public void onItemLongClick(View view, int position) {
-                Log.i("llb", "onItemLongClick position=" + position);
+//                Log.i("llb", "onItemLongClick position=" + position);
             }
         });
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                Log.i("llb", "onScrollStateChanged newState=" + newState);
+//                Log.i("llb", "onScrollStateChanged newState=" + newState);
             }
 
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                Log.i("llb", "onScrolled dx=" + dx + "  dy = " + dy);
+//                Log.i("llb", "onScrolled dx=" + dx + "  dy = " + dy);
 //                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
                 if (recyclerView.computeVerticalScrollOffset() + recyclerView.computeHorizontalScrollExtent() >= recyclerView.computeVerticalScrollRange()) {
-                    Log.i("llb", "onScrolled 底部啦");
+//                    Log.i("llb", "onScrolled 底部啦");
                     // 是否正在下拉刷新
                     if (swipeRefreshLayout.isRefreshing()) {
                         adapter.notifyItemRemoved(adapter.getItemCount());
@@ -125,14 +128,14 @@ public class HomeFragment extends Fragment implements HomeContract.View {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                Log.i("llb", "setOnRefreshListener()");
+//                Log.i("llb", "setOnRefreshListener()");
                 presenter.refreshPage();
             }
         });
-        if(BaseActivity.forumListItems !=null && BaseActivity.forumListItems.forumInformations.size()>0){
-            adapter.setData(BaseActivity.forumListItems.forumInformations);//使用内存缓存即可
-        }else {
-        presenter.refreshPage();
+        if (BaseActivity.homePageResponse != null && BaseActivity.homePageResponse.forumInformations.size() > 0) {
+            adapter.setData(BaseActivity.homePageResponse.forumInformations);//使用内存缓存即可
+        } else {
+            presenter.refreshPage();
         }
     }
 
@@ -164,8 +167,15 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     }
 
     @Override
-    public void onFinishRefresh(ForumListItem response) {
-        Toast.makeText(this.getActivity(), "数据解析完了", Toast.LENGTH_SHORT).show();
+    public void onFinishRefresh(HomePageResponse response) {
+//        Toast.makeText(this.getActivity(), "数据解析完了", Toast.LENGTH_SHORT).show();
         adapter.setData(response.forumInformations);
+        if (!TextUtils.isEmpty(response.accountInfoUrls.logOutUrl)) {
+            BaseApplication.isLogin = true;
+            Intent intent = new Intent();
+            intent.setAction(Constants.BROADCAST_LOGIN_ACTION);
+            intent.putExtra("status", "login");
+            mContext.sendBroadcast(intent);
+        }
     }
 }

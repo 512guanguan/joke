@@ -3,26 +3,26 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_my_post"
+            android:id="@+id/nav_my_notice"
             android:icon="@drawable/ic_menu_camera"
-            android:title="我的帖子"/>
+            android:title="消息提醒"/>
         <item
-            android:id="@+id/nav_my_collection"
+            android:id="@+id/nav_about"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="我的收藏"/>
+            android:title="关于地铁族"/>
     </group>
 
-    <item android:title="Communicate">
-        <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share"/>
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send"/>
-        </menu>
-    </item>
+    <!--<item android:title="Communicate">-->
+        <!--<menu>-->
+            <!--<item-->
+                <!--android:id="@+id/nav_share"-->
+                <!--android:icon="@drawable/ic_menu_share"-->
+                <!--android:title="Share"/>-->
+            <!--<item-->
+                <!--android:id="@+id/nav_send"-->
+                <!--android:icon="@drawable/ic_menu_send"-->
+                <!--android:title="Send"/>-->
+        <!--</menu>-->
+    <!--</item>-->
 
 </menu>

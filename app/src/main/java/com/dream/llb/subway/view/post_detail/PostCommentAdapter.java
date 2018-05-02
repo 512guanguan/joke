@@ -1,7 +1,6 @@
 package com.dream.llb.subway.view.post_detail;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.LayoutRes;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,7 +21,10 @@ import com.dream.llb.subway.common.htmlspanner.handlers.MyLinkHandler;
 import com.dream.llb.subway.model.bean.PostDetailResponse;
 import com.dream.llb.subway.model.bean.PostDetailResponse.CommentInformation;
 import com.dream.llb.subway.view.base.BaseApplication;
-import com.dream.llb.subway.view.edit_comment.EditCommentActivity;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 import com.squareup.picasso.Picasso;
 
 import net.nightwhistler.htmlspanner.HtmlSpanner;
@@ -44,7 +46,10 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     protected static final int TYPE_ITEM = 1;
     protected static final int TYPE_FOOTER = 2;
     protected static final int TYPE_FOOTER_NO_MORE_DATA = 3;
-    protected List<CommentInformation> commentData;
+    protected static final int BANNER_AD_VIEW_TYPE = 4;
+    protected boolean hasAd = false;
+    protected int adIndex = 15;
+    protected List<Object> commentData;
     protected PostDetailResponse response;
     protected View headerView, footerView, noMoreDataView;
     protected OnItemClickListener onItemClickListener;
@@ -52,6 +57,8 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     protected boolean isLoadingMore = false;
     protected HtmlSpanner htmlSpanner;
     public boolean isLastPage = true;//标记最后一页
+    protected static final int ITEMS_PER_AD = 25;
+    protected String adUnitId = "ca-app-pub-1863836438957183/6535261332";// "ca-app-pub-3940256099942544/6300978111";//TODO　test
 
     public PostCommentAdapter(Context mContext, @LayoutRes int layoutId) {
         this.mContext = mContext;
@@ -64,7 +71,7 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Log.i("llb", "onCreateViewHolder viewType=" + viewType);
+//        Log.i("llb", "onCreateViewHolder viewType=" + viewType);
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View itemView;
         BaseViewHolder holder = null;
@@ -86,10 +93,15 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                 holder = new BaseViewHolder(mContext, footerView);
                 break;
             case TYPE_FOOTER_NO_MORE_DATA:
-                if(noMoreDataView == null){
+                if (noMoreDataView == null) {
                     noMoreDataView = inflater.inflate(R.layout.item_recyclerview_footer_no_more_data, parent, false);
                 }
                 holder = new BaseViewHolder(mContext, noMoreDataView);
+                break;
+            case BANNER_AD_VIEW_TYPE:
+                // fall through
+                View bannerLayoutView = LayoutInflater.from(mContext).inflate(R.layout.banner_ad_container, parent, false);
+                holder = new BaseViewHolder(mContext, bannerLayoutView);
                 break;
             default:
                 break;
@@ -106,10 +118,11 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         this.commentData.clear();
         this.commentData.addAll(response.commentList);
 //        response.commentList.clear();
+        // TODO admod
         this.response = response;
-        if(this.commentData.size() == Integer.valueOf(response.commentNum)){
+        if (this.commentData.size() == Integer.valueOf(this.response.commentNum)) {
             isLastPage = true;
-        }else {
+        } else {
             isLastPage = false;
         }
         notifyDataSetChanged();
@@ -122,9 +135,12 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
      */
     public void setMoreData(PostDetailResponse response) {
         this.commentData.addAll(response.commentList);
-        if(this.commentData.size() == Integer.valueOf(response.commentNum)){
+        if(!hasAd){
+            addBannerAds();
+        }
+        if (this.commentData.size() == Integer.valueOf(this.response.commentNum)) {
             isLastPage = true;
-        }else {
+        } else {
             isLastPage = false;
         }
         notifyDataSetChanged();
@@ -145,7 +161,7 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
             return;
         }
         int realPosition = getRealPosition(holder);
-        Log.i("llb", "realPostion="+realPosition+"===postion="+position+"===totalCount="+getItemCount()+"====Commentsize="+commentData.size());
+//        Log.i("llb", "realPostion="+realPosition+"===postion="+position+"===totalCount="+getItemCount()+"====Commentsize="+commentData.size());
         //TODO 初始化化页面
         if (this.onItemClickListener != null) {
             holder.itemView.setOnClickListener(new OnClickListener() {
@@ -186,55 +202,97 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
                 break;
             case TYPE_ITEM:
-                //用with()方法初始化，,//用过Picasso框架对图片处理并显示到iv上
-                Picasso.with(mContext)
+                if (commentData.get(realPosition) instanceof CommentInformation) {
+                    CommentInformation information = (CommentInformation) commentData.get(realPosition);
+                    //用with()方法初始化，,//用过Picasso框架对图片处理并显示到iv上
+                    Picasso.with(mContext)
 //                        .load("http://g.hiphotos.baidu.com/image/pic/item/c9fcc3cec3fdfc03e426845ed03f8794a5c226fd.jpg")//下载图片
-                        .load(commentData.get(realPosition).headShotUrl)
-                        //                .resize(60,120)
-                        //下载中显示的图片
-                        .placeholder(R.drawable.default_head_icon)
-                        //下载失败显示的图片
-                        .error(R.drawable.default_head_icon)
-                        //init()显示到指定控件
-                        .into((ImageView) holder.getView(R.id.head_shortcut_iv));
+                            .load(information.headShotUrl)
+                            //                .resize(60,120)
+                            //下载中显示的图片
+                            .placeholder(R.drawable.default_head_icon)
+                            //下载失败显示的图片
+                            .error(R.drawable.default_head_icon)
+                            //init()显示到指定控件
+                            .into((ImageView) holder.getView(R.id.head_shortcut_iv));
 //                }
 //
-                ((TextView) holder.getView(R.id.comment_author_tv)).setText(commentData.get(realPosition).author);
-                ((TextView) holder.getView(R.id.comment_time_tv)).setText(commentData.get(realPosition).commentTime);
-                ((TextView) holder.getView(R.id.floor_title_tv)).setText(commentData.get(realPosition).floor.replace("#","楼"));
-                //下面这句话可能在主线程loadimage，闪退
+                    ((TextView) holder.getView(R.id.comment_author_tv)).setText(information.author);
+                    ((TextView) holder.getView(R.id.comment_time_tv)).setText(information.commentTime);
+                    ((TextView) holder.getView(R.id.floor_title_tv)).setText(information.floor.replace("#", "楼"));
+                    //下面这句话可能在主线程loadimage，闪退
 //                ((TextView) holder.getView(R.id.comment_content_tv)).setText(new HtmlSpanner().fromHtml(commentData.get(realPosition).commentContent));
-                if(BaseApplication.isLogin){
-                    holder.getView(R.id.reply_tv).setOnClickListener(new OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            //TODO 只有登陆态才能跳转哟，登录态的判定待完善
-                            onItemClickListener.onReplyButtonClick(commentData.get(realPosition).replyUrl,commentData.get(realPosition).author);
-                        }
-                    });
-                }else {
-                    holder.getView(R.id.reply_tv).setVisibility(View.GONE);
+                    if (BaseApplication.isLogin) {
+                        holder.getView(R.id.reply_tv).setOnClickListener(new OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                //TODO 只有登陆态才能跳转哟，登录态的判定待完善
+                                onItemClickListener.onReplyButtonClick(information.replyUrl, information.author);
+                            }
+                        });
+                    } else {
+                        holder.getView(R.id.reply_tv).setVisibility(View.GONE);
+                    }
+
+                    Observable.just(information.commentContent)
+                            .subscribeOn(Schedulers.io())
+                            .flatMap((String content) -> {
+                                Spannable spannable = htmlSpanner.fromHtml(content);
+                                return Observable.just(spannable);
+                            })
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe((Spannable content) -> {
+                                ((TextView) holder.getView(R.id.comment_content_tv)).setText(content);
+                                ((TextView) holder.getView(R.id.comment_content_tv)).setMovementMethod(LinkMovementMethod.getInstance());
+                            }, (error) -> {
+                            }, () -> {
+                            });
+                } else if (commentData.get(realPosition) instanceof AdView) { // TODO　AdView item
+                    BaseViewHolder bannerHolder = (BaseViewHolder) holder;
+                    AdView adView = (AdView) commentData.get(realPosition);
+                    ViewGroup adCardView = (ViewGroup) bannerHolder.itemView;
+                    // The AdViewHolder recycled by the RecyclerView may be a different
+                    // instance than the one used previously for this position. Clear the
+                    // AdViewHolder of any subviews in case it has a different
+                    // AdView associated with it, and make sure the AdView for this position doesn't
+                    // already have a parent of a different recycled AdViewHolder.
+                    if (adCardView.getChildCount() > 0) {
+                        adCardView.removeAllViews();
+                    }
+                    if (adView.getParent() != null) {
+                        ((ViewGroup) adView.getParent()).removeView(adView);
+                    }
+                    // Add the banner ad to the ad view.
+                    adCardView.addView(adView);
                 }
 
-                Observable.just(commentData.get(realPosition).commentContent)
-                        .subscribeOn(Schedulers.io())
-                        .flatMap((String content) -> {
-                            Spannable spannable = htmlSpanner.fromHtml(content);
-                            return Observable.just(spannable);
-                        })
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe((Spannable content) -> {
-                            ((TextView) holder.getView(R.id.comment_content_tv)).setText(content);
-                            ((TextView) holder.getView(R.id.comment_content_tv)).setMovementMethod(LinkMovementMethod.getInstance());
-                        }, (error) -> {
-                        }, () -> {
-                        });
                 break;
             case TYPE_FOOTER:
-                Log.i("llb","getViewHolder TYPE_FOOTER");
+                Log.i("llb", "getViewHolder TYPE_FOOTER");
                 break;
             case TYPE_FOOTER_NO_MORE_DATA:
-                Log.i("llb","getViewHolder TYPE_FOOTER_NO_MORE_DATA");
+                Log.i("llb", "getViewHolder TYPE_FOOTER_NO_MORE_DATA");
+                break;
+            case BANNER_AD_VIEW_TYPE:
+                // fall through
+                BaseViewHolder bannerHolder = (BaseViewHolder) holder;
+                AdView adView = (AdView) commentData.get(realPosition);
+                ViewGroup adCardView = (ViewGroup) bannerHolder.itemView;
+                // The AdViewHolder recycled by the RecyclerView may be a different
+                // instance than the one used previously for this position. Clear the
+                // AdViewHolder of any subviews in case it has a different
+                // AdView associated with it, and make sure the AdView for this position doesn't
+                // already have a parent of a different recycled AdViewHolder.
+                if (adCardView.getChildCount() > 0) {
+                    adCardView.removeAllViews();
+                }
+                if (adView.getParent() != null) {
+                    ((ViewGroup) adView.getParent()).removeView(adView);
+                }
+                // Add the banner ad to the ad view.
+                adCardView.addView(adView);
+                break;
+            default:
                 break;
         }
     }
@@ -244,10 +302,12 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         //TODO 有问题
         if (headerView != null && position == 0) {
             return TYPE_HEADER;
+        } else if (hasAd && position == adIndex + 1) {
+            return BANNER_AD_VIEW_TYPE;
         } else if (position > 0 && position <= commentData.size()) {
             return TYPE_ITEM;
-        } else if(position == commentData.size()+1 && isLastPage){
-            Log.i("llb","最后一页");
+        } else if (position == commentData.size() + 1 && isLastPage) {
+            Log.i("llb", "最后一页");
             return TYPE_FOOTER_NO_MORE_DATA;
         } else {//if(position == commentData.size()+getHeadersCount()){
             return TYPE_FOOTER;
@@ -256,9 +316,9 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     @Override
     public int getItemCount() {
-        if(headerView== null){
+        if (headerView == null) {
             return 0;
-        }else {
+        } else {
             return commentData.size() + getHeadersCount() + getFootersCount();
         }
     }
@@ -296,9 +356,9 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     public int getFootersCount() {
 //        if (footerView == null && noMoreDataView == null) {
-//            return 0;
+//            to_left 0;
 //        } else {
-            return 1;
+        return 1;
 //        }
     }
 
@@ -330,9 +390,86 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
         /**
          * 点击某一层的回复按钮
+         *
          * @param replyPageUrl 请求回复页面的链接
-         * @param authorName 层主的昵称，用来@用
+         * @param authorName   层主的昵称，用来@用
          */
         void onReplyButtonClick(String replyPageUrl, String authorName);
     }
+
+    /**
+     * Adds banner ads to the items list.
+     */
+    private void addBannerAds() {
+        // Loop through the items array and place a new banner ad in every ith position in
+        // the items List.
+//        for (int i = ITEMS_PER_AD; i <= commentData.size(); i += ITEMS_PER_AD) {
+        if (commentData.size() > adIndex) {
+            final AdView adView = new AdView(mContext);
+            adView.setAdSize(AdSize.BANNER);
+            adView.setAdUnitId(adUnitId);
+            commentData.add(adIndex, adView);
+            hasAd = true;
+            this.response.commentNum = String.valueOf(Integer.valueOf(response.commentNum) + 1);
+            loadBannerAd(adIndex);
+        }
+
+//        }
+    }
+
+    //
+//    /**
+//     * Sets up and loads the banner ads.
+//     */
+    private void loadBannerAds() {
+        // Load the first banner ad in the items list (subsequent ads will be loaded automatically
+        // in sequence).
+//        loadBannerAd(0);
+    }
+
+    //
+//    /**
+//     * Loads the banner ads in the items list.
+//     */
+    private void loadBannerAd(final int index) {
+        if (index >= commentData.size()) {
+            return;
+        }
+        Object item = commentData.get(index);
+        if (!(item instanceof AdView)) {
+            throw new ClassCastException("Expected item at index " + index + " to be a banner ad"
+                    + " ad.");
+        }
+        final AdView adView = (AdView) item;
+        // Set an AdListener on the AdView to wait for the previous banner ad
+        // to finish loading before loading the next ad in the items list.
+        adView.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                super.onAdLoaded();
+                Log.i("llb", "onAdLoaded");
+                // The previous banner ad loaded successfully, call this method again to
+                // load the next ad in the items list.
+//                loadBannerAd(index + ITEMS_PER_AD);
+            }
+
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+                Log.i("llb", "onAdFailedToLoad");
+                // The previous banner ad failed to load. Call this method again to load
+                // the next ad in the items list.
+                Log.e("MainActivity", "The previous banner ad failed to load. Attempting to"
+                        + " load the next banner ad in the items list.");
+//                loadBannerAd(index + ITEMS_PER_AD);
+            }
+        });
+
+        // Load the banner ad.
+        adView.loadAd(new AdRequest.Builder().build());
+    }
+//    public class AdViewHolder extends RecyclerView.ViewHolder {
+//        AdViewHolder(View view) {
+//            super(view);
+//        }
+//    }
 }

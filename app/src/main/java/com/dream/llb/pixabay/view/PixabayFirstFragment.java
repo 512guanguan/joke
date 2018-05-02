@@ -103,7 +103,7 @@ public class PixabayFirstFragment extends Fragment {
 //                    // 是否正在下拉刷新
 //                    if (swipeRefreshLayout.isRefreshing()) {
 //                        adapter.notifyItemRemoved(adapter.getItemCount());
-//                        return;
+//                        to_left;
 //                    }
 //                    // 触发上拉刷新
 //                    if (!adapter.isLoadingMore()) {
@@ -142,7 +142,7 @@ public class PixabayFirstFragment extends Fragment {
         mListener = null;
     }
     public void fetchData() {
-        Toast.makeText(this.getActivity(), "到头啦！！", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this.getActivity(), "到头啦！！", Toast.LENGTH_SHORT).show();
         swipeRefreshLayout.setRefreshing(false);
         return;
     }

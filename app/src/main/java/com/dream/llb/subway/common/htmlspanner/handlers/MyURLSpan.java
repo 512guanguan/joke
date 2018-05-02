@@ -10,6 +10,7 @@ import android.text.style.ClickableSpan;
 import android.view.View;
 import android.widget.Toast;
 
+import com.dream.llb.subway.model.api.SubwayURL;
 import com.dream.llb.subway.view.post_detail.PostDetailActivity;
 import com.dream.llb.subway.view.show_image.ShowImageActivity;
 import com.dream.llb.subway.view.webpage.WebPageActivity;
@@ -62,6 +63,9 @@ public class MyURLSpan extends ClickableSpan implements ParcelableSpan {
         Context context = widget.getContext();
 //        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
 //        intent.putExtra(Browser.EXTRA_APPLICATION_ID, context.getPackageName());
+        if(!mURL.startsWith("http")) {//如forum.php/..
+            mURL = SubwayURL.SUBWAY_BASE + mURL;
+        }
         Intent intent;
         if(mURL.endsWith(".jpg")||mURL.endsWith(".png")||mURL.endsWith(".jpeg")||mURL.endsWith(".bmp")||mURL.endsWith(".gif")){
             intent = new Intent(context, ShowImageActivity.class);
@@ -69,7 +73,7 @@ public class MyURLSpan extends ClickableSpan implements ParcelableSpan {
         }else if(mURL.endsWith(".pdf")||mURL.endsWith(".doc")){
             Toast.makeText(context,"暂不支持该格式文件",Toast.LENGTH_SHORT).show();
             return;
-        }else if(mURL.indexOf("http://www.ditiezu.com/thread-")== -1){
+        }else if(mURL.indexOf("http://www.ditiezu.com/thread-")== -1 && mURL.indexOf("https://www.ditiezu.com/thread-")== -1){
             intent = new Intent(context, WebPageActivity.class);
             intent.putExtra("url",mURL);
         }else {
