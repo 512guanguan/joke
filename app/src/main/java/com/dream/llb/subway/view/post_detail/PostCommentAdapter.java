@@ -48,7 +48,7 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     protected static final int TYPE_FOOTER_NO_MORE_DATA = 3;
     protected static final int BANNER_AD_VIEW_TYPE = 4;
     protected boolean hasAd = false;
-    protected int adIndex = 15;
+    protected int adIndex = 5;
     protected List<Object> commentData;
     protected PostDetailResponse response;
     protected View headerView, footerView, noMoreDataView;
@@ -57,7 +57,7 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     protected boolean isLoadingMore = false;
     protected HtmlSpanner htmlSpanner;
     public boolean isLastPage = true;//标记最后一页
-    protected static final int ITEMS_PER_AD = 25;
+//    protected static final int ITEMS_PER_AD = 25;
     protected String adUnitId = "ca-app-pub-1863836438957183/6535261332";// "ca-app-pub-3940256099942544/6300978111";//TODO　test
 
     public PostCommentAdapter(Context mContext, @LayoutRes int layoutId) {
@@ -118,8 +118,11 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         this.commentData.clear();
         this.commentData.addAll(response.commentList);
 //        response.commentList.clear();
-        // TODO admod
         this.response = response;
+        hasAd = false;
+        if(!hasAd){
+            addBannerAds();
+        }
         if (this.commentData.size() == Integer.valueOf(this.response.commentNum)) {
             isLastPage = true;
         } else {
@@ -135,9 +138,9 @@ public class PostCommentAdapter extends RecyclerView.Adapter<BaseViewHolder> {
      */
     public void setMoreData(PostDetailResponse response) {
         this.commentData.addAll(response.commentList);
-        if(!hasAd){
-            addBannerAds();
-        }
+//        if(!hasAd){
+//            addBannerAds();
+//        }
         if (this.commentData.size() == Integer.valueOf(this.response.commentNum)) {
             isLastPage = true;
         } else {
