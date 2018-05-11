@@ -5,6 +5,7 @@ import android.app.Application;
 import android.content.Context;
 import android.widget.ImageView;
 
+import com.dream.llb.subway.BuildConfig;
 import com.dream.llb.subway.R;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
@@ -12,6 +13,10 @@ import com.google.android.gms.ads.MobileAds;
 import com.lqr.emoji.IImageLoader;
 import com.lqr.emoji.LQREmotionKit;
 import com.squareup.picasso.Picasso;
+import com.tencent.tac.TACApplication;
+import com.tencent.tac.analytics.TACAnalyticsOptions;
+import com.tencent.tac.analytics.TACAnalyticsStrategy;
+import com.tencent.tac.option.TACApplicationOptions;
 
 import java.util.ArrayList;
 
@@ -23,7 +28,6 @@ public class BaseApplication extends Application{
     public static Context mContext;
     private static BaseApplication instance;
     private ArrayList<Activity> activities;
-    public static InterstitialAd mInterstitialAd;//admod插屏广告
     public static Boolean isLogin = false;//TODO 标记是否登录了
 
     @Override
@@ -39,15 +43,22 @@ public class BaseApplication extends Application{
                 Picasso.with(context).load(path).centerCrop().into(imageView);
             }
         });
-
-        MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");
-        mInterstitialAd = new InterstitialAd(this);
-//        mInterstitialAd.setAdUnitId("ca-app-pub-1863836438957183/2446447638");
-        //测试号
-        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
-        mInterstitialAd.loadAd(new AdRequest.Builder().build());
     }
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        // 实例化一个新的配置
+        TACApplicationOptions applicationOptions = TACApplicationOptions.newDefaultOptions(this);
+        // 修改其他配置
 
+        // 设置行为统计数据上报的策略
+        TACAnalyticsOptions analyticsOptions = applicationOptions.sub("analytics");
+        if(BuildConfig.DEBUG){
+            analyticsOptions.strategy(TACAnalyticsStrategy.INSTANT); // 立即发送
+        }
+        // 让自定义设置生效
+        TACApplication.configureWithOptions(this, applicationOptions);
+    }
     /**
      * 单例模式
      * @return

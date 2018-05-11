@@ -68,6 +68,7 @@ public class PostDetailActivity extends BaseActivity implements PostDetailContra
 
     private void initView() {
         initHeadView();
+        initADMob();
         headTitleTV.setText("地铁族");
         headRightTV.setVisibility(View.GONE);
         headRightTV.setOnClickListener(this);

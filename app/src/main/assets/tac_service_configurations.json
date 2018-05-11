@@ -1,0 +1,30 @@
+{
+    "version": "1.0.0",
+    "warning": "请不要修改这个文件中的内容",
+    "project": {
+        "projectId": 101207
+    },
+    "application": {
+        "appId": 101007,
+        "packageId": "com.dream.llb.subway"
+    },
+    "services": {
+        "analytics": {
+            "appKey": "Aqcloud101007"
+        },
+        "messaging": {
+            "appId": "2100283858",
+            "appKey": "A33ENP488NXR"
+        },
+        "crash": {
+            "appId": "df1c4667ff"
+        },
+        "payment": {
+            "offerId": "TC101007"
+        },
+        "storage": {
+            "bucket": "tac-ditiezu-st-1256649256",
+            "region": "ap-guangzhou"
+        }
+    }
+}
