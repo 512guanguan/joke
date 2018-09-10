@@ -3,13 +3,14 @@ package com.dream.llb.subway.common.htmlspanner.handlers;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Parcel;
 import android.text.ParcelableSpan;
 import android.text.style.ClickableSpan;
 import android.view.View;
 import android.widget.Toast;
 
+import com.dream.llb.subway.common.annotations.MyAnnotations;
+import com.dream.llb.subway.common.util.SharedPreferencesUtil;
 import com.dream.llb.subway.model.api.SubwayURL;
 import com.dream.llb.subway.view.post_detail.PostDetailActivity;
 import com.dream.llb.subway.view.show_image.ShowImageActivity;
@@ -35,7 +36,9 @@ public class MyURLSpan extends ClickableSpan implements ParcelableSpan {
         return getSpanTypeIdInternal();
     }
 
-    /** @hide */
+    /**
+     * @hide
+     */
     public int getSpanTypeIdInternal() {
         return 0;//TextUtils.URL_SPAN;
     }
@@ -48,7 +51,9 @@ public class MyURLSpan extends ClickableSpan implements ParcelableSpan {
         writeToParcelInternal(dest, flags);
     }
 
-    /** @hide */
+    /**
+     * @hide
+     */
     public void writeToParcelInternal(Parcel dest, int flags) {
         dest.writeString(mURL);
     }
@@ -63,27 +68,28 @@ public class MyURLSpan extends ClickableSpan implements ParcelableSpan {
         Context context = widget.getContext();
 //        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
 //        intent.putExtra(Browser.EXTRA_APPLICATION_ID, context.getPackageName());
-        if(!mURL.startsWith("http")) {//如forum.php/..
+        if (!mURL.startsWith("http")) {//如forum.php/..
             mURL = SubwayURL.SUBWAY_BASE + mURL;
         }
         Intent intent;
-        if(mURL.endsWith(".jpg")||mURL.endsWith(".png")||mURL.endsWith(".jpeg")||mURL.endsWith(".bmp")||mURL.endsWith(".gif")){
+        if (mURL.endsWith(".jpg") || mURL.endsWith(".png") || mURL.endsWith(".jpeg") || mURL.endsWith(".bmp") || mURL.endsWith(".gif")) {
             intent = new Intent(context, ShowImageActivity.class);
-            intent.putExtra("url",mURL);
-        }else if(mURL.endsWith(".pdf")||mURL.endsWith(".doc")){
-            Toast.makeText(context,"暂不支持该格式文件",Toast.LENGTH_SHORT).show();
+            intent.putExtra("url", mURL);
+        } else if (mURL.endsWith(".pdf") || mURL.endsWith(".doc")) {
+            Toast.makeText(context, "暂不支持该格式文件", Toast.LENGTH_SHORT).show();
             return;
-        }else if(mURL.indexOf("http://www.ditiezu.com/thread-")== -1 && mURL.indexOf("https://www.ditiezu.com/thread-")== -1){
+        } else if (mURL.indexOf("http://www.ditiezu.com/thread-") == -1 && mURL.indexOf("https://www.ditiezu.com/thread-") == -1) {
             intent = new Intent(context, WebPageActivity.class);
-            intent.putExtra("url",mURL);
-        }else {
+            intent.putExtra("url", mURL);
+        } else {
             //论坛其他帖子链接=》转换成手机版链接
             //http://www.ditiezu.com/thread-192706-1-1.html
             //http://www.ditiezu.com/forum.php?mod=viewthread&tid=192706&extra=page=1&ordertype=1&threads=thread
-            mURL = mURL.replace("http://www.ditiezu.com/thread-","http://www.ditiezu.com/forum.php?mod=viewthread&tid=");
-            mURL = mURL.substring(0,mURL.indexOf("-"))+"&extra=page=1&ordertype=1&threads=thread";
+            mURL = mURL.replace("http://www.ditiezu.com/thread-", "http://www.ditiezu.com/forum.php?mod=viewthread&tid=");
+            int currentOrder = (int) SharedPreferencesUtil.get(context, SharedPreferencesUtil.SETTING_ORDER, MyAnnotations.DESC);
+            mURL = mURL.substring(0, mURL.indexOf("-")) + "&extra=page=1&ordertype=" + currentOrder + "&threads=thread";
             intent = new Intent(context, PostDetailActivity.class);
-            intent.putExtra("url",mURL);
+            intent.putExtra("url", mURL);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);// | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         }
 

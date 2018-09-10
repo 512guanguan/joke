@@ -34,7 +34,7 @@ public class SubwayURL {
     public static final String SUBWAY_SUBMIT_POST = SUBWAY_BASE + "forum.php?mod=post&action=newthread&fid=FID&extra=&topicsubmit=yes";// TODO　fid
 
     /**帖子详情页**/
-    public static final String SUBWAY_POST_DETAIL = SUBWAY_BASE + "forum.php?mod=viewthread&tid=TID&extra=&ordertype=1&threads=thread";// TODO　TID
+    public static final String SUBWAY_POST_DETAIL = SUBWAY_BASE + "forum.php?mod=viewthread&tid=TID&extra=&ordertype=1&threads=thread";// TODO　TID  &ordertype=1
 
     /**
      * 已读通知消息

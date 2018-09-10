@@ -76,28 +76,28 @@ public class PixabayFirstFragment extends Fragment {
         adapter.setOnItemClickListener(new PixabayAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Log.i("llb", "onItemClick position=" + position);
+//                Log.i("llb", "onItemClick position=" + position);
                 if(position + 1 == adapter.getItemCount()){
                     //底部加载更多
-                    Log.i("llb", "底部加载更多 position=" + position);
+//                    Log.i("llb", "底部加载更多 position=" + position);
                 }
             }
 
             @Override
             public void onItemLongClick(View view, int position) {
-                Log.i("llb", "onItemLongClick position=" + position);
+//                Log.i("llb", "onItemLongClick position=" + position);
             }
         });
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                Log.i("llb", "onScrollStateChanged newState=" + newState);
+//                Log.i("llb", "onScrollStateChanged newState=" + newState);
             }
 
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                Log.i("llb", "onScrolled dx=" + dx + "  dy = " + dy);
+//                Log.i("llb", "onScrolled dx=" + dx + "  dy = " + dy);
                 StaggeredGridLayoutManager layoutManager = (StaggeredGridLayoutManager) recyclerView.getLayoutManager();
 //                if (recyclerView.findLastVisibleItemPosition() + 1 == adapter.getItemCount()) {
 //                    // 是否正在下拉刷新
@@ -118,7 +118,7 @@ public class PixabayFirstFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                Log.i("llb", "setOnRefreshListener()");
+//                Log.i("llb", "setOnRefreshListener()");
                 fetchData();
             }
 

@@ -20,6 +20,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dream.llb.subway.R;
+import com.dream.llb.subway.common.annotations.MyAnnotations;
+import com.dream.llb.subway.common.util.SharedPreferencesUtil;
 import com.dream.llb.subway.common.widget.CaptchaPopupWindow;
 import com.dream.llb.subway.common.widget.SimpleDividerItemDecoration;
 import com.dream.llb.subway.model.api.SubwayURL;
@@ -28,8 +30,8 @@ import com.dream.llb.subway.model.bean.EditCommentPageResponse;
 import com.dream.llb.subway.model.bean.PostDetailResponse;
 import com.dream.llb.subway.model.bean.PostDetailResponse.CommentInformation;
 import com.dream.llb.subway.model.bean.WarningPageResponse;
-import com.dream.llb.subway.view.base.base_activity.BaseActivity;
 import com.dream.llb.subway.view.base.BaseApplication;
+import com.dream.llb.subway.view.base.base_activity.BaseActivity;
 import com.dream.llb.subway.view.edit_post.EditPostActivity;
 import com.dream.llb.subway.view.login.LoginActivity;
 
@@ -48,12 +50,13 @@ public class PostDetailActivity extends BaseActivity implements PostDetailContra
     private int currentPage = 1;
     public static final int LOGIN_CODE = 0;
     private Button loginBtn;
-    private Button SubmitBtn;
     private TextView postCommentTV;
     private RelativeLayout editLayout;
     private EditText commentEdit;
     private EditCommentPageResponse editCommentPageResponse;//回复别人的评论时页面信息
     private CaptchaPopupWindow captchaPopupWindow;
+    private int currentOrder = MyAnnotations.DESC;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +75,19 @@ public class PostDetailActivity extends BaseActivity implements PostDetailContra
         headTitleTV.setText("地铁族");
         headRightTV.setVisibility(View.GONE);
         headRightTV.setOnClickListener(this);
+
+        currentOrder = (int) SharedPreferencesUtil.get(mContext, SharedPreferencesUtil.SETTING_ORDER, MyAnnotations.DESC);
+        //把传入的地址排序参数替换为全局值
+//        Log.i("替换前的URL=", url);
+        int index = url.indexOf("ordertype=");
+        if (index != -1) {
+            int orderIndex = index + 10;
+            url.replace(url.charAt(orderIndex), (char) currentOrder);
+        } else {
+            url += "&ordertype=" + currentOrder + "&threads=thread";
+        }
+//        Log.i("替换后的URL=", url);
+
 //        postTV = (TextView) findViewById(R.id.post_content_tv);
         loginBtn = (Button) findViewById(R.id.login_btn);
         loginBtn.setOnClickListener(this);
@@ -127,7 +143,7 @@ public class PostDetailActivity extends BaseActivity implements PostDetailContra
                     int totalItemCount = layoutManager.getItemCount();
                     if (visibleItemCount > 0 && lastVisiblePosition >= totalItemCount - 1 && !adapter.isLoadingMore) {
                         adapter.setLoadingMore(true);
-                        presenter.loadMoreData(url, currentPage);
+                        presenter.loadMoreData(url, currentPage, currentOrder);
                     }
                 }
             }
@@ -202,9 +218,9 @@ public class PostDetailActivity extends BaseActivity implements PostDetailContra
 
         }
         if (BaseApplication.isLogin) {
-            if(!TextUtils.isEmpty(response.replyCommentUrl)){
+            if (!TextUtils.isEmpty(response.replyCommentUrl)) {
                 editLayout.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 editLayout.setVisibility(View.GONE);
             }
             loginBtn.setVisibility(View.GONE);
@@ -216,6 +232,7 @@ public class PostDetailActivity extends BaseActivity implements PostDetailContra
 
     @Override
     public void onPostCommentFinished(BaseResponse response) {
+        postCommentTV.setEnabled(true);
         if (response instanceof WarningPageResponse) {//发帖失败原因提醒
             Toast.makeText(mContext, ((WarningPageResponse) response).warning, Toast.LENGTH_LONG).show();
 //            presenter.refreshPage(url);
@@ -277,12 +294,14 @@ public class PostDetailActivity extends BaseActivity implements PostDetailContra
                         presenter.getCaptchaImage(editCommentPageResponse.captchaUrl, url);
                     } else {
                         presenter.postReplyComment(editCommentPageResponse, commentMsg, "", url);
+                        postCommentTV.setEnabled(false);
                     }
                 } else {
                     if (!TextUtils.isEmpty(postDetailResponse.CAPTCHA_URL)) {
                         presenter.getCaptchaImage(postDetailResponse.CAPTCHA_URL, url);
                     } else {
                         presenter.postComment(postDetailResponse, commentMsg, "");
+                        postCommentTV.setEnabled(false);
                     }
                 }
                 break;
@@ -293,6 +312,7 @@ public class PostDetailActivity extends BaseActivity implements PostDetailContra
                 } else {
                     presenter.postComment(postDetailResponse, commentMsg, captchaPopupWindow.getCaptcha());
                 }
+                postCommentTV.setEnabled(false);
                 captchaPopupWindow.dismiss();
                 break;
             case R.id.login_btn:
@@ -301,12 +321,12 @@ public class PostDetailActivity extends BaseActivity implements PostDetailContra
                 break;
             case R.id.headRightTV:
                 //跳转去发表帖子入口
-                if(BaseApplication.isLogin){
+                if (BaseApplication.isLogin) {
                     Intent intentTest = new Intent(mContext, EditPostActivity.class);
                     intentTest.putExtra("referer", url);
                     intentTest.putExtra("pageURL", SubwayURL.SUBWAY_EDIT_PAGE.replace("FID", postDetailResponse.subjectID));
                     startActivity(intentTest);
-                }else {
+                } else {
                     Intent intent1 = new Intent(mContext, LoginActivity.class);
                     startActivity(intent1);
                 }

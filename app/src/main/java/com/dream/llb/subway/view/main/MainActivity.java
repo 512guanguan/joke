@@ -35,6 +35,7 @@ import com.dream.llb.subway.view.edit_post.EditPostActivity;
 import com.dream.llb.subway.view.home_fragment.HomeFragment;
 import com.dream.llb.subway.view.login.LoginActivity;
 import com.dream.llb.subway.view.notice_msg.NoticeMsgActivity;
+import com.dream.llb.subway.view.setting.SettingActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -110,20 +111,24 @@ public class MainActivity extends BaseActivity implements OnFragmentInteractionL
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 // Handle navigation view item clicks here.
                 int id = item.getItemId();
+                Intent intent;
                 RetrofitServiceManager.clearInstance();
                 switch (id) {
                     case R.id.nav_my_notice:
                         if(BaseApplication.isLogin){
-                            Intent intent = new Intent(mContext, NoticeMsgActivity.class);
+                            intent = new Intent(mContext, NoticeMsgActivity.class);
                             mContext.startActivity(intent);
                         }else {
-                            Intent intent = new Intent(mContext, LoginActivity.class);
+                            intent = new Intent(mContext, LoginActivity.class);
                             mContext.startActivity(intent);
                         }
-
                         break;
                     case R.id.nav_about:
-                        Intent intent = new Intent(mContext, AboutActivity.class);
+                        intent = new Intent(mContext, AboutActivity.class);
+                        mContext.startActivity(intent);
+                        break;
+                    case R.id.setting:
+                        intent = new Intent(mContext, SettingActivity.class);
                         mContext.startActivity(intent);
                         break;
                     default:

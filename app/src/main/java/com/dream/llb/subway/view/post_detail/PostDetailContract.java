@@ -24,7 +24,7 @@ public interface PostDetailContract {
         /**
          * 上拉加载更多
          */
-        void loadMoreData(String url,int currentPage);
+        void loadMoreData(String url,int currentPage, int currentOrder);
     }
 
     interface View{
