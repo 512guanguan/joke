@@ -23,3 +23,38 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+
+-keep public class com.leedavid.adslib.comm.**
+-dontwarn com.leedavid.**
+-keepclassmembers public class com.leedavid.adslib.comm.** { public *** ***(...);}
+-keepclassmembers public class com.leedavid.adslib.comm.** { public <fields> ;}
+-keep class com.qq.e.** { public protected *;}
+-keep class android.support.v4.app.NotificationCompat**{ public *;}
+-keepclassmembers class * extends android.app.Activity { public void *(android.view.View);}
+-keepclassmembers enum * { public static **[] values();
+public static ** valueOf(java.lang.String);
+}
+-keep class com.baidu.mobads.*.** { *; }
+-keep class com.afk.** {*;}
+-keep class com.google.protobuf.** {*;}
+-keepattributes *Annotation* -keepattributes *JavascriptInterface*
+-keep public class * implements com.afk.client.ads.inf.BaseListener
+-keep public class com.afk.client.ads.inf.BaseListener
+-keep public class * extends android.app.Activity
+-keep public class * extends android.webkit.WebChromeClient -keep public class com.anzhi.usercenter.sdk.AnzhiUserCenter
+
+-keep class * implements com.anzhi.usercenter.sdk.BaseWebViewActivity$JsCallJavaInterface{*; }
+-keep public class com.anzhi.**{*;}
+-keepclassmembers class com.afk.client.ads.inf.BaseListener {
+<fields>;
+<methods>;
+}
+-keepclassmembers class * extends android.webkit.WebChromeClient{
+public <fields>;
+public <methods>;
+}
+-keepclassmembers class * implements com.afk.client.ads.inf.BannerAdListener{
+public <fields>;
+public <methods>;
+}

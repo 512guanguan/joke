@@ -28,7 +28,7 @@ public class PostDetailPresenter implements PostDetailContract.Presenter {
         postDetailView.showProgressDialog();
         SubwayLoader.getInstance().getPostDetailData(url)
                 .subscribe((PostDetailResponse response) -> {
-//                    Log.i("llb", "response = " + response);
+                    Log.i("llb", "response = " + response);
                     postDetailView.hideProgressDialog();
                     postDetailView.onFinishRefresh(response);
                 }, (Throwable e) -> {
@@ -60,6 +60,7 @@ public class PostDetailPresenter implements PostDetailContract.Presenter {
 
     @Override
     public void postComment(PostDetailResponse postDetailResponse, String commentMsg, String captcha) {
+        postDetailView.showProgressDialog();
         HashMap<String, String> data = new HashMap<>();
         /**
          * 回复主贴：
@@ -78,8 +79,10 @@ public class PostDetailPresenter implements PostDetailContract.Presenter {
                 .subscribe((response) -> {
 //                    Log.i("llb", "评论完了？？");
                     postDetailView.onPostCommentFinished(response);
+                    postDetailView.hideProgressDialog();
                 }, (Throwable e) -> {
                     postDetailView.onPostCommentFinished(null);
+                    postDetailView.hideProgressDialog();
 //                    Log.d("llb", "error " + e.getMessage());
                 }, () -> {
 //                    Log.d("llb", "completed");

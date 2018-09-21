@@ -68,7 +68,8 @@
             android:id="@+id/edit_layout"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="@color/main_bg"
+            android:background="@drawable/btn_corner_bg"
+            android:padding="2dp"
             android:layout_below="@+id/captcha_layout_rl">
             <EditText
                 android:id="@+id/comment_edit"

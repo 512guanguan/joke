@@ -9,8 +9,11 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.LinearLayout;
 
+import com.anzhi.sdk.ad.main.AzBannerAd;
+import com.anzhi.sdk.ad.manage.AnzhiAdCallBack;
+import com.dream.llb.common.Constants;
 import com.dream.llb.subway.R;
 import com.dream.llb.subway.common.OnItemClickListener;
 import com.dream.llb.subway.common.util.SharedPreferencesUtil;
@@ -22,8 +25,6 @@ import com.dream.llb.subway.view.base.base_activity.BaseActivity;
 import com.dream.llb.subway.view.edit_post.EditPostActivity;
 import com.dream.llb.subway.view.login.LoginActivity;
 import com.dream.llb.subway.view.post_detail.PostDetailActivity;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 
 public class ForumHomeActivity extends BaseActivity implements ForumHomeContract.View, View.OnClickListener {
     private Context mContext;
@@ -36,7 +37,9 @@ public class ForumHomeActivity extends BaseActivity implements ForumHomeContract
     private ForumHomeContract.Presenter presenter;
     private String subjectName;
     private String subjectID;
-    private AdView mAdView;
+//    private AdView mAdView;
+    private AzBannerAd azBannerAd1;
+    private LinearLayout anzhiLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,11 +65,11 @@ public class ForumHomeActivity extends BaseActivity implements ForumHomeContract
         headTitleTV.setText(subjectName);
         headRightTV.setOnClickListener(this);
         headLeftIcon.setOnClickListener(this);
-        mAdView = (AdView) findViewById(R.id.adView);
-//        mAdView.setAdUnitId(Constants.ADMOB_FORUM_BOTTOM_ID);
-//        mAdView.setAdSize(AdSize.BANNER);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
+        anzhiLayout = (LinearLayout) findViewById(R.id.anzhi_banner_ll);
+        loadAnzhiBannerAd();
+//        mAdView = (AdView) findViewById(R.id.adView);
+//        AdRequest adRequest = new AdRequest.Builder().build();
+//        mAdView.loadAd(adRequest);
 
         presenter = new ForumHomePresenter(this);
         recyclerView = (RecyclerView) findViewById(R.id.post_list);
@@ -128,6 +131,50 @@ public class ForumHomeActivity extends BaseActivity implements ForumHomeContract
         BaseActivity.postListItems = null;//清空
         presenter.refreshPage();
 //        }
+    }
+
+    private void loadAnzhiBannerAd() {
+        azBannerAd1 = new AzBannerAd(this, Constants.AN_ZHI_APP_KEY, Constants.AN_ZHI_FORUM_BANNER_ID, new AnzhiAdCallBack() {
+            @Override
+            public void onReceiveAd() {
+                anzhiLayout.setVisibility(View.VISIBLE);
+                Log.i("llb","广告接受成功---");
+            }
+
+            @Override
+            public void onLoadFailed(String result) {
+                Log.i("llb","广告加载失败---" + result);
+                anzhiLayout.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onCloseAd() {
+                anzhiLayout.setVisibility(View.INVISIBLE);
+                Log.i("llb","广告关闭---");
+            }
+
+            @Override
+            public void onAdClik() {
+                Log.i("llb","banner广告点击---");
+            }
+
+            @Override
+            public void onShow() {
+                anzhiLayout.setVisibility(View.VISIBLE);
+                Log.i("llb","banner广告展示---");
+            }
+
+            @Override
+            public void onAdExposure() {
+
+            }
+
+            @Override
+            public void onADTick(long millisUntilFinished) {// 无用回调
+
+            }
+        }, anzhiLayout);
+        azBannerAd1.loadAd();
     }
 
     @Override

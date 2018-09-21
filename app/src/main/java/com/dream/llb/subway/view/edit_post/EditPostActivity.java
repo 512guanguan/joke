@@ -60,9 +60,9 @@ public class EditPostActivity extends BaseActivity implements View.OnClickListen
         titleET = (EditText) findViewById(R.id.postTitleET);
         contentET = (EditText) findViewById(R.id.postContentET);
 //        submitBtn = (Button) findViewById(R.id.submitButton);
-        arrayAdapter = new SimpleArrayAdapter(this, R.layout.item_simple_line_spinner);
+        arrayAdapter = new SimpleArrayAdapter(this, R.layout.line_spinner_text_item);
         /*adapter设置一个下拉列表样式，参数为系统子布局*/
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        arrayAdapter.setDropDownViewResource(R.layout.line_spinner_dropdown_item);
         lineSpinner.setAdapter(arrayAdapter);
         lineSpinner.setOnItemSelectedListener(this);
 //        submitBtn.setOnClickListener(this);

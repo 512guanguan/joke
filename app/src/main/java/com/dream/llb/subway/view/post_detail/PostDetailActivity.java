@@ -8,10 +8,10 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -237,11 +237,18 @@ public class PostDetailActivity extends BaseActivity implements PostDetailContra
             Toast.makeText(mContext, ((WarningPageResponse) response).warning, Toast.LENGTH_LONG).show();
 //            presenter.refreshPage(url);
         } else if (response instanceof PostDetailResponse) {//发帖成功并返回了新页面
-            onFinishRefresh((PostDetailResponse) response);
-            commentEdit.setText("");
-            commentEdit.setHint("快说两句吧……");
-            commentEdit.clearFocus();
-            editCommentPageResponse = null;
+            PostDetailResponse res = (PostDetailResponse) response;
+            if (!TextUtils.isEmpty(res.pageWarning)) {
+                Toast.makeText(this, res.pageWarning, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(mContext, "评论成功", Toast.LENGTH_SHORT).show();
+                presenter.refreshPage(url);
+                commentEdit.setText("");
+                commentEdit.setHint("快说两句吧……");
+                commentEdit.clearFocus();
+                editCommentPageResponse = null;
+            }
+//            onFinishRefresh((PostDetailResponse) response);
         } else {
 
         }
@@ -276,6 +283,10 @@ public class PostDetailActivity extends BaseActivity implements PostDetailContra
         String commentMsg = commentEdit.getText().toString();
         switch (v.getId()) {
             case R.id.post_comment_tv:
+                // 收起键盘
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(commentEdit.getWindowToken(), 0);
+
 //                commentMsg = commentEdit.getText().toString();
                 if (TextUtils.isEmpty(commentMsg)) {
                     Toast.makeText(this, "评论信息不能为空", Toast.LENGTH_SHORT).show();

@@ -39,15 +39,17 @@
         android:layout_height="35dp"
         android:layout_below="@+id/titleLayout"
         android:layout_margin="10dp"
-        android:spinnerMode="dropdown"></Spinner>
+        android:spinnerMode="dialog"></Spinner>
 
     <EditText
         android:id="@+id/postContentET"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/lineSpinner"
+        android:background="@drawable/btn_corner_bg"
         android:gravity="start"
         android:hint="请编辑帖子内容"
         android:padding="10dp"
-        android:textSize="20sp" />
+        android:layout_margin="2dp"
+        android:textSize="18sp" />
 </RelativeLayout>

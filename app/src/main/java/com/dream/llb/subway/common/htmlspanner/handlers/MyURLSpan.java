@@ -95,6 +95,6 @@ public class MyURLSpan extends ClickableSpan implements ParcelableSpan {
 
         context.startActivity(intent);
         //TODO 跳转到webView页面
-        Toast.makeText(widget.getContext(), mURL, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(widget.getContext(), mURL, Toast.LENGTH_SHORT).show();
     }
 }
